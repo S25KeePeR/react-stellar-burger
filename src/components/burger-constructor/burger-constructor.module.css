@@ -1,0 +1,8 @@
+.container {
+    width: 600px;
+    max-height: calc(100vh - 168px);
+    align-self: center;
+    
+    border: 1px solid gray;
+    box-sizing: border-box;
+}

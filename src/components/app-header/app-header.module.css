@@ -1,0 +1,48 @@
+.header {                
+    background-color: rgba(28, 28, 33, 1);
+    min-height: 88px;
+    min-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.navigation {
+    margin: 0;
+    padding: 0;
+    height: 56px;
+    width: 100%;
+    max-width: 1280px; 
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.navigation__item {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.navigation__item:last-of-type {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.logoImage {
+    position: absolute;
+    left: calc(50% - (290px/2));
+}
+
+.link__text_ative {
+    color: rgba(242, 242, 243, 1);
+}
+
+.link__text {
+    color: rgba(133, 133, 173, 1);
+}
