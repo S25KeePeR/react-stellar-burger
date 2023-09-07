@@ -27,7 +27,8 @@ export default function BurgerIngredients() {
         if (num > 0) { 
             return <Counter count={num} size="default" extraClass="m-1"/>
         }
-    }
+    };
+
     const refs = {
         'Булки': useRef(null),
         'Соусы': useRef(null),
@@ -38,6 +39,9 @@ export default function BurgerIngredients() {
         setCurrent(tab);
         refs[tab].current.scrollIntoView({behavior: 'smooth'});
     };
+
+
+
     return (
         <section>
             <h1 className={classH1}>

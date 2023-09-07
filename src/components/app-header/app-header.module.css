@@ -37,6 +37,7 @@
 .logoImage {
     position: absolute;
     left: calc(50% - (290px/2));
+    top: 3px;
 }
 
 .link__text_ative {
