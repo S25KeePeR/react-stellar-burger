@@ -14,6 +14,24 @@ export default function BurgerConstructor() {
     const classTotal = `mr-10 ${styles.total}`;
     const classTotalTitle = `mr-4 text text_type_digits-medium`;
 
+    const ingredientsData = JSON.parse(JSON.stringify(data));
+    const buns = React.useMemo(() => ingredientsData.filter(items => items.type === "bun"), [ingredientsData]);
+    const mains = React.useMemo(() => ingredientsData.filter(items => items.type !== "bun"), [ingredientsData]);
+   
+    // const getIngredient = (props) => {
+    //     if (props.__v !== 0) {
+    //         return <li className={classIngredient} key={props._id}>
+    //             <DragIcon type="primary"/>
+    //             <ConstructorElement
+    //                 text={props.name}
+    //                 price={props.price}
+    //                 thumbnail={props.image}
+    //             />
+    //         </li>
+    //     }
+    // };
+
+
     return (
         <section className={classContainer}>
             <ul className={classConstructor}>
@@ -21,78 +39,44 @@ export default function BurgerConstructor() {
                     <ConstructorElement
                         type="top"
                         isLocked={true}
-                        text="Краторная булка N-200i (верх)"
-                        price={200}
-                        thumbnail={data[0].image}
+                        text={`${buns[0].name} (верх)`}
+                        price={buns[0].price}
+                        thumbnail={buns[0].image}
                     />
                 </li>
+
                 <li>
                     <ul className={classIngredients}>
-                        <li className={classIngredient}>
+                        {/* <li className={classIngredient}>
                             <DragIcon type="primary"/>
                             <ConstructorElement
                                 text="Краторная булка N-200i (верх)"
                                 price={50}
                                 thumbnail={data[3].image}
                             />
-                        </li>
-                        <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li>
-                        <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li>
-                        <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li>
-                        <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li>
-                        <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li>
-                        <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li>
+                        </li> */}
+                        {mains.map(ingredients => (
+
+                            // getIngredient(ingredients)
+                            <li className={classIngredient} key={ingredients._id}>
+                                <DragIcon type="primary"/>
+                                <ConstructorElement
+                                    text={ingredients.name}
+                                    price={ingredients.price}
+                                    thumbnail={ingredients.image}
+                                />
+                            </li>
+                        ))}
+                        
                     </ul>
                 </li>
                 <li className={classBun}>
                     <ConstructorElement
                         type="bottom"
                         isLocked={true}
-                        text="Краторная булка N-200i (низ)"
-                        price={200}
-                        thumbnail={data[0].image}
+                        text={`${buns[0].name} (низ)`}
+                        price={buns[0].price}
+                        thumbnail={buns[0].image}
                     />
                 </li>
             </ul>

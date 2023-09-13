@@ -22,11 +22,11 @@
 }
 
 .navigation__item {
-    height: 100%;
+    /* height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    justify-content: center; */
+    /* cursor: pointer; */
 }
 
 .navigation__item:last-of-type {
@@ -38,6 +38,13 @@
     position: absolute;
     left: calc(50% - (290px/2));
     top: 3px;
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 .link__text_ative {
