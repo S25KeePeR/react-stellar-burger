@@ -1,9 +1,8 @@
 import React from "react";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { data } from "../../utils/data";
 
-export default function BurgerConstructor() {
+export default function BurgerConstructor({data}) {
 
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
@@ -14,9 +13,9 @@ export default function BurgerConstructor() {
     const classTotal = `mr-10 ${styles.total}`;
     const classTotalTitle = `mr-4 text text_type_digits-medium`;
 
-    const ingredientsData = JSON.parse(JSON.stringify(data));
-    const buns = React.useMemo(() => ingredientsData.filter(items => items.type === "bun"), [ingredientsData]);
-    const mains = React.useMemo(() => ingredientsData.filter(items => items.type !== "bun"), [ingredientsData]);
+    // const ingredientsData = JSON.parse(JSON.stringify(data));
+    const buns = React.useMemo(() => data.filter(items => items.type === "bun"), [data]);
+    const mains = React.useMemo(() => data.filter(items => items.type !== "bun"), [data]);
    
     // const getIngredient = (props) => {
     //     if (props.__v !== 0) {

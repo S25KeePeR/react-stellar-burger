@@ -1,16 +1,14 @@
 import React, { useRef }  from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { data } from "../../utils/data";
 
-export default function BurgerIngredients() {
-    
-    const ingredientsData = JSON.parse(JSON.stringify(data));
+export default function BurgerIngredients({data}) {
+
     const ingredientsCategories = React.useMemo(() => ({
-        'Булки': ingredientsData.filter(item => item.type === 'bun'),
-        'Соусы': ingredientsData.filter(item => item.type === 'sauce'),
-        'Начинки': ingredientsData.filter(item => item.type === 'main'),
-    }), [ingredientsData]);
+        'Булки': data.filter(item => item.type === 'bun'),
+        'Соусы': data.filter(item => item.type === 'sauce'),
+        'Начинки': data.filter(item => item.type === 'main'),
+    }), [data]);
 
     const [current, setCurrent] = React.useState(Object.keys(ingredientsCategories)[0]);
 
