@@ -8,6 +8,9 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 
 import Modal from "../modals/modal";
 import OrderDetails from "../modals/order-details/order-details";
+import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+
+import {data as base} from "../../utils/data"; // удалить
 
 const dataURL = "https://norma.nomoreparties.space/api/ingredients";
 
@@ -59,8 +62,9 @@ export default function App() {
 				</>
 				}
 			</main>
-			<Modal closeModal={0} modalHeader={''} modalBody={'OrderDetails'}>
-				<OrderDetails/>
+			<Modal closeModal={0} modalTitle={'Детали ингредиента'}>
+				{/* <OrderDetails/> */}
+				<IngredientDetails ingredient={data[1]}/>
 			</Modal>
 		</div>
   	);
