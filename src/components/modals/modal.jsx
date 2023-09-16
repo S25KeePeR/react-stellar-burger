@@ -7,7 +7,7 @@ import ModalOverlay from "./modal-overlay/modal-overlay";
 
 const modalRoot = document.getElementById("react-modals");
 
-export default function Modal({ closeModal, modalHeader = null, modalBody }) {
+export default function Modal({ closeModal, modalHeader = null, children }) {
     
     useEffect(() => {
         const closeModalOnPressKey = (e) => {
@@ -35,7 +35,7 @@ export default function Modal({ closeModal, modalHeader = null, modalBody }) {
                         <CloseIcon type="primary"/>
                     </button>
                 </div>
-                {modalBody}
+                {children}
             </div>
             <ModalOverlay onClose={closeModal}/>
         </>
