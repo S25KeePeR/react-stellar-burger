@@ -1,9 +1,10 @@
 import React, { useRef }  from "react";
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+// import OpenModal from '../modals/modal';
 
 export default function BurgerIngredients({data}) {
-
+  
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
         'Соусы': data.filter(item => item.type === 'sauce'),
@@ -27,18 +28,9 @@ export default function BurgerIngredients({data}) {
         }
     };
 
-    const refs = {
-        'Булки': useRef(null),
-        'Соусы': useRef(null),
-        'Начинки': useRef(null),
-    };
-
     const handleTabClick = (tab) => {
-        setCurrent(tab);
-        refs[tab].current.scrollIntoView({behavior: 'smooth'});
+        console.log(tab);
     };
-
-
 
     return (
         <section>
@@ -47,7 +39,11 @@ export default function BurgerIngredients({data}) {
             </h1>
             <nav className={styles.menu}>
                 {Object.keys(ingredientsCategories).map(section => (
-                    <Tab key={section} value={section} active={current === section} onClick={() => handleTabClick(section)}>
+                    <Tab    key={section} 
+                            value={section} 
+                            active={current === section} 
+                            onClick={() => handleTabClick(section)}
+                    >
                         {section}
                     </Tab>
                 ))}
@@ -55,10 +51,16 @@ export default function BurgerIngredients({data}) {
             <div className={classContainer}>
                 {Object.entries(ingredientsCategories).map(([category, ingredients]) => (
                     <>
-                        <h2 className={classH2} key={category}>{category}</h2>
+                        <h2 className={classH2} key={category}>
+                            {category}
+                        </h2>
                         <ul className={classItems}>
                             {ingredients.map((ingredient) => (
-                                <li className={classItem} key={ingredient._id}>
+                                <li className={classItem} key={ingredient._id} 
+                                    onClick={() => {
+                                        console.log(ingredient.name)
+                                    }}
+                                >
                                     {showCounter(ingredient.__v)}
                                     <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
                                     <div className={classItemPrice}>

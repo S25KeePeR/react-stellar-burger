@@ -1,8 +1,13 @@
-import React, {useEffect, useState, useRef} from "react";
+import {useEffect, useState } from "react";
+
 import styles from "./app.module.css";
+
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
+
+import Modal from "../modals/modal";
+import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
 const dataURL = "https://norma.nomoreparties.space/api/ingredients";
 
@@ -15,52 +20,46 @@ export default function App() {
 	})
 
 	useEffect(() => {
-
-	const getData = async () => {
-		try {
-			let res = await fetch(dataURL);
-			if (!res.ok) {
-				throw new Error('Ошибка соединения с сервером');
-			}
-
-			res = await res.json();
-			if (res.success && Array.isArray(res.data) && res.data.length !== 0) {
-				setDataState({ ...dataState, isLoading: false, data: res.data })
-			} else {
-				throw new Error('Некорректные данные или пустая база');
-			}
-
-		} catch (error) {
-			setDataState({ ...dataState, hasError: true, isLoading: false  })
-			console.log('Ошибка:', error); 
-		} 
-  };
-
-	getData();
-	
-  }, [])
+		const getData = async () => {
+			try {
+				let res = await fetch(dataURL);
+				if (!res.ok) {
+					throw new Error('Ошибка соединения с сервером');
+				}
+				res = await res.json();
+				if (res.success && Array.isArray(res.data) && res.data.length !== 0) {
+					setDataState({ ...dataState, isLoading: false, data: res.data })
+				} else {
+					throw new Error('Некорректные данные или пустая база');
+				}
+			} catch (error) {
+				setDataState({ ...dataState, hasError: true, isLoading: false  })
+				console.log('Ошибка: ', error); 
+			} 
+		};
+		getData();
+	}, []);
 
 
-  const { isLoading, hasError, data } = dataState;
+  	const { isLoading, hasError, data } = dataState;
 
-  const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
+  	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
 
-  return (
-	<div className={styles.app}>
-	  <AppHeader />
-	  <main className={classMain}>
+  	return (
+		<div className={styles.app}>
+			<AppHeader />
+			<main className={classMain}>
 
-		{isLoading && "Загрузка..."}
-		{hasError && "Произошла ошибка"}
-		{!isLoading && !hasError && data.length !== 0 && 
-		  <> 
-			<BurgerIngredients data={data} /> 
-			<BurgerConstructor data={data} />
-		  </>
-		}
-
-	  </main>
-	</div>
-  );
-
+				{isLoading && "Загрузка..."}
+				{hasError && "Произошла ошибка"}
+				{!isLoading && !hasError && data.length !== 0 && 
+				<> 
+					<BurgerIngredients data={data} /> 
+					<BurgerConstructor data={data} />
+				</>
+				}
+			</main>
+			<Modal closeModal={0} modalHeader={'Текст в шапке'} modalBody={'ТЕЛО'}/>
+		</div>
+  	);
 }

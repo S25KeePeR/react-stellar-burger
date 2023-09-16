@@ -13,7 +13,7 @@ export default function BurgerConstructor({data}) {
     const classTotal = `mr-10 ${styles.total}`;
     const classTotalTitle = `mr-4 text text_type_digits-medium`;
 
-    // const ingredientsData = JSON.parse(JSON.stringify(data));
+
     const buns = React.useMemo(() => data.filter(items => items.type === "bun"), [data]);
     const mains = React.useMemo(() => data.filter(items => items.type !== "bun"), [data]);
    
@@ -35,47 +35,32 @@ export default function BurgerConstructor({data}) {
         <section className={classContainer}>
             <ul className={classConstructor}>
                 <li className={classBun}>
-                    <ConstructorElement
-                        type="top"
-                        isLocked={true}
-                        text={`${buns[0].name} (верх)`}
-                        price={buns[0].price}
-                        thumbnail={buns[0].image}
+                    <ConstructorElement type="top"
+                                        isLocked={true}
+                                        text={`${buns[0].name} (верх)`}
+                                        price={buns[0].price}
+                                        thumbnail={buns[0].image}
                     />
                 </li>
-
                 <li>
                     <ul className={classIngredients}>
-                        {/* <li className={classIngredient}>
-                            <DragIcon type="primary"/>
-                            <ConstructorElement
-                                text="Краторная булка N-200i (верх)"
-                                price={50}
-                                thumbnail={data[3].image}
-                            />
-                        </li> */}
                         {mains.map(ingredients => (
-
-                            // getIngredient(ingredients)
                             <li className={classIngredient} key={ingredients._id}>
                                 <DragIcon type="primary"/>
-                                <ConstructorElement
-                                    text={ingredients.name}
-                                    price={ingredients.price}
-                                    thumbnail={ingredients.image}
+                                <ConstructorElement text={ingredients.name}
+                                                    price={ingredients.price}
+                                                    thumbnail={ingredients.image}
                                 />
                             </li>
                         ))}
-                        
                     </ul>
                 </li>
                 <li className={classBun}>
-                    <ConstructorElement
-                        type="bottom"
-                        isLocked={true}
-                        text={`${buns[0].name} (низ)`}
-                        price={buns[0].price}
-                        thumbnail={buns[0].image}
+                    <ConstructorElement type="bottom"
+                                        isLocked={true}
+                                        text={`${buns[0].name} (низ)`}
+                                        price={buns[0].price}
+                                        thumbnail={buns[0].image}
                     />
                 </li>
             </ul>
