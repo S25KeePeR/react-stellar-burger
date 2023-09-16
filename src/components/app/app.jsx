@@ -22,6 +22,13 @@ export default function App() {
 		data: []
 	})
 
+    const [openModal, setOpenModal] = useState(false);
+
+    function closeModal() {
+        setOpenModal(false);
+    }
+
+
 	useEffect(() => {
 		const getData = async () => {
 			try {
@@ -62,10 +69,6 @@ export default function App() {
 				</>
 				}
 			</main>
-			<Modal closeModal={0} modalTitle={'Детали ингредиента'}>
-				{/* <OrderDetails/> */}
-				<IngredientDetails ingredient={data[1]}/>
-			</Modal>
 		</div>
   	);
 }
