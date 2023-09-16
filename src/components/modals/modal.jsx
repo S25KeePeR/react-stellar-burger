@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
-// import { useEffect } from "react";
+
 import styles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+
 import ModalOverlay from "./modal-overlay/modal-overlay";
 
 const modalRoot = document.getElementById("react-modals");
@@ -24,28 +25,20 @@ export default function Modal({ closeModal, modalTitle = null, children }) {
     const classH2 = `text text_type_main-large mt-3 ${styles.title}`;
     const classCloseButton = ` ${styles.close}`;
 
-    return (
+    return ReactDOM.createPortal((
         <>
             <div className={classModal}>
                 <div className={classHeader}>
                     <h2 className={classH2}>
                         {modalTitle}
                     </h2>
-                    <button className={classCloseButton} type="button">
+                    <button className={classCloseButton} type="button" onClick={closeModal}>
                         <CloseIcon type="primary"/>
                     </button>
                 </div>
                 {children}
             </div>
-            <ModalOverlay onClose={closeModal}/>
-        </>
-    )
-
-    // return ReactDOM.createPortal(
-    //     (
-    //         <section>
-    //         </section>
-    //     ),
-    //     modalRoot
-    // );
+            <ModalOverlay onClick={closeModal}/>
+        </> 
+    ), modalRoot);
 };

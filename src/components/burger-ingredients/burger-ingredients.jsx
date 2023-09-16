@@ -1,9 +1,23 @@
-import React, { useRef }  from "react";
+import React, { useState, useRef }  from "react";
+
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-// import OpenModal from '../modals/modal';
+
+import Modal from "../modals/modal";
+import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+
+import {data as base} from "../../utils/data"; // удалить
 
 export default function BurgerIngredients({data}) {
+
+    const [modalState, setModalState] = useState(false);
+
+    function closeModal() {
+        setModalState(false);
+    }
+
+    const [selectedIngredient, setSelectedIngredient] = useState();
+
   
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
@@ -11,7 +25,7 @@ export default function BurgerIngredients({data}) {
         'Начинки': data.filter(item => item.type === 'main'),
     }), [data]);
 
-    const [current, setCurrent] = React.useState(Object.keys(ingredientsCategories)[0]);
+    const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
 
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
     const classH2 = `mb-6 text text_type_main-medium `;
@@ -32,6 +46,11 @@ export default function BurgerIngredients({data}) {
         console.log(tab);
     };
 
+    const getItem = (itemId) => {
+        setSelectedIngredient(data.filter(item => item._id === itemId))
+        setModalState(true)
+    }
+ 
     return (
         <section>
             <h1 className={classH1}>
@@ -58,7 +77,7 @@ export default function BurgerIngredients({data}) {
                             {ingredients.map((ingredient) => (
                                 <li className={classItem} key={ingredient._id} 
                                     onClick={() => {
-                                        console.log(ingredient.name)
+                                        getItem(ingredient._id)
                                     }}
                                 >
                                     {showCounter(ingredient.__v)}
@@ -68,13 +87,20 @@ export default function BurgerIngredients({data}) {
                                         <CurrencyIcon type="primary"/>
                                     </div>
                                     <span className={classItemTitle}>{ingredient.name}</span>
+                                    
                                 </li>
-
+                                
                             ))}
                         </ul>
                     </>
                 ))}
             </div>
+
+            {modalState && 
+                <Modal closeModal={closeModal} modalTitle={'Детали ингредиента'}>
+                    <IngredientDetails ingredient={selectedIngredient[0]}/>
+                </Modal>
+            }
         </section>
     )
 

@@ -6,11 +6,11 @@ import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 
-import Modal from "../modals/modal";
-import OrderDetails from "../modals/order-details/order-details";
-import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+// import Modal from "../modals/modal";
+// import OrderDetails from "../modals/order-details/order-details";
+// import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
-import {data as base} from "../../utils/data"; // удалить
+// import {data as base} from "../../utils/data"; // удалить
 
 const dataURL = "https://norma.nomoreparties.space/api/ingredients";
 
@@ -22,12 +22,11 @@ export default function App() {
 		data: []
 	})
 
-    const [openModal, setOpenModal] = useState(false);
-
-    function closeModal() {
-        setOpenModal(false);
-    }
-
+	// Продумать как открывать popup плавно...
+    // const [openModal, setOpenModal] = useState(false);
+    // function closeModal() {
+    //     setOpenModal(false);
+    // }
 
 	useEffect(() => {
 		const getData = async () => {

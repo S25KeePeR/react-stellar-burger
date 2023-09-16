@@ -1,8 +1,19 @@
 import React from "react";
+
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
+import Modal from "../modals/modal";
+import OrderDetails from "../modals/order-details/order-details";
+// import useModal from "../../hooks/useModal"
+
 export default function BurgerConstructor({data}) {
+
+    const [modalState, setModalState] = React.useState(false);
+
+    function closeModal() {
+        setModalState(false);
+    }
 
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
@@ -69,13 +80,16 @@ export default function BurgerConstructor({data}) {
                     <span className={classTotalTitle}>610</span>
                     <CurrencyIcon type="primary"/>
                 </div>
-                <Button htmlType="button" type="primary" size="large" >
+                <Button htmlType="button" type="primary" size="large" onClick={() => setModalState(true)}>
                     Оформить заказ
                 </Button>
             </div>
 
-
-
+			{modalState && 
+                <Modal closeModal={closeModal}>
+                    <OrderDetails/>
+                </Modal>
+            }
         </section>
     );
 };

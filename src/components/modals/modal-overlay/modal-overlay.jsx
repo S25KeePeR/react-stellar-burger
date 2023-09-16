@@ -1,8 +1,8 @@
 import styles from "./modal-overlay.module.css";
 
-const ModalOverlay = ({closeModal}) => {
+const ModalOverlay = ({onClick}) => {
     return (
-        <div className={styles.overlay} onClick={closeModal}></div>
+        <div className={styles.overlay} onClick={onClick}></div>
     );
 };
 
