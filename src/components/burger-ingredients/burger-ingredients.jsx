@@ -1,4 +1,6 @@
 import React, { useState, useRef }  from "react";
+import PropTypes from "prop-types";
+import ingredientPropType from "../../utils/prop-types";
 
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -17,7 +19,6 @@ export default function BurgerIngredients({data}) {
     }
 
     const [selectedIngredient, setSelectedIngredient] = useState();
-
   
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
@@ -104,4 +105,9 @@ export default function BurgerIngredients({data}) {
         </section>
     )
 
+};
+
+
+BurgerIngredients.propTypes = {
+    data: PropTypes.arrayOf(ingredientPropType).isRequired
 };

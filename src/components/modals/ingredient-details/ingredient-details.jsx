@@ -1,3 +1,5 @@
+import ingredientPropType from "../../../utils/prop-types";
+
 import styles from "./ingredient-details.module.css";
 
 const classH3 = `text text_type_main-medium mt-4 `;
@@ -17,21 +19,25 @@ const IngredientDetails = ({ingredient}) => {
                     <p className={classTextMain}>Калории,ккал</p>
                     <p className={classTextDigits}>{ingredient.calories}</p>
                 </li>
-                <li className={styles.item}>
+                <li className={classItem}>
                     <p className={classTextMain}>Белки, г</p>
                     <p className={classTextDigits}>{ingredient.proteins}</p>
                 </li>
-                <li className={styles.item}>
+                <li className={classItem}>
                     <p className={classTextMain}>Жиры, г</p>
                     <p className={classTextDigits}>{ingredient.fat}</p>
                 </li>
-                <li className={styles.item}>
+                <li className={classItem}>
                     <p className={classTextMain}>Углеводы, г</p>
                     <p className={classTextDigits}>{ingredient.carbohydrates}</p>
                 </li>
             </ul> 
         </>
     );
+};
+
+IngredientDetails.propTypes = {
+    ingredient: ingredientPropType
 };
 
 export default IngredientDetails;

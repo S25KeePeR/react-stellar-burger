@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import styles from "./order-details.module.css";
 import doneImg from "../../../images/submitted-order.svg";
 
@@ -19,6 +21,10 @@ const OrderDetails = ({orderNum = '034536'}) => {
             <p className={classInfoInactive}>Дождитесь готовности на орбитальной станции</p>
         </>
     );
+};
+
+OrderDetails.propTypes = {
+    orderNum: PropTypes.number.isRequired,
 };
 
 export default OrderDetails;

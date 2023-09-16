@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+import ingredientPropType from "../../utils/prop-types";
 
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -40,7 +42,6 @@ export default function BurgerConstructor({data}) {
     //         </li>
     //     }
     // };
-
 
     return (
         <section className={classContainer}>
@@ -92,4 +93,8 @@ export default function BurgerConstructor({data}) {
             }
         </section>
     );
+};
+
+BurgerConstructor.propTypes = {
+    data: PropTypes.arrayOf(ingredientPropType).isRequired
 };
