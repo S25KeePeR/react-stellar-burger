@@ -1,25 +1,32 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 
-const useModal = ({action = false}) => {
+const useModal = () => {
     const [modalState, setModalState] = useState(false);
+    const [modalType, setModalType] = useState(null);
+    const [modalData, setModalData] = useState({});
 
     const closeModal = () => {
         setModalState(false);
+        setModalType(null);
     }
 
-    const openModal = () => {
-        setModalState(true)
+    const openModal = (type = null, item = null) => {
+        setModalState(true);
+        
+        if (item !== null) {
+            setModalData(item)
+        }
+        if (type !== null) {
+            setModalType(type);
+        }
     }
-
-    if (action === true) {
-        openModal();
-    } else {
-        closeModal();
-    }
-
-
+    
     return {
-        modalState
+        modalState,
+        modalType,
+        modalData,
+        closeModal,
+        openModal
     };
 };
 
