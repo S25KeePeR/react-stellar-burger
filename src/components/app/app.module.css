@@ -11,7 +11,12 @@
   margin-left: auto;
   margin-right: auto;
   display: grid;
-  grid-template-columns: 600px 600px;
+  grid-template-columns: 600px;
+  grid-auto-columns: 600px;
+  grid-auto-flow: column;
   column-gap: 40px;
   align-items: start;
+  height: 100%;
+  align-content: center;
+  justify-items: center;
 }

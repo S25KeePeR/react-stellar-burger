@@ -1,0 +1,11 @@
+.details {
+    padding: 0;
+    display: flex;
+    column-gap: 22px;
+    list-style-type: none;
+}
+
+.item {
+    width: 112px;
+    text-align: center;
+}
