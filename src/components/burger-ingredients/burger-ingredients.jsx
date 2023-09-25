@@ -1,4 +1,4 @@
-import React, { useState, useRef }  from "react";
+import React, { useState }  from "react";
 import PropTypes from "prop-types";
 import ingredientPropType from "../../utils/prop-types";
 
@@ -13,8 +13,7 @@ export default function BurgerIngredients({data, openModal}) {
         'Начинки': data.filter(item => item.type === 'main'),
     }), [data]);
 
-    // const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
-    const current = Object.keys(ingredientsCategories)[0];
+    const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
 
     const showCounter = (num) => {
         if (num > 0) { 
@@ -22,8 +21,15 @@ export default function BurgerIngredients({data, openModal}) {
         }
     };
 
+    // const refs = {
+    //     'Булки': useRef(null),
+    //     'Соусы': useRef(null),
+    //     'Начинки': useRef(null),
+    // };
+
     const handleTabClick = (tab) => {
         console.log(tab);
+        // refs[tab].current.scrollIntoView({behavior: 'smooth'});
     };
 
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
@@ -45,7 +51,10 @@ export default function BurgerIngredients({data, openModal}) {
                     <Tab    key={section} 
                             value={section} 
                             active={current === section} 
-                            onClick={() => handleTabClick(section)}
+                            onClick={() => {
+                                handleTabClick(section)
+                                setCurrent(section)
+                            }}
                     >
                         {section}
                     </Tab>
@@ -71,9 +80,7 @@ export default function BurgerIngredients({data, openModal}) {
                                         <CurrencyIcon type="primary"/>
                                     </div>
                                     <span className={classItemTitle}>{ingredient.name}</span>
-                                    
                                 </li>
-                                
                             ))}
                         </ul>
                     </>
@@ -81,7 +88,6 @@ export default function BurgerIngredients({data, openModal}) {
             </div>
         </section>
     )
-
 };
 
 BurgerIngredients.propTypes = {

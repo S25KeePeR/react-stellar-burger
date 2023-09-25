@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, forwardRef } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 
@@ -9,7 +9,7 @@ import ModalOverlay from "./modal-overlay/modal-overlay";
 
 const modalRoot = document.getElementById("react-modals");
 
-export default function Modal({ closeModal, modalTitle = null, children }) {
+const Modal = forwardRef(({ closeModal, modalTitle = null, children }, ref) => {
     
     useEffect(() => {
         const closeModalOnPressKey = (e) => {
@@ -28,7 +28,7 @@ export default function Modal({ closeModal, modalTitle = null, children }) {
 
     return ReactDOM.createPortal((
         <>
-            <div className={classModal}>
+            <div ref={ref} className={classModal}>
                 <div className={classHeader}>
                     <h2 className={classH2}>
                         {modalTitle}
@@ -42,10 +42,12 @@ export default function Modal({ closeModal, modalTitle = null, children }) {
             <ModalOverlay onClick={closeModal}/>
         </> 
     ), modalRoot);
-};
+});
 
 Modal.propTypes = {
     modalTitle: PropTypes.string,
     children: PropTypes.element.isRequired,
     closeModal: PropTypes.func.isRequired,
 };
+
+export default Modal;

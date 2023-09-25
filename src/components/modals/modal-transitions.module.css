@@ -1,0 +1,21 @@
+.enter {
+    opacity: 0;
+    visibility: hidden;
+}
+.enterActive {
+    opacity: 1;
+    visibility: visible;
+    transition: 
+        visibility 0s, 
+        opacity .3s ease-in-out;
+}
+.exit {
+    opacity: 1;
+}
+.exitActive {
+    opacity: 0;
+    visibility: hidden;
+    transition: 
+        visibility 0s .3s, 
+        opacity .3s ease-in-out;
+}

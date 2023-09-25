@@ -20,3 +20,8 @@
   align-content: center;
   justify-items: center;
 }
+
+.ttt {
+  border: 1px solid red;
+  /* transition: all .5s linear; */
+}

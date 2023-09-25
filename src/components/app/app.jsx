@@ -1,6 +1,8 @@
-import {useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { CSSTransition } from "react-transition-group";
 
 import styles from "./app.module.css";
+import transitions from "../modals/modal-transitions.module.css"; 
 
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
@@ -22,7 +24,7 @@ export default function App() {
 		hasError: false,
 		data: []
 	})
-
+	// const nodeRef = useRef(null);
 	const {modalState, modalType, modalData, openModal, closeModal} = useModal();
 	const { isLoading, hasError, data } = dataState;
 
@@ -45,7 +47,7 @@ export default function App() {
 			} 
 		};
 		getData();
-	}, []);
+	});
 
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
 
@@ -72,9 +74,20 @@ export default function App() {
 		}
 		{modalState && modalType === 'Order' &&
 			<Modal closeModal={closeModal}>
-				<OrderDetails/>
+				<OrderDetails  orderNum={'034536'}/>
 			</Modal>
 		}
+		{/* <CSSTransition
+			nodeRef={nodeRef}
+			in={modalState && modalType === 'ingredient'}
+			timeout={300}
+			classNames={{...transitions}}
+			unmountOnExit 
+		>
+			<Modal ref={nodeRef} closeModal={closeModal} modalTitle={'Детали ингредиента'}>
+				<IngredientDetails  ingredient={modalData}/>
+			</Modal>
+      	</CSSTransition> */}
 		</>
   	);
 }
