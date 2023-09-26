@@ -1,11 +1,16 @@
-import React, { useState }  from "react";
+import React, { useState, useContext }  from "react";
 import PropTypes from "prop-types";
 import ingredientPropType from "../../utils/prop-types";
+import {v4 as uuidv4} from "uuid";
 
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorContext } from "../../services/constructorContext";
 
 export default function BurgerIngredients({data, openModal}) {
+
+    const { burgerData, setBurgerData } = useContext(ConstructorContext);
+    const { ingredients } = burgerData;
 
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
@@ -19,6 +24,12 @@ export default function BurgerIngredients({data, openModal}) {
         if (num > 0) { 
             return <Counter count={num} size="default" extraClass="m-1"/>
         }
+    };
+
+    const addIngredient = (ingredient) => {
+        ingredient.type === "bun" ? 
+            setBurgerData({ ...burgerData, bun: ingredient }) :
+            setBurgerData({ ...burgerData, ingredients: [...ingredients, ingredient]});
     };
 
     // const refs = {
@@ -70,7 +81,8 @@ export default function BurgerIngredients({data, openModal}) {
                             {ingredients.map((ingredient) => (
                                 <li className={classItem} key={ingredient._id} 
                                     onClick={() => {
-                                        openModal('ingredient', ingredient)
+                                        openModal('ingredient', ingredient);
+                                        addIngredient(ingredient);
                                     }}
                                 >
                                     {showCounter(ingredient.__v)}

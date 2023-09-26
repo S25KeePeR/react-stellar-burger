@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
-import { CSSTransition } from "react-transition-group";
+import { useEffect, useState, useMemo, useRef } from "react";
+// import { CSSTransition } from "react-transition-group";
 
 import styles from "./app.module.css";
-import transitions from "../modals/modal-transitions.module.css"; 
+// import transitions from "../modals/modal-transitions.module.css"; 
 
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
@@ -12,6 +12,8 @@ import useModal from '../../hooks/useModal';
 import Modal from "../modals/modal";
 import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+
+import { ConstructorContext } from "../../services/constructorContext";
 
 // import {data as base} from "../../utils/data"; // удалить
 
@@ -23,7 +25,20 @@ export default function App() {
 		isLoading: false,
 		hasError: false,
 		data: []
-	})
+	});
+
+    // const [bun, setBun] = useState(null);
+    // const [ingredients, setIngredients] = useState([]);
+	// const burgerData = useMemo(() => ({
+    //     bun, ingredients
+    // }), [bun, ingredients]);
+
+	const [burgerData, setBurgerData] = useState({
+		bun: null,
+		ingredients: [],
+	});
+
+		
 	// const nodeRef = useRef(null);
 	const {modalState, modalType, modalData, openModal, closeModal} = useModal();
 	const { isLoading, hasError, data } = dataState;
@@ -47,10 +62,11 @@ export default function App() {
 			} 
 		};
 		getData();
-	});
+	}, []);
 
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
 
+	
   	return (
 		<>
 		<div className={styles.app}>
@@ -61,8 +77,15 @@ export default function App() {
 				{hasError && "Произошла ошибка"}
 				{!isLoading && !hasError && data.length !== 0 && 
 				<> 
-					<BurgerIngredients data={data} openModal={openModal}/> 
-					<BurgerConstructor data={data} openModal={openModal}/>
+					{/* <BurgerIngredients data={data} openModal={openModal}/> 
+					<BurgerConstructor data={data} openModal={openModal}/> */}
+
+					<ConstructorContext.Provider value={{burgerData, setBurgerData}}>
+
+						<BurgerIngredients data={data} openModal={openModal}/> 
+						<BurgerConstructor openModal={openModal}/>
+
+					</ConstructorContext.Provider>
 				</>
 				}
 			</main>
@@ -91,3 +114,5 @@ export default function App() {
 		</>
   	);
 }
+
+
