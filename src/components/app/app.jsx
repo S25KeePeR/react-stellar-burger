@@ -1,8 +1,8 @@
-import { useEffect, useState, useMemo, useRef } from "react";
-// import { CSSTransition } from "react-transition-group";
+import { useEffect, useState, useReducer, useMemo, useRef } from "react";
 
 import styles from "./app.module.css";
 // import transitions from "../modals/modal-transitions.module.css"; 
+// import { CSSTransition } from "react-transition-group";
 
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
@@ -14,35 +14,29 @@ import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
 import { ConstructorContext } from "../../services/constructorContext";
-
-// import {data as base} from "../../utils/data"; // удалить
+import { constructorReducer, initialState } from "../../services/constructorReducer";
 
 const dataURL = "https://norma.nomoreparties.space/api/ingredients";
 
 export default function App() {
 
-	const [dataState, setDataState] = useState({ 
+	// const >>>>>>>
+	const [ dataState, setDataState ] = useState({ 
 		isLoading: false,
 		hasError: false,
 		data: []
 	});
-
-    // const [bun, setBun] = useState(null);
-    // const [ingredients, setIngredients] = useState([]);
-	// const burgerData = useMemo(() => ({
-    //     bun, ingredients
-    // }), [bun, ingredients]);
-
-	const [burgerData, setBurgerData] = useState({
+	const [ burgerData, setBurgerData ] = useState({
 		bun: null,
 		ingredients: [],
 	});
-
 		
 	// const nodeRef = useRef(null);
-	const {modalState, modalType, modalData, openModal, closeModal} = useModal();
+	const { modalState, modalType, modalData, openModal, closeModal } = useModal();
 	const { isLoading, hasError, data } = dataState;
-
+    const [ state, dispatch ] = useReducer(constructorReducer, initialState);
+		
+	// function >>>>>>>
 	useEffect(() => {
 		const getData = async () => {
 			try {
@@ -64,9 +58,10 @@ export default function App() {
 		getData();
 	}, []);
 
+	// class >>>>>>>
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
-
 	
+	// >>>>>>> 
   	return (
 		<>
 		<div className={styles.app}>
@@ -76,17 +71,12 @@ export default function App() {
 				{isLoading && "Загрузка..."}
 				{hasError && "Произошла ошибка"}
 				{!isLoading && !hasError && data.length !== 0 && 
-				<> 
-					{/* <BurgerIngredients data={data} openModal={openModal}/> 
-					<BurgerConstructor data={data} openModal={openModal}/> */}
-
-					<ConstructorContext.Provider value={{burgerData, setBurgerData}}>
-
-						<BurgerIngredients data={data} openModal={openModal}/> 
-						<BurgerConstructor openModal={openModal}/>
-
+					<ConstructorContext.Provider value={{burgerData, setBurgerData, state, dispatch}}>
+						
+							<BurgerIngredients data={data} openModal={openModal}/> 
+							<BurgerConstructor openModal={openModal}/>
+						
 					</ConstructorContext.Provider>
-				</>
 				}
 			</main>
 		</div>

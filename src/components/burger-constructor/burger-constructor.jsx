@@ -9,13 +9,15 @@ import { ConstructorContext } from "../../services/constructorContext";
 
 export default function BurgerConstructor({openModal}) {
 
-    const { burgerData } = useContext(ConstructorContext);
+    const { burgerData, state } = useContext(ConstructorContext);
+    
     // const { bun, ingredients } = burgerData;
 
     // const ingredientsCategories = React.useMemo(() => ({
     //     buns: data.filter(items => items.type === "bun"),
     //     mains: data.filter(items => items.type !== "bun")
     // }), [data]);
+    
 
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
@@ -30,12 +32,6 @@ export default function BurgerConstructor({openModal}) {
     const classItemTop = `mr-4 ${classItem} ${styles.top}`;
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
  
-    function getMR() {
-        if (burgerData.ingredients.length < 6 ) {
-            return classMR
-        }
-    }
-
     return (
         <section className={classContainer}>
             <ul className={classConstructor}>
@@ -63,7 +59,7 @@ export default function BurgerConstructor({openModal}) {
                                     <ConstructorElement text={ingredients.name}
                                                         price={ingredients.price}
                                                         thumbnail={ingredients.image}
-                                                        extraClass={getMR()}                                                  
+                                                        extraClass={burgerData.ingredients.length < 6  ? classMR : null}                                              
                                     />
                                 </li>
                             ))}
@@ -119,7 +115,9 @@ export default function BurgerConstructor({openModal}) {
             </ul>
             <div className={classFooter}>
                 <div className={classTotal}>
-                    <span className={classTotalTitle}>610</span>
+                    <span className={classTotalTitle}>
+                        {state.total}
+                    </span>
                     <CurrencyIcon type="primary"/>
                 </div>
                 <Button     htmlType="button" 
@@ -135,6 +133,6 @@ export default function BurgerConstructor({openModal}) {
     );
 };
 
-BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(ingredientPropType).isRequired
-};
+// BurgerConstructor.propTypes = {
+//     data: PropTypes.arrayOf(ingredientPropType).isRequired
+// };

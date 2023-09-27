@@ -54,7 +54,8 @@
 } */
 
 .ingredient {
-    width: 100%;
+    /* width: 100%; */
+    min-width: 579px;
     display: flex;
     align-items: center;
     gap: 8px;    
