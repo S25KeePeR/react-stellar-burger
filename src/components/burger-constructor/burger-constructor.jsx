@@ -7,18 +7,14 @@ import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorContext } from "../../services/constructorContext";
 
+const dataURL = "https://norma.nomoreparties.space/api/orders";
+
 export default function BurgerConstructor({openModal}) {
 
+	// const >>>>>>>
     const { burgerData, state } = useContext(ConstructorContext);
-    
-    // const { bun, ingredients } = burgerData;
 
-    // const ingredientsCategories = React.useMemo(() => ({
-    //     buns: data.filter(items => items.type === "bun"),
-    //     mains: data.filter(items => items.type !== "bun")
-    // }), [data]);
-    
-
+	// class >>>>>>>
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
     const classMR = ` mr-3`;
@@ -32,6 +28,39 @@ export default function BurgerConstructor({openModal}) {
     const classItemTop = `mr-4 ${classItem} ${styles.top}`;
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
  
+
+    const submitOrder = async (e) => {
+        e.preventDefault();
+        const newOrder = {
+            ingredients: [  burgerData.bun._id, 
+                            ...burgerData.ingredients.map(ingredient => ingredient._id), 
+                            burgerData.bun._id ] 
+        }
+        try {
+            let res = await fetch( dataURL, { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newOrder)
+            })
+            if (!res.ok) {
+                throw new Error('Ошибка соединения с сервером');
+            }
+            res = await res.json();
+            if (res.success && res.order.number !== 0) {
+                // setDataState({ ...dataState, isLoading: false, data: res.data })
+                console.log(res)
+            } else {
+                throw new Error('Некорректные данные');
+            }
+        } catch (error) {
+            // setDataState({ ...dataState, hasError: true, isLoading: false  })
+            console.log('Ошибка: ', error); 
+        }
+    };
+
+
+
+	// >>>>>>> 
     return (
         <section className={classContainer}>
             <ul className={classConstructor}>
@@ -79,39 +108,6 @@ export default function BurgerConstructor({openModal}) {
                         />
                     )} 
                 </li>
-
-                {/* <li className={classBun}>
-                    <ConstructorElement type="top"
-                                        isLocked={true}
-                                        text={`${burgerData.bun.name} (верх)`}
-                                        price={burgerData.bun.price}
-                                        thumbnail={burgerData.bun.image}
-                                        //extraClass={checkBun(burgerData.bun._id)}
-                    />
-
-                </li>
-                <li>
-                    <ul className={classIngredients}>
-                        {ingredientsCategories.mains.map(ingredients => (
-                            <li className={classIngredient} key={ingredients._id}>
-                                <DragIcon type="primary"/>
-                                <ConstructorElement text={ingredients.name}
-                                                    price={ingredients.price}
-                                                    thumbnail={ingredients.image}                                                    
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </li>
-                <li className={classBun}>
-                    <ConstructorElement type="bottom"
-                                        isLocked={true}
-                                        text={`${burgerData.bun.name} (низ)`}
-                                        price={burgerData.bun.price}
-                                        thumbnail={burgerData.bun.image}
-                                        //extraClass={checkBun(burgerData.bun._id)}
-                    />
-                </li> */}
             </ul>
             <div className={classFooter}>
                 <div className={classTotal}>
@@ -123,8 +119,9 @@ export default function BurgerConstructor({openModal}) {
                 <Button     htmlType="button" 
                             type="primary" 
                             size="large" 
-                            onClick={() => {
+                            onClick={(e) => {
                                 openModal('Order')
+                                submitOrder(e)
                             }}>
                     Оформить заказ
                 </Button>
@@ -133,6 +130,6 @@ export default function BurgerConstructor({openModal}) {
     );
 };
 
-// BurgerConstructor.propTypes = {
-//     data: PropTypes.arrayOf(ingredientPropType).isRequired
-// };
+BurgerConstructor.propTypes = {
+    openModal:  PropTypes.func.isRequired,
+};

@@ -90,7 +90,7 @@ export default function BurgerIngredients({data, openModal}) {
                             {ingredients.map((ingredient) => (
                                 <li className={classItem} key={ingredient._id} 
                                     onClick={() => {
-                                        //openModal('ingredient', ingredient);
+                                        openModal('ingredient', ingredient);
                                         addIngredient(ingredient);
                                         
                                     }}
@@ -113,5 +113,6 @@ export default function BurgerIngredients({data, openModal}) {
 };
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(ingredientPropType).isRequired
+    data: PropTypes.arrayOf(ingredientPropType).isRequired,
+    openModal:  PropTypes.func.isRequired,
 };
