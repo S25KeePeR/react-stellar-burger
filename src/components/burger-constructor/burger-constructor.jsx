@@ -116,16 +116,12 @@ export default function BurgerConstructor({openModal}) {
                 </div>
                 <Button     htmlType="button" 
                             type="primary" 
-                            size="large" 
-                            onClick={(e) => {{
-                                burgerData.bun !== null &&
-                                burgerData.ingredients.length !== 0 &&
+                            size="large"
+                            disabled={burgerData.bun === null ? true : burgerData.ingredients.length === 0 ? true : false}
+                            onClick={(e) => {
                                 submitOrder(e)
-                            }
-                            //     console.log(burgerData.bun._id)
-                                // openModal('Order')
-                                //submitOrder(e)
-                            }}>
+                            }}
+                >
                     Оформить заказ
                 </Button>
             </div>
