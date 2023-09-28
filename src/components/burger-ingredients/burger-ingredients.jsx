@@ -83,11 +83,11 @@ export default function BurgerIngredients({data, openModal}) {
             </nav>
             <div className={classContainer}>
                 {Object.entries(ingredientsCategories).map(([category, ingredients]) => (
-                    <>
-                        <h2 className={classH2} key={category}>
+                    <div key={category}>
+                        <h2 className={classH2} >
                             {category}
                         </h2>
-                        <ul className={classItems}>
+                        <ul className={classItems} >
                             {ingredients.map((ingredient) => (
                                 <li className={classItem} key={ingredient._id} 
                                     onClick={() => {
@@ -106,7 +106,7 @@ export default function BurgerIngredients({data, openModal}) {
                                 </li>
                             ))}
                         </ul>
-                    </>
+                    </div>
                 ))}
             </div>
         </section>
