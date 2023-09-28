@@ -15,6 +15,7 @@ import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
 import { ConstructorContext } from "../../services/constructorContext";
 import { constructorReducer, initialState } from "../../services/constructorReducer";
+import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
 const dataURL = "https://norma.nomoreparties.space/api/ingredients";
 
@@ -30,6 +31,10 @@ export default function App() {
 		bun: null,
 		ingredients: [],
 	});
+	const [ orderData, setOrderData ] = useState({
+		name: null,
+		number: null
+	})
 		
 	// const nodeRef = useRef(null);
 	const { modalState, modalType, modalData, openModal, closeModal } = useModal();
@@ -57,7 +62,7 @@ export default function App() {
 		};
 		getData();
 	}, []);
-
+	
 	// class >>>>>>>
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
 	
@@ -72,10 +77,10 @@ export default function App() {
 				{hasError && "Произошла ошибка"}
 				{!isLoading && !hasError && data.length !== 0 && 
 					<ConstructorContext.Provider value={{burgerData, setBurgerData, state, dispatch}}>
-						
-							<BurgerIngredients data={data} openModal={openModal}/> 
-							<BurgerConstructor openModal={openModal}/>
-						
+						<BurgerIngredients data={data} openModal={openModal}/> 
+						<OrderDetailsContext.Provider value={{setOrderData}}>
+							<BurgerConstructor openModal={openModal}/>						
+						</OrderDetailsContext.Provider> 
 					</ConstructorContext.Provider>
 				}
 			</main>
@@ -87,7 +92,7 @@ export default function App() {
 		}
 		{modalState && modalType === 'Order' &&
 			<Modal closeModal={closeModal}>
-				<OrderDetails  orderNum={'034536'}/>
+				<OrderDetails  orderNum={orderData.number}/>
 			</Modal>
 		}
 		{/* <CSSTransition

@@ -1,11 +1,12 @@
-import React, {useContext} from "react";
+import { useContext } from "react";
 import PropTypes from "prop-types";
-import ingredientPropType from "../../utils/prop-types";
-import {v4 as uuidv4} from "uuid";
+//import ingredientPropType from "../../utils/prop-types";
+import { v4 as uuidv4 } from "uuid";
 
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorContext } from "../../services/constructorContext";
+import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
 const dataURL = "https://norma.nomoreparties.space/api/orders";
 
@@ -13,6 +14,7 @@ export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
     const { burgerData, state } = useContext(ConstructorContext);
+	const { setOrderData } = useContext(OrderDetailsContext);
 
 	// class >>>>>>>
     const classContainer = `${styles.container}`;
@@ -28,7 +30,6 @@ export default function BurgerConstructor({openModal}) {
     const classItemTop = `mr-4 ${classItem} ${styles.top}`;
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
  
-
     const submitOrder = async (e) => {
         e.preventDefault();
         const newOrder = {
@@ -47,18 +48,15 @@ export default function BurgerConstructor({openModal}) {
             }
             res = await res.json();
             if (res.success && res.order.number !== 0) {
-                // setDataState({ ...dataState, isLoading: false, data: res.data })
-                console.log(res)
+                setOrderData({ name: res.name, number: res.order.number });
+                openModal('Order');
             } else {
                 throw new Error('Некорректные данные');
             }
         } catch (error) {
-            // setDataState({ ...dataState, hasError: true, isLoading: false  })
             console.log('Ошибка: ', error); 
         }
     };
-
-
 
 	// >>>>>>> 
     return (
@@ -119,9 +117,14 @@ export default function BurgerConstructor({openModal}) {
                 <Button     htmlType="button" 
                             type="primary" 
                             size="large" 
-                            onClick={(e) => {
-                                openModal('Order')
+                            onClick={(e) => {{
+                                burgerData.bun !== null &&
+                                burgerData.ingredients.length !== 0 &&
                                 submitOrder(e)
+                            }
+                            //     console.log(burgerData.bun._id)
+                                // openModal('Order')
+                                //submitOrder(e)
                             }}>
                     Оформить заказ
                 </Button>
