@@ -2,21 +2,22 @@ import { useContext } from "react";
 import PropTypes from "prop-types";
 //import ingredientPropType from "../../utils/prop-types";
 import { v4 as uuidv4 } from "uuid";
+import api from "../../utils/api";
 
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { ConstructorContext } from "../../services/constructorContext";
 import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
-const dataURL = "https://norma.nomoreparties.space/api/orders";
-
 export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
+
     const { burgerData, state } = useContext(ConstructorContext);
-	const { setOrderData } = useContext(OrderDetailsContext);
+	const { setOrderData, setIsLoading, setError } = useContext(OrderDetailsContext);
 
 	// class >>>>>>>
+
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
     const classMR = ` mr-3`;
@@ -25,40 +26,39 @@ export default function BurgerConstructor({openModal}) {
     const classFooter = `mr-4 mt-5 ${styles.footer}`;
     const classTotal = `mr-10 ${styles.total}`;
     const classTotalTitle = `mr-4 text text_type_digits-medium`;
-    
     const classItem = `mr-4 ${styles.item}`;
     const classItemTop = `mr-4 ${classItem} ${styles.top}`;
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
  
+	// function >>>>>>>
+
     const submitOrder = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const newOrder = {
             ingredients: [  burgerData.bun._id, 
                             ...burgerData.ingredients.map(ingredient => ingredient._id), 
                             burgerData.bun._id ] 
         }
         try {
-            let res = await fetch( dataURL, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newOrder)
-            })
-            if (!res.ok) {
-                throw new Error('Ошибка соединения с сервером');
-            }
-            res = await res.json();
-            if (res.success && res.order.number !== 0) {
-                setOrderData({ name: res.name, number: res.order.number });
+            let res = await api.post('orders', newOrder);
+            let resData = res.data;
+            if (resData.success && resData.order.number !== 0) {
+                setOrderData({ name: resData.name, number: resData.order.number });
                 openModal('Order');
             } else {
                 throw new Error('Некорректные данные');
             }
         } catch (error) {
+            setError(true);
             console.log('Ошибка: ', error); 
+        } finally {
+            setIsLoading(false);
         }
     };
 
 	// >>>>>>> 
+
     return (
         <section className={classContainer}>
             <ul className={classConstructor}>

@@ -9,25 +9,24 @@ import { ConstructorContext } from "../../services/constructorContext";
 
 export default function BurgerIngredients({data, openModal}) {
 
-	// const >>>>>>>
+// const >>>>>>>
+
     const { burgerData, setBurgerData, dispatch } = useContext(ConstructorContext);
     const { ingredients } = burgerData;
-
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
         'Соусы': data.filter(item => item.type === 'sauce'),
         'Начинки': data.filter(item => item.type === 'main'),
     }), [data]);
-
     const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
 
+// function >>>>>>>
+  
     const showCounter = (num) => {
         if (num > 0) { 
             return <Counter count={num} size="default" extraClass="m-1"/>
         }
     };
-
-	// function >>>>>>>
     const addIngredient = (ingredient) => {
         if (ingredient.type === "bun") {
             setBurgerData({ ...burgerData, bun: ingredient });
@@ -40,19 +39,18 @@ export default function BurgerIngredients({data, openModal}) {
             dispatch({ type: "add_ingredient", payload: ingredient });
         }
     };
-
     // const refs = {
     //     'Булки': useRef(null),
     //     'Соусы': useRef(null),
     //     'Начинки': useRef(null),
     // };
-
     const handleTabClick = (tab) => {
         console.log(tab);
         // refs[tab].current.scrollIntoView({behavior: 'smooth'});
     };
 
-	// class >>>>>>>
+// class >>>>>>>
+
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
     const classH2 = `mb-6 text text_type_main-medium `;
     const classContainer = `mt-10 ${styles.container} custom-scroll`;
@@ -62,6 +60,8 @@ export default function BurgerIngredients({data, openModal}) {
     const classItemText = `text text_type_digits-default ${styles.text}`;
     const classItemPrice = `${styles.price}`;
     
+// >>>>>>> 
+
     return (
         <section>
             <h1 className={classH1}>
@@ -89,11 +89,11 @@ export default function BurgerIngredients({data, openModal}) {
                         </h2>
                         <ul className={classItems} >
                             {ingredients.map((ingredient) => (
-                                <li className={classItem} key={ingredient._id} 
+                                <li className={classItem} 
+                                    key={ingredient._id} 
                                     onClick={() => {
                                         openModal('ingredient', ingredient);
                                         addIngredient(ingredient);
-                                        
                                     }}
                                 >
                                     {showCounter(ingredient.__v)}
@@ -112,6 +112,8 @@ export default function BurgerIngredients({data, openModal}) {
         </section>
     )
 };
+
+// propTypes >>>>>>>
 
 BurgerIngredients.propTypes = {
     data: PropTypes.arrayOf(ingredientPropType).isRequired,

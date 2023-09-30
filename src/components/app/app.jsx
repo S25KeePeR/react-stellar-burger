@@ -1,6 +1,8 @@
 import { useEffect, useState, useReducer, useMemo, useRef } from "react";
+import api from "../../utils/api";
 
 import styles from "./app.module.css";
+
 // import transitions from "../modals/modal-transitions.module.css"; 
 // import { CSSTransition } from "react-transition-group";
 
@@ -17,16 +19,12 @@ import { ConstructorContext } from "../../services/constructorContext";
 import { constructorReducer, initialState } from "../../services/constructorReducer";
 import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
-const dataURL = "https://norma.nomoreparties.space/api/ingredients";
-
 export default function App() {
 
 	// const >>>>>>>
-	const [ dataState, setDataState ] = useState({ 
-		isLoading: false,
-		hasError: false,
-		data: []
-	});
+	const [ data, setData ] = useState([]);
+	const [ isLoading, setIsLoading ] = useState(false);
+	const [ error, setError ] = useState(false);
 	const [ burgerData, setBurgerData ] = useState({
 		bun: null,
 		ingredients: [],
@@ -38,47 +36,55 @@ export default function App() {
 		
 	// const nodeRef = useRef(null);
 	const { modalState, modalType, modalData, openModal, closeModal } = useModal();
-	const { isLoading, hasError, data } = dataState;
     const [ state, dispatch ] = useReducer(constructorReducer, initialState);
 		
 	// function >>>>>>>
+
 	useEffect(() => {
+		setIsLoading(true);
 		const getData = async () => {
 			try {
-				let res = await fetch(dataURL);
-				if (!res.ok) {
-					throw new Error('Ошибка соединения с сервером');
-				}
-				res = await res.json();
-				if (res.success && Array.isArray(res.data) && res.data.length !== 0) {
-					setDataState({ ...dataState, isLoading: false, data: res.data })
+				let res = await api.get('ingredients');
+				let resData = res.data;
+				if (resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
+					setData(resData.data);
 				} else {
 					throw new Error('Некорректные данные или пустая база');
 				}
 			} catch (error) {
-				setDataState({ ...dataState, hasError: true, isLoading: false  })
+				setError(true);
 				console.log('Ошибка: ', error); 
-			} 
+			} finally {
+				setIsLoading(false);
+			}
 		};
 		getData();
 	}, []);
 	
 	// class >>>>>>>
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
-	
+	const classStatus = `${styles.status}`;
+
 	// >>>>>>> 
   	return (
 		<>
 		<div className={styles.app}>
 			<AppHeader />
 			<main className={classMain}>
-
-				{isLoading && "Загрузка..."}
-				{hasError && "Произошла ошибка"}
-				{!isLoading && !hasError && data.length !== 0 && 
+				{isLoading && 
+					<p className={classStatus}>
+						Загрузка...
+					</p>
+				}
+				{error && 
+					<p className={classStatus}>
+						Произошла ошибка
+					</p>
+				}
+				{data.length !== 0 && 
 					<ConstructorContext.Provider value={{burgerData, setBurgerData, state, dispatch}}>
 						<BurgerIngredients data={data} openModal={openModal}/> 
-						<OrderDetailsContext.Provider value={{setOrderData}}>
+						<OrderDetailsContext.Provider value={{setOrderData, setIsLoading, setError}}>
 							<BurgerConstructor openModal={openModal}/>						
 						</OrderDetailsContext.Provider> 
 					</ConstructorContext.Provider>
