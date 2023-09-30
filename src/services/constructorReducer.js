@@ -1,5 +1,3 @@
-import React, { useReducer } from 'react';
-
 export const initialState = { total: 0 };
 
 export const constructorReducer = (state, action) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer, useMemo, useRef } from "react";
+import { useEffect, useState, useReducer } from "react";
 import api from "../../utils/api";
 
 import styles from "./app.module.css";

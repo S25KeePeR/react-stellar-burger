@@ -13,7 +13,7 @@ export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
 
-    const { burgerData, state } = useContext(ConstructorContext);
+    const { burgerData, setBurgerData, state } = useContext(ConstructorContext);
 	const { setOrderData, setIsLoading, setError } = useContext(OrderDetailsContext);
 
 	// class >>>>>>>
@@ -46,6 +46,7 @@ export default function BurgerConstructor({openModal}) {
             if (resData.success && resData.order.number !== 0) {
                 setOrderData({ name: resData.name, number: resData.order.number });
                 openModal('Order');
+                setBurgerData({ bun: null, ingredients: [] })
             } else {
                 throw new Error('Некорректные данные');
             }
