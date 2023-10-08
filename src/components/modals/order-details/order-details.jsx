@@ -11,7 +11,7 @@ const classInfo = `${classText} mt-15`;
 const classInfoInactive = `${classText} text_color_inactive mt-2 mb-15`;
 
 
-const OrderDetails = ({orderNum = '034536'}) => {
+const OrderDetails = ({orderNum}) => {
     return (
         <>
             <h3 className={classH3}>{orderNum}</h3>
