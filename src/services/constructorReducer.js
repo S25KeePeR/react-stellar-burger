@@ -22,6 +22,11 @@ export const constructorReducer = (state, action) => {
                 ...state,
                 total: state.total - action.payload.price
             };
+        case 'clearTotal':
+            return {
+                ...state,
+                total: 0
+            };
         default:
             throw new Error(`Wrong type of action: ${action.type}`);
     }
