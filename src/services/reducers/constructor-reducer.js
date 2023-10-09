@@ -1,36 +1,36 @@
 import {
-    ADD_BUN,
-    REMOVE_BUN,
-    ADD_INGREDIENT,
-    REMOVE_INGREDIENT,
-    CLEAR_TOTAL,
+    ADD_BUN_PRICE,
+    REMOVE_BUN_PRICE,
+    ADD_INGREDIENT_PRICE,
+    REMOVE_INGREDIENT_PRICE,
+    CLEAR_TOTAL_PRICE,
   } from '../actions/constructor-action';
 
-export const initialState = { total: 0 };
+const initialState = { total: 0 };
 
 export const constructorReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_BUN:
+        case ADD_BUN_PRICE:
             return {
                 ...state,
                 total: state.total + (action.payload.price * 2)
             };
-        case REMOVE_BUN:
+        case REMOVE_BUN_PRICE:
             return {
                 ...state,
                 total: state.total - (action.payload.price * 2)
             };
-        case ADD_INGREDIENT:
+        case ADD_INGREDIENT_PRICE:
             return {
                 ...state,
                 total: state.total + action.payload.price
             };
-        case REMOVE_INGREDIENT:
+        case REMOVE_INGREDIENT_PRICE:
             return {
                 ...state,
                 total: state.total - action.payload.price
             };
-        case CLEAR_TOTAL:
+        case CLEAR_TOTAL_PRICE:
             return {
                 ...state,
                 total: 0

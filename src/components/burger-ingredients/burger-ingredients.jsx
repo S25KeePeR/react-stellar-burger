@@ -1,7 +1,7 @@
 import React, { useState, useContext }  from "react";
 import { useDispatch } from 'react-redux';
 
-import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
+import { ADD_BUN_PRICE, REMOVE_BUN_PRICE, ADD_INGREDIENT_PRICE } from "../../services/actions/constructor-action";
 
 import PropTypes from "prop-types";
 import ingredientPropType from "../../utils/prop-types";
@@ -37,12 +37,12 @@ export default function BurgerIngredients({data, openModal}) {
         if (ingredient.type === "bun") {
             setBurgerData({ ...burgerData, bun: ingredient });
             if (burgerData.bun !== null) {
-                dispatch({ type: REMOVE_BUN, payload: burgerData.bun });
+                dispatch({ type: REMOVE_BUN_PRICE, payload: burgerData.bun });
             } 
-            dispatch({ type: ADD_BUN, payload: ingredient });
+            dispatch({ type: ADD_BUN_PRICE, payload: ingredient });
         } else {
             setBurgerData({ ...burgerData, ingredients: [...ingredients, ingredient]})
-            dispatch({ type: ADD_INGREDIENT, payload: ingredient });
+            dispatch({ type: ADD_INGREDIENT_PRICE, payload: ingredient });
         }
     };
     // const refs = {
