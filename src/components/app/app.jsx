@@ -16,7 +16,6 @@ import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
 import { ConstructorContext } from "../../services/constructorContext";
-import { constructorReducer, initialState } from "../../services/constructorReducer";
 import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
 export default function App() {
@@ -36,7 +35,7 @@ export default function App() {
 		
 	// const nodeRef = useRef(null);
 	const { modalState, modalType, modalData, openModal, closeModal } = useModal();
-    const [ state, dispatch ] = useReducer(constructorReducer, initialState);
+   
 		
 	// function >>>>>>>
 
@@ -82,7 +81,7 @@ export default function App() {
 					</p>
 				}
 				{data.length !== 0 && 
-					<ConstructorContext.Provider value={{burgerData, setBurgerData, state, dispatch}}>
+					<ConstructorContext.Provider value={{burgerData, setBurgerData}}>
 						<BurgerIngredients data={data} openModal={openModal}/> 
 						<OrderDetailsContext.Provider value={{setOrderData, setIsLoading, setError}}>
 							<BurgerConstructor openModal={openModal}/>						

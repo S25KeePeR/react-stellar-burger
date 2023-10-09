@@ -17,7 +17,7 @@ export default function BurgerIngredients({data, openModal}) {
 
     const dispatch = useDispatch();
 
-    const { burgerData, setBurgerData } = useContext(ConstructorContext); //, dispatch
+    const { burgerData, setBurgerData } = useContext(ConstructorContext); 
     const { ingredients } = burgerData;
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
@@ -37,14 +37,11 @@ export default function BurgerIngredients({data, openModal}) {
         if (ingredient.type === "bun") {
             setBurgerData({ ...burgerData, bun: ingredient });
             if (burgerData.bun !== null) {
-                // dispatch({ type: "remove_bun", payload: burgerData.bun });
                 dispatch({ type: REMOVE_BUN, payload: burgerData.bun });
             } 
-            // dispatch({ type: "add_bun", payload: ingredient });
             dispatch({ type: ADD_BUN, payload: ingredient });
         } else {
             setBurgerData({ ...burgerData, ingredients: [...ingredients, ingredient]})
-            // dispatch({ type: "add_ingredient", payload: ingredient });
             dispatch({ type: ADD_INGREDIENT, payload: ingredient });
         }
     };

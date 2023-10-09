@@ -15,9 +15,8 @@ export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
 
-    const dispatch2 = useDispatch();
-
-    const { burgerData, setBurgerData } = useContext(ConstructorContext); //, state, dispatch
+    const dispatch = useDispatch();
+    const { burgerData, setBurgerData } = useContext(ConstructorContext); 
 	const { setOrderData, setIsLoading, setError } = useContext(OrderDetailsContext);
     const total = useSelector(store => store.constructorReducer.total);
     
@@ -53,9 +52,8 @@ export default function BurgerConstructor({openModal}) {
                 setOrderData({ name: resData.name, number: resData.order.number });
                 openModal('Order');
                 setBurgerData({ bun: null, ingredients: [] });
-                // dispatch({ type: "clearTotal"});
-                dispatch2({type: 'CLEAR_TOTAL' });
 
+                dispatch({type: 'CLEAR_TOTAL' });
             } else {
                 throw new Error('Некорректные данные');
             }
