@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
+import { CLEAR } from "../../services/actions/constructor-action";
+
 import PropTypes from "prop-types";
 //import ingredientPropType from "../../utils/prop-types";
 import { v4 as uuidv4 } from "uuid";
@@ -8,21 +10,18 @@ import api from "../../utils/api";
 
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { ConstructorContext } from "../../services/constructorContext";
+
 import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
 export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
-
     const dispatch = useDispatch();
-    const { burgerData, setBurgerData } = useContext(ConstructorContext); 
+    const burgerData = useSelector(store => store.constructorReducer);
 	const { setOrderData, setIsLoading, setError } = useContext(OrderDetailsContext);
-    const total = useSelector(store => store.constructorReducer.total);
-    
+ 
 
 	// class >>>>>>>
-
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
     const classMR = ` mr-3`;
@@ -36,7 +35,6 @@ export default function BurgerConstructor({openModal}) {
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
  
 	// function >>>>>>>
-
     const submitOrder = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -51,9 +49,7 @@ export default function BurgerConstructor({openModal}) {
             if (resData.success && resData.order.number !== 0) {
                 setOrderData({ name: resData.name, number: resData.order.number });
                 openModal('Order');
-                setBurgerData({ bun: null, ingredients: [] });
-
-                dispatch({type: 'CLEAR_TOTAL' });
+                dispatch({type: CLEAR});
             } else {
                 throw new Error('Некорректные данные');
             }
@@ -66,7 +62,6 @@ export default function BurgerConstructor({openModal}) {
     };
 
 	// >>>>>>> 
-
     return (
         <section className={classContainer}>
             <ul className={classConstructor}>
@@ -118,7 +113,7 @@ export default function BurgerConstructor({openModal}) {
             <div className={classFooter}>
                 <div className={classTotal}>
                     <span className={classTotalTitle}>
-                        {total}
+                        {burgerData.total}
                     </span>
                     <CurrencyIcon type="primary"/>
                 </div>
@@ -137,6 +132,7 @@ export default function BurgerConstructor({openModal}) {
     );
 };
 
+// propTypes >>>>>>>
 BurgerConstructor.propTypes = {
     openModal:  PropTypes.func.isRequired,
 };

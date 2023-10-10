@@ -1,7 +1,8 @@
 import React, { useState, useContext }  from "react";
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_BUN_PRICE, REMOVE_BUN_PRICE, ADD_INGREDIENT_PRICE } from "../../services/actions/constructor-action";
+import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT, REMOVE_INGREDIENT } from "../../services/actions/constructor-action";
+// import { ADD_BUN, ADD_INGREDIENT } from "../../services/actions/ingredient-action";
 
 import PropTypes from "prop-types";
 import ingredientPropType from "../../utils/prop-types";
@@ -13,12 +14,9 @@ import { ConstructorContext } from "../../services/constructorContext";
 
 export default function BurgerIngredients({data, openModal}) {
 
-// const >>>>>>>
-
+    // const >>>>>>>
     const dispatch = useDispatch();
-
-    const { burgerData, setBurgerData } = useContext(ConstructorContext); 
-    const { ingredients } = burgerData;
+    const burgerData = useSelector(store => store.constructorReducer);
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
         'Соусы': data.filter(item => item.type === 'sauce'),
@@ -26,8 +24,7 @@ export default function BurgerIngredients({data, openModal}) {
     }), [data]);
     const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
 
-// function >>>>>>>
-  
+    // function >>>>>>>  
     const showCounter = (num) => {
         if (num > 0) { 
             return <Counter count={num} size="default" extraClass="m-1"/>
@@ -35,14 +32,12 @@ export default function BurgerIngredients({data, openModal}) {
     };
     const addIngredient = (ingredient) => {
         if (ingredient.type === "bun") {
-            setBurgerData({ ...burgerData, bun: ingredient });
             if (burgerData.bun !== null) {
-                dispatch({ type: REMOVE_BUN_PRICE, payload: burgerData.bun });
+                dispatch({ type: REMOVE_BUN, payload: burgerData.bun });
             } 
-            dispatch({ type: ADD_BUN_PRICE, payload: ingredient });
+            dispatch({ type: ADD_BUN, payload: ingredient });
         } else {
-            setBurgerData({ ...burgerData, ingredients: [...ingredients, ingredient]})
-            dispatch({ type: ADD_INGREDIENT_PRICE, payload: ingredient });
+            dispatch({ type: ADD_INGREDIENT, payload: ingredient });   
         }
     };
     // const refs = {
@@ -55,8 +50,8 @@ export default function BurgerIngredients({data, openModal}) {
         // refs[tab].current.scrollIntoView({behavior: 'smooth'});
     };
 
-// class >>>>>>>
 
+    // class >>>>>>>
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
     const classH2 = `mb-6 text text_type_main-medium `;
     const classContainer = `mt-10 ${styles.container} custom-scroll`;
@@ -66,8 +61,7 @@ export default function BurgerIngredients({data, openModal}) {
     const classItemText = `text text_type_digits-default ${styles.text}`;
     const classItemPrice = `${styles.price}`;
     
-// >>>>>>> 
-
+    // >>>>>>> 
     return (
         <section>
             <h1 className={classH1}>
@@ -120,7 +114,6 @@ export default function BurgerIngredients({data, openModal}) {
 };
 
 // propTypes >>>>>>>
-
 BurgerIngredients.propTypes = {
     data: PropTypes.arrayOf(ingredientPropType).isRequired,
     openModal:  PropTypes.func.isRequired,

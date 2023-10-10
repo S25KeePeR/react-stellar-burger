@@ -1,39 +1,49 @@
 import {
-    ADD_BUN_PRICE,
-    REMOVE_BUN_PRICE,
-    ADD_INGREDIENT_PRICE,
-    REMOVE_INGREDIENT_PRICE,
-    CLEAR_TOTAL_PRICE,
+    ADD_BUN,
+    REMOVE_BUN,
+    ADD_INGREDIENT,
+    REMOVE_INGREDIENT,
+    CLEAR,
   } from '../actions/constructor-action';
 
-const initialState = { total: 0 };
+const initialState = {
+    bun: null,
+    ingredients: [],
+    total: 0 
+};
+
 
 export const constructorReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_BUN_PRICE:
+        case ADD_BUN:
             return {
                 ...state,
-                total: state.total + (action.payload.price * 2)
+                bun: action.payload,
+                total: state.total  + (action.payload.price * 2)
             };
-        case REMOVE_BUN_PRICE:
+        case REMOVE_BUN: 
             return {
                 ...state,
                 total: state.total - (action.payload.price * 2)
             };
-        case ADD_INGREDIENT_PRICE:
+        case ADD_INGREDIENT:
             return {
                 ...state,
+                ingredients: [...state.ingredients, action.payload],
                 total: state.total + action.payload.price
             };
-        case REMOVE_INGREDIENT_PRICE:
+        case REMOVE_INGREDIENT: // доработать когда понадобится удалять ингредиенты из бургера
             return {
                 ...state,
                 total: state.total - action.payload.price
             };
-        case CLEAR_TOTAL_PRICE:
+        case CLEAR:
             return {
-                ...state,
-                total: 0
+                order: null,
+                name: null,
+                bun: null,
+                ingredients: [],
+                total: 0 
             };
         default:
             return state;
