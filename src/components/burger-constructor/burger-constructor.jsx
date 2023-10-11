@@ -1,7 +1,7 @@
-import { useContext } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CLEAR } from "../../services/actions/constructor-action";
+import { GET_ORDER, GET_ORDER_FAILED, GET_ORDER_SUCCESS } from "../../services/actions/order-action";
 
 import PropTypes from "prop-types";
 //import ingredientPropType from "../../utils/prop-types";
@@ -11,16 +11,12 @@ import api from "../../utils/api";
 import styles from "./burger-constructor.module.css";
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 
-import { OrderDetailsContext } from "../../services/orderDetailsContext";
-
 export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
     const dispatch = useDispatch();
     const burgerData = useSelector(store => store.constructorReducer);
-	const { setOrderData, setIsLoading, setError } = useContext(OrderDetailsContext);
- 
-
+  
 	// class >>>>>>>
     const classContainer = `${styles.container}`;
     const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
@@ -37,7 +33,9 @@ export default function BurgerConstructor({openModal}) {
 	// function >>>>>>>
     const submitOrder = async (e) => {
         e.preventDefault();
-        setIsLoading(true);
+        dispatch({
+            type: GET_ORDER
+        })
         const newOrder = {
             ingredients: [  burgerData.bun._id, 
                             ...burgerData.ingredients.map(ingredient => ingredient._id), 
@@ -46,19 +44,26 @@ export default function BurgerConstructor({openModal}) {
         try {
             let res = await api.post('orders', newOrder);
             let resData = res.data;
-            if (resData.success && resData.order.number !== 0) {
-                setOrderData({ name: resData.name, number: resData.order.number });
-                openModal('Order');
+            if (res && resData.success && resData.order.number !== 0) {
+                dispatch({
+                    type: GET_ORDER_SUCCESS,
+                    order: resData.order.number,
+                    name: resData.name
+                })
                 dispatch({type: CLEAR});
             } else {
+                dispatch({
+                    type: GET_ORDER_FAILED
+                })
                 throw new Error('Некорректные данные');
             }
         } catch (error) {
-            setError(true);
+            dispatch({
+                type: GET_ORDER_FAILED
+            })
             console.log('Ошибка: ', error); 
-        } finally {
-            setIsLoading(false);
         }
+        openModal('Order');
     };
 
 	// >>>>>>> 

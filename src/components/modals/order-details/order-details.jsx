@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import { useSelector } from 'react-redux';
 
 import styles from "./order-details.module.css";
 import doneImg from "../../../images/submitted-order.svg";
@@ -11,20 +11,34 @@ const classInfo = `${classText} mt-15`;
 const classInfoInactive = `${classText} text_color_inactive mt-2 mb-15`;
 
 
-const OrderDetails = ({orderNum}) => {
+const OrderDetails = () => {
+
+    const orderData = useSelector(store => store.orderReducer);
+
     return (
         <>
-            <h3 className={classH3}>{orderNum}</h3>
-            <p className={classOrderID}>идентификатор заказа</p>
-            <img className={classOrderImg} src={doneImg} alt='Заказ принят.' />
-            <p className={classInfo}>Ваш заказ начали готовить</p>
-            <p className={classInfoInactive}>Дождитесь готовности на орбитальной станции</p>
+            {orderData.orderRequest && 
+                <p className={classOrderID}>
+                    Загрузка...
+                </p>
+            }
+            {orderData.orderFailed && 
+                <p className={classOrderID}>
+                    Произошла ошибка
+                </p>
+            }
+            {!orderData.orderRequest && !orderData.orderFailed &&
+                <>
+                    <h3 className={classH3}>{orderData.order}</h3>
+                    <p className={classOrderID}>идентификатор заказа</p>
+                    <img className={classOrderImg} src={doneImg} alt='Заказ принят.' />
+                    <p className={classInfo}>Ваш заказ начали готовить</p>
+                    <p className={classInfoInactive}>Дождитесь готовности на орбитальной станции</p>
+                </>
+            }
         </>
-    );
-};
 
-OrderDetails.propTypes = {
-    orderNum: PropTypes.number.isRequired,
+    );
 };
 
 export default OrderDetails;

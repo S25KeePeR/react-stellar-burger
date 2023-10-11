@@ -3,7 +3,6 @@ import { useState } from "react";
 const useModal = () => {
     const [modalState, setModalState] = useState(false);
     const [modalType, setModalType] = useState(null);
-    const [modalData, setModalData] = useState({});
 
     const closeModal = () => {
         setModalState(false);
@@ -20,7 +19,6 @@ const useModal = () => {
     return {
         modalState,
         modalType,
-        modalData,
         closeModal,
         openModal
     };

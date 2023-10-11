@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
 import { SELECT_INGREDIENT } from "../../services/actions/ingredient-action";
-// import { ADD_BUN, ADD_INGREDIENT } from "../../services/actions/ingredient-action";
 
 import PropTypes from "prop-types";
 import ingredientPropType from "../../utils/prop-types";

@@ -23,13 +23,9 @@ export default function App() {
 	const [ data, setData ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(false);
 	const [ error, setError ] = useState(false);
-	const [ orderData, setOrderData ] = useState({
-		name: null,
-		number: null
-	})
 		
 	// const nodeRef = useRef(null);
-	const { modalState, modalType, modalData, openModal, closeModal } = useModal();
+	const { modalState, modalType, openModal, closeModal } = useModal();
    
 		
 	// function >>>>>>>
@@ -78,21 +74,19 @@ export default function App() {
 				{data.length !== 0 && 
 					<>
 						<BurgerIngredients data={data} openModal={openModal}/> 
-						<OrderDetailsContext.Provider value={{setOrderData, setIsLoading, setError}}>
-							<BurgerConstructor openModal={openModal}/>						
-						</OrderDetailsContext.Provider> 
+						<BurgerConstructor openModal={openModal}/>
 					</>
 				}
 			</main>
 		</div>
 		{modalState && modalType === 'ingredient' &&
 			<Modal closeModal={closeModal} modalTitle={'Детали ингредиента'}>
-				<IngredientDetails ingredient={modalData}/>
+				<IngredientDetails />
 			</Modal>
 		}
 		{modalState && modalType === 'Order' &&
 			<Modal closeModal={closeModal}>
-				<OrderDetails  orderNum={orderData.number}/>
+				<OrderDetails />
 			</Modal>
 		}
 		{/* <CSSTransition
