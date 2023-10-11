@@ -72,11 +72,9 @@ export default function App() {
 					</p>
 				}
 				{data.length !== 0 && 
-					<>
-						<BurgerIngredients data={data} openModal={openModal}/> 
-						<BurgerConstructor openModal={openModal}/>
-					</>
+					<BurgerIngredients data={data} openModal={openModal}/> 
 				}
+				<BurgerConstructor openModal={openModal}/>
 			</main>
 		</div>
 		{modalState && modalType === 'ingredient' &&
