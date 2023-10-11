@@ -15,7 +15,6 @@ import Modal from "../modals/modal";
 import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
-import { ConstructorContext } from "../../services/constructorContext";
 import { OrderDetailsContext } from "../../services/orderDetailsContext";
 
 export default function App() {
@@ -24,10 +23,6 @@ export default function App() {
 	const [ data, setData ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(false);
 	const [ error, setError ] = useState(false);
-	const [ burgerData, setBurgerData ] = useState({
-		bun: null,
-		ingredients: [],
-	});
 	const [ orderData, setOrderData ] = useState({
 		name: null,
 		number: null
@@ -81,12 +76,12 @@ export default function App() {
 					</p>
 				}
 				{data.length !== 0 && 
-					<ConstructorContext.Provider value={{burgerData, setBurgerData}}>
+					<>
 						<BurgerIngredients data={data} openModal={openModal}/> 
 						<OrderDetailsContext.Provider value={{setOrderData, setIsLoading, setError}}>
 							<BurgerConstructor openModal={openModal}/>						
 						</OrderDetailsContext.Provider> 
-					</ConstructorContext.Provider>
+					</>
 				}
 			</main>
 		</div>

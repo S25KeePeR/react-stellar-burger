@@ -1,6 +1,8 @@
 import ingredientPropType from "../../../utils/prop-types";
 
 import styles from "./ingredient-details.module.css";
+import { useSelector } from 'react-redux';
+
 
 const classH3 = `text text_type_main-medium mt-4 `;
 const classDetails = `${styles.details} mt-8`;
@@ -9,7 +11,11 @@ const classTextInactive = `text_color_inactive`;
 const classTextMain = `text text_type_main-default ${classTextInactive}`;
 const classTextDigits = `text text_type_digits-default ${classTextInactive} mt-2`;
 
-const IngredientDetails = ({ingredient}) => {
+// const IngredientDetails = ({ingredient}) => {
+const IngredientDetails = () => {
+
+    const ingredient = useSelector(store => store.ingredientReducer.ingredient);
+    
     return (
         <>
            <img src={ingredient.image_large} alt={ingredient.name}/>
@@ -36,8 +42,8 @@ const IngredientDetails = ({ingredient}) => {
     );
 };
 
-IngredientDetails.propTypes = {
-    ingredient: ingredientPropType
-};
+// IngredientDetails.propTypes = {
+//     ingredient: ingredientPropType
+// };
 
 export default IngredientDetails;

@@ -10,12 +10,8 @@ const useModal = () => {
         setModalType(null);
     }
 
-    const openModal = (type = null, item = null) => {
+    const openModal = (type = null) => { 
         setModalState(true);
-        
-        if (item !== null) {
-            setModalData(item)
-        }
         if (type !== null) {
             setModalType(type);
         }

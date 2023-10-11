@@ -39,8 +39,6 @@ export const constructorReducer = (state = initialState, action) => {
             };
         case CLEAR:
             return {
-                order: null,
-                name: null,
                 bun: null,
                 ingredients: [],
                 total: 0 

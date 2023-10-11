@@ -1,7 +1,8 @@
-import React, { useState, useContext }  from "react";
+import React, { useState }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT, REMOVE_INGREDIENT } from "../../services/actions/constructor-action";
+import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
+import { SELECT_INGREDIENT } from "../../services/actions/ingredient-action";
 // import { ADD_BUN, ADD_INGREDIENT } from "../../services/actions/ingredient-action";
 
 import PropTypes from "prop-types";
@@ -10,13 +11,13 @@ import ingredientPropType from "../../utils/prop-types";
 
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import { ConstructorContext } from "../../services/constructorContext";
 
 export default function BurgerIngredients({data, openModal}) {
 
     // const >>>>>>>
     const dispatch = useDispatch();
     const burgerData = useSelector(store => store.constructorReducer);
+    const ingredientData = useSelector(store => store.ingredientReducer.ingredient);
     const ingredientsCategories = React.useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
         'Соусы': data.filter(item => item.type === 'sauce'),
@@ -31,6 +32,7 @@ export default function BurgerIngredients({data, openModal}) {
         }
     };
     const addIngredient = (ingredient) => {
+        dispatch({ type: SELECT_INGREDIENT, payload: ingredient });
         if (ingredient.type === "bun") {
             if (burgerData.bun !== null) {
                 dispatch({ type: REMOVE_BUN, payload: burgerData.bun });
@@ -39,6 +41,7 @@ export default function BurgerIngredients({data, openModal}) {
         } else {
             dispatch({ type: ADD_INGREDIENT, payload: ingredient });   
         }
+
     };
     // const refs = {
     //     'Булки': useRef(null),
@@ -49,7 +52,6 @@ export default function BurgerIngredients({data, openModal}) {
         console.log(tab);
         // refs[tab].current.scrollIntoView({behavior: 'smooth'});
     };
-
 
     // class >>>>>>>
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
@@ -92,10 +94,10 @@ export default function BurgerIngredients({data, openModal}) {
                                 <li className={classItem} 
                                     key={ingredient._id} 
                                     onClick={() => {
-                                        openModal('ingredient', ingredient);
                                         addIngredient(ingredient);
+                                        openModal('ingredient');
                                     }}
-                                >
+                                    >
                                     {showCounter(ingredient.__v)}
                                     <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
                                     <div className={classItemPrice}>
