@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
-import {api} from "../../utils/api";
-import styles from "./app.module.css";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { getBase } from "../../services/actions/ingredients-action";
 
 import { GET_INGREDIENTS, GET_INGREDIENTS_FAILED, GET_INGREDIENTS_SUCCESS } from "../../services/actions/ingredients-action";
 
+import api from "../../utils/api";
 
 // import transitions from "../modals/modal-transitions.module.css"; 
 // import { CSSTransition } from "react-transition-group";
@@ -19,73 +17,49 @@ import Modal from "../modals/modal";
 import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
+import styles from "./app.module.css";
+
 export default function App() {
-	// const dispatch = useDispatch();
-	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
+
 	// const >>>>>>>
-	const [ data, setData ] = useState([]);
-	const [ isLoading, setIsLoading ] = useState(false);
-	const [ error, setError ] = useState(false);
-		
+	const dispatch = useDispatch();
+	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
 	// const nodeRef = useRef(null);
 	const { modalState, modalType, openModal, closeModal } = useModal();
-    const dispatch = useDispatch();
 
-		
 	// function >>>>>>>
 	useEffect(() => {
-		
-		setIsLoading(true);
-		const getData = async () => {
-			try {
-				let res = await api.get('ingredients');
-				let resData = res.data;
-				if (resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
-					setData(resData.data);
-				} else {
-					throw new Error('Некорректные данные или пустая база');
-				}
-			} catch (error) {
-				setError(true);
-				console.log('Ошибка: ', error); 
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		getData();
+        const getBase = () => {
+            return async function(dispatch) {
+                dispatch({
+                    type: GET_INGREDIENTS
+                })
+                try {
+                    let res = await api.get('ingredients');
+                    let resData = res.data;
+                    if (res && resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
+                        dispatch({
+                            type: GET_INGREDIENTS_SUCCESS,
+                            base: resData
+                        })
 
-        // const getBase = () => {
-        //     return async function(dispatch) {
-        //         dispatch({
-        //             type: GET_INGREDIENTS
-        //         })
-        //         try {
-        //             let res = await api.get('ingredients');
-        //             let resData = res.data;
-        //             if (res && resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
-        //                 dispatch({
-        //                     type: GET_INGREDIENTS_SUCCESS,
-        //                     base: resData
-        //                 })
-
-        //             } else {
-        //                 dispatch({
-        //                     type: GET_INGREDIENTS_FAILED
-        //                 })
-        //                 throw new Error('Некорректные данные или пустая база');
-        //             }
-        //         } catch (error) {
-        //             dispatch({
-        //                 type: GET_INGREDIENTS_FAILED
-        //             })
-        //             console.log(error); 
-        //         }
+                    } else {
+                        dispatch({
+                            type: GET_INGREDIENTS_FAILED
+                        })
+                        throw new Error('Некорректные данные или пустая база');
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: GET_INGREDIENTS_FAILED
+                    })
+                    console.log(error); 
+                }
                 
-        //     }
-        // } 
+            }
+        } 
 		dispatch(getBase());
 	}, []);
-	
 	
 	// class >>>>>>>
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
@@ -97,22 +71,6 @@ export default function App() {
 		<div className={styles.app}>
 			<AppHeader />
 			<main className={classMain}>
-				{/* {isLoading && 
-					<p className={classStatus}>
-						Загрузка...
-					</p>
-				}
-				{error && 
-					<p className={classStatus}>
-						Произошла ошибка
-					</p>
-				}
-				{base.length !== 0 && 
-					<>
-						<BurgerIngredients data={data} openModal={openModal}/> 
-						<BurgerConstructor openModal={openModal}/>
-					</>
-				} */}
 				{baseRequest && 
 					<p className={classStatus}>
 						Загрузка...
@@ -123,9 +81,9 @@ export default function App() {
 						Произошла ошибка
 					</p>
 				}
-				{!baseRequest && !baseFailed &&
+				{!baseRequest && !baseFailed && base.length > 0 &&
 					<>
-						<BurgerIngredients data={data} openModal={openModal}/> 
+						<BurgerIngredients openModal={openModal}/> 
 						<BurgerConstructor openModal={openModal}/>
 					</>
 				}

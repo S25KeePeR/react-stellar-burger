@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CLEAR } from "../../services/actions/constructor-action";
 import { GET_ORDER, GET_ORDER_FAILED, GET_ORDER_SUCCESS } from "../../services/actions/order-action";
 
-import PropTypes from "prop-types";
-//import ingredientPropType from "../../utils/prop-types";
 import { v4 as uuidv4 } from "uuid";
-import {api} from "../../utils/api";
+import api from "../../utils/api";
 
-import styles from "./burger-constructor.module.css";
+import PropTypes from "prop-types";
+
 import { ConstructorElement, Button, CurrencyIcon, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import styles from "./burger-constructor.module.css";
 
 export default function BurgerConstructor({openModal}) {
 

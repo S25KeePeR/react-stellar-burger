@@ -1,77 +1,28 @@
-import { useEffect, useState, useMemo }  from "react";
+import { useState, useMemo }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
 import { SELECT_INGREDIENT } from "../../services/actions/ingredient-action";
-// import { getBase } from "../../services/actions/ingredients-action";
-
-import { GET_INGREDIENTS, GET_INGREDIENTS_FAILED, GET_INGREDIENTS_SUCCESS } from "../../services/actions/ingredients-action";
-import {api} from "../../utils/api";
 
 import PropTypes from "prop-types";
-import ingredientPropType from "../../utils/prop-types";
-// import { v4 as uuidv4 } from "uuid";
 
 import styles from "./burger-ingredients.module.css";
 import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 
-export default function BurgerIngredients({data, openModal}) {
+export default function BurgerIngredients({openModal}) {
 
     // const >>>>>>>
     const dispatch = useDispatch();
     const burgerData = useSelector(store => store.constructorReducer);
     const base = useSelector(state => state.ingredientsReducer.base);
-
-    
-	// useEffect(() => {
-
-    //     const getBase = () => {
-    //         return async function(dispatch) {
-    //             dispatch({
-    //                 type: GET_INGREDIENTS
-    //             })
-    //             try {
-    //                 let res = await api.get('ingredients');
-    //                 let resData = res.data;
-    //                 if (res && resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
-    //                     dispatch({
-    //                         type: GET_INGREDIENTS_SUCCESS,
-    //                         base: resData
-    //                     })
-
-    //                 } else {
-    //                     dispatch({
-    //                         type: GET_INGREDIENTS_FAILED
-    //                     })
-    //                     throw new Error('Некорректные данные или пустая база');
-    //                 }
-    //             } catch (error) {
-    //                 dispatch({
-    //                     type: GET_INGREDIENTS_FAILED
-    //                 })
-    //                 console.log(error); 
-    //             }
-                
-    //         }
-    //     } 
-	// 	dispatch(getBase());
-
-
-
-	// }, []);
-
-    console.log(base);
-    
     const ingredientsCategories = useMemo(() => ({
-        'Булки': data.filter(item => item.type === 'bun'),
-        'Соусы': data.filter(item => item.type === 'sauce'),
-        'Начинки': data.filter(item => item.type === 'main'),
-    }), [data]);
-
-
+        'Булки': base.filter(item => item.type === 'bun'),
+        'Соусы': base.filter(item => item.type === 'sauce'),
+        'Начинки': base.filter(item => item.type === 'main'),
+    }), [base]);
     const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
 
-    // function >>>>>>>  
+    // function >>>>>>>
     const showCounter = (num) => {
         if (num > 0) { 
             return <Counter count={num} size="default" extraClass="m-1"/>
@@ -87,7 +38,6 @@ export default function BurgerIngredients({data, openModal}) {
         } else {
             dispatch({ type: ADD_INGREDIENT, payload: ingredient });   
         }
-
     };
     // const refs = {
     //     'Булки': useRef(null),
@@ -163,6 +113,5 @@ export default function BurgerIngredients({data, openModal}) {
 
 // propTypes >>>>>>>
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(ingredientPropType).isRequired,
     openModal:  PropTypes.func.isRequired,
 };
