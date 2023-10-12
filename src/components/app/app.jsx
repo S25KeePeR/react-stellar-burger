@@ -1,7 +1,11 @@
-import { useEffect, useState, useReducer } from "react";
-import api from "../../utils/api";
-
+import { useEffect, useState } from "react";
+import {api} from "../../utils/api";
 import styles from "./app.module.css";
+import { useSelector, useDispatch } from 'react-redux';
+import { getBase } from "../../services/actions/ingredients-action";
+
+import { GET_INGREDIENTS, GET_INGREDIENTS_FAILED, GET_INGREDIENTS_SUCCESS } from "../../services/actions/ingredients-action";
+
 
 // import transitions from "../modals/modal-transitions.module.css"; 
 // import { CSSTransition } from "react-transition-group";
@@ -15,10 +19,9 @@ import Modal from "../modals/modal";
 import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
-import { OrderDetailsContext } from "../../services/orderDetailsContext";
-
 export default function App() {
-
+	// const dispatch = useDispatch();
+	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
 	// const >>>>>>>
 	const [ data, setData ] = useState([]);
 	const [ isLoading, setIsLoading ] = useState(false);
@@ -26,11 +29,12 @@ export default function App() {
 		
 	// const nodeRef = useRef(null);
 	const { modalState, modalType, openModal, closeModal } = useModal();
-   
+    const dispatch = useDispatch();
+
 		
 	// function >>>>>>>
-
 	useEffect(() => {
+		
 		setIsLoading(true);
 		const getData = async () => {
 			try {
@@ -49,7 +53,39 @@ export default function App() {
 			}
 		};
 		getData();
+
+        // const getBase = () => {
+        //     return async function(dispatch) {
+        //         dispatch({
+        //             type: GET_INGREDIENTS
+        //         })
+        //         try {
+        //             let res = await api.get('ingredients');
+        //             let resData = res.data;
+        //             if (res && resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
+        //                 dispatch({
+        //                     type: GET_INGREDIENTS_SUCCESS,
+        //                     base: resData
+        //                 })
+
+        //             } else {
+        //                 dispatch({
+        //                     type: GET_INGREDIENTS_FAILED
+        //                 })
+        //                 throw new Error('Некорректные данные или пустая база');
+        //             }
+        //         } catch (error) {
+        //             dispatch({
+        //                 type: GET_INGREDIENTS_FAILED
+        //             })
+        //             console.log(error); 
+        //         }
+                
+        //     }
+        // } 
+		dispatch(getBase());
 	}, []);
+	
 	
 	// class >>>>>>>
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
@@ -61,7 +97,7 @@ export default function App() {
 		<div className={styles.app}>
 			<AppHeader />
 			<main className={classMain}>
-				{isLoading && 
+				{/* {isLoading && 
 					<p className={classStatus}>
 						Загрузка...
 					</p>
@@ -71,10 +107,28 @@ export default function App() {
 						Произошла ошибка
 					</p>
 				}
-				{data.length !== 0 && 
-					<BurgerIngredients data={data} openModal={openModal}/> 
+				{base.length !== 0 && 
+					<>
+						<BurgerIngredients data={data} openModal={openModal}/> 
+						<BurgerConstructor openModal={openModal}/>
+					</>
+				} */}
+				{baseRequest && 
+					<p className={classStatus}>
+						Загрузка...
+					</p>
 				}
-				<BurgerConstructor openModal={openModal}/>
+				{baseFailed && 
+					<p className={classStatus}>
+						Произошла ошибка
+					</p>
+				}
+				{!baseRequest && !baseFailed &&
+					<>
+						<BurgerIngredients data={data} openModal={openModal}/> 
+						<BurgerConstructor openModal={openModal}/>
+					</>
+				}
 			</main>
 		</div>
 		{modalState && modalType === 'ingredient' &&

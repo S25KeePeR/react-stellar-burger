@@ -1,8 +1,12 @@
-import React, { useState }  from "react";
+import { useEffect, useState, useMemo }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
 import { SELECT_INGREDIENT } from "../../services/actions/ingredient-action";
+// import { getBase } from "../../services/actions/ingredients-action";
+
+import { GET_INGREDIENTS, GET_INGREDIENTS_FAILED, GET_INGREDIENTS_SUCCESS } from "../../services/actions/ingredients-action";
+import {api} from "../../utils/api";
 
 import PropTypes from "prop-types";
 import ingredientPropType from "../../utils/prop-types";
@@ -16,12 +20,55 @@ export default function BurgerIngredients({data, openModal}) {
     // const >>>>>>>
     const dispatch = useDispatch();
     const burgerData = useSelector(store => store.constructorReducer);
-    const ingredientData = useSelector(store => store.ingredientReducer.ingredient);
-    const ingredientsCategories = React.useMemo(() => ({
+    const base = useSelector(state => state.ingredientsReducer.base);
+
+    
+	// useEffect(() => {
+
+    //     const getBase = () => {
+    //         return async function(dispatch) {
+    //             dispatch({
+    //                 type: GET_INGREDIENTS
+    //             })
+    //             try {
+    //                 let res = await api.get('ingredients');
+    //                 let resData = res.data;
+    //                 if (res && resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
+    //                     dispatch({
+    //                         type: GET_INGREDIENTS_SUCCESS,
+    //                         base: resData
+    //                     })
+
+    //                 } else {
+    //                     dispatch({
+    //                         type: GET_INGREDIENTS_FAILED
+    //                     })
+    //                     throw new Error('Некорректные данные или пустая база');
+    //                 }
+    //             } catch (error) {
+    //                 dispatch({
+    //                     type: GET_INGREDIENTS_FAILED
+    //                 })
+    //                 console.log(error); 
+    //             }
+                
+    //         }
+    //     } 
+	// 	dispatch(getBase());
+
+
+
+	// }, []);
+
+    console.log(base);
+    
+    const ingredientsCategories = useMemo(() => ({
         'Булки': data.filter(item => item.type === 'bun'),
         'Соусы': data.filter(item => item.type === 'sauce'),
         'Начинки': data.filter(item => item.type === 'main'),
     }), [data]);
+
+
     const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
 
     // function >>>>>>>  
@@ -47,10 +94,10 @@ export default function BurgerIngredients({data, openModal}) {
     //     'Соусы': useRef(null),
     //     'Начинки': useRef(null),
     // };
-    const handleTabClick = (tab) => {
-        console.log(tab);
-        // refs[tab].current.scrollIntoView({behavior: 'smooth'});
-    };
+    // const handleTabClick = (tab) => {
+    //     console.log(tab);
+    //     // refs[tab].current.scrollIntoView({behavior: 'smooth'});
+    // };
 
     // class >>>>>>>
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
@@ -74,7 +121,7 @@ export default function BurgerIngredients({data, openModal}) {
                             value={section} 
                             active={current === section} 
                             onClick={() => {
-                                handleTabClick(section)
+                                // handleTabClick(section)
                                 setCurrent(section)
                             }}
                     >
