@@ -1,13 +1,15 @@
 import { 
     GET_INGREDIENTS, 
     GET_INGREDIENTS_SUCCESS, 
-    GET_INGREDIENTS_FAILED 
+    GET_INGREDIENTS_FAILED,
+    SELECT_TAB,
 } from "../actions/ingredients-action";
 
 const initialState = {
     baseRequest: false,
     baseFailed: false,
-    base: {}
+    base: {},
+    currentTab: 'Булки'
 };
 
 export const ingredientsReducer = (state = initialState, action) => {
@@ -31,6 +33,12 @@ export const ingredientsReducer = (state = initialState, action) => {
                 ...state, 
                 baseFailed: true, 
                 baseRequest: false 
+            };
+        }
+        case SELECT_TAB: {
+            return { 
+                ...state, 
+                currentTab: action.currentTab,
             };
         }
         default: {

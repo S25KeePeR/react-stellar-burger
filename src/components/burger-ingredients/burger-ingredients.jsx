@@ -1,8 +1,9 @@
-import { useState, useMemo }  from "react";
+import { useState, useMemo, useRef }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
 import { SELECT_INGREDIENT } from "../../services/actions/ingredient-action";
+import { SELECT_TAB } from "../../services/actions/ingredients-action";
 
 import PropTypes from "prop-types";
 
@@ -14,13 +15,28 @@ export default function BurgerIngredients({openModal}) {
     // const >>>>>>>
     const dispatch = useDispatch();
     const burgerData = useSelector(store => store.constructorReducer);
-    const base = useSelector(state => state.ingredientsReducer.base);
+    const { base, currentTab } = useSelector(state => state.ingredientsReducer);
     const ingredientsCategories = useMemo(() => ({
         'Булки': base.filter(item => item.type === 'bun'),
         'Соусы': base.filter(item => item.type === 'sauce'),
         'Начинки': base.filter(item => item.type === 'main'),
     }), [base]);
     const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
+
+    // const bunsRef = useRef(null);
+    // const soucesRef = useRef(null);
+    // const mainsRef = useRef(null);
+    const tabsRef = useRef(null);
+    const tabsRefs = {
+        'Булки': useRef(null),
+        'Соусы': useRef(null),
+        'Начинки': useRef(null)
+    }
+    // const refs = {
+    //     'Булки': useRef(null),
+    //     'Соусы': useRef(null),
+    //     'Начинки': useRef(null),
+    // };
 
     // function >>>>>>>
     const showCounter = (num) => {
@@ -39,15 +55,26 @@ export default function BurgerIngredients({openModal}) {
             dispatch({ type: ADD_INGREDIENT, payload: ingredient });   
         }
     };
-    // const refs = {
-    //     'Булки': useRef(null),
-    //     'Соусы': useRef(null),
-    //     'Начинки': useRef(null),
-    // };
-    // const handleTabClick = (tab) => {
-    //     console.log(tab);
-    //     // refs[tab].current.scrollIntoView({behavior: 'smooth'});
-    // };
+    const handleScroll = () => {                                            
+        const tabsBottom = tabsRef.current.getBoundingClientRect().bottom;
+        const bunsTop = tabsRefs['Булки'].current.getBoundingClientRect().top;
+        const saucesTop = tabsRefs['Соусы'].current.getBoundingClientRect().top;
+        const mainsTop = tabsRefs['Начинки'].current.getBoundingClientRect().top;
+
+        const bunsDelta = Math.abs(bunsTop - tabsBottom);
+        const soucesDelta = Math.abs(saucesTop - tabsBottom);
+        const mainsDelta = Math.abs(mainsTop - tabsBottom);
+
+        const min = Math.min(bunsDelta, soucesDelta, mainsDelta);
+
+        const newTab = min === bunsDelta ? 'Булки' : min === soucesDelta ? 'Соусы' : 'Начинки';
+        if (newTab !== currentTab) {
+            dispatch({ type: SELECT_TAB, currentTab: newTab });
+        }
+    };
+    const handleTabClick = (tab) => {
+        tabsRefs[tab].current.scrollIntoView({behavior: 'smooth'});
+    };
 
     // class >>>>>>>
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
@@ -65,13 +92,13 @@ export default function BurgerIngredients({openModal}) {
             <h1 className={classH1}>
                 Соберите бургер
             </h1>
-            <nav className={styles.menu}>
+            <nav className={styles.menu} ref={tabsRef}>
                 {Object.keys(ingredientsCategories).map(section => (
                     <Tab    key={section} 
                             value={section} 
-                            active={current === section} 
+                            active={currentTab === section} 
                             onClick={() => {
-                                // handleTabClick(section)
+                                handleTabClick(section)
                                 setCurrent(section)
                             }}
                     >
@@ -79,9 +106,9 @@ export default function BurgerIngredients({openModal}) {
                     </Tab>
                 ))}
             </nav>
-            <div className={classContainer}>
+            <div className={classContainer} onScroll={handleScroll} >
                 {Object.entries(ingredientsCategories).map(([category, ingredients]) => (
-                    <div key={category}>
+                    <div key={category} ref={tabsRefs[category]}>
                         <h2 className={classH2} >
                             {category}
                         </h2>
