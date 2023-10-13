@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef }  from "react";
+import { useMemo, useRef }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
@@ -21,22 +21,12 @@ export default function BurgerIngredients({openModal}) {
         'Соусы': base.filter(item => item.type === 'sauce'),
         'Начинки': base.filter(item => item.type === 'main'),
     }), [base]);
-    const [current, setCurrent] = useState(Object.keys(ingredientsCategories)[0]);
-
-    // const bunsRef = useRef(null);
-    // const soucesRef = useRef(null);
-    // const mainsRef = useRef(null);
     const tabsRef = useRef(null);
     const tabsRefs = {
         'Булки': useRef(null),
         'Соусы': useRef(null),
         'Начинки': useRef(null)
     }
-    // const refs = {
-    //     'Булки': useRef(null),
-    //     'Соусы': useRef(null),
-    //     'Начинки': useRef(null),
-    // };
 
     // function >>>>>>>
     const showCounter = (num) => {
@@ -99,7 +89,6 @@ export default function BurgerIngredients({openModal}) {
                             active={currentTab === section} 
                             onClick={() => {
                                 handleTabClick(section)
-                                setCurrent(section)
                             }}
                     >
                         {section}

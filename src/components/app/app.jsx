@@ -24,7 +24,6 @@ export default function App() {
 	// const >>>>>>>
 	const dispatch = useDispatch();
 	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
-	// const nodeRef = useRef(null);
 	const { modalState, modalType, openModal, closeModal } = useModal();
 
 	// function >>>>>>>
