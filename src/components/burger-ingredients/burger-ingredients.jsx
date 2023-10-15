@@ -1,20 +1,18 @@
 import { useMemo, useRef }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT } from "../../services/actions/constructor-action";
-import { SELECT_INGREDIENT } from "../../services/actions/ingredient-action";
 import { SELECT_TAB } from "../../services/actions/ingredients-action";
 
 import PropTypes from "prop-types";
 
 import styles from "./burger-ingredients.module.css";
-import { Tab, Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'; // { Tab , Counter, CurrencyIcon }
+import ItemCard from "../item-card/item-card";
 
 export default function BurgerIngredients({openModal}) {
 
     // const >>>>>>>
     const dispatch = useDispatch();
-    const burgerData = useSelector(store => store.constructorReducer);
     const { base, currentTab } = useSelector(state => state.ingredientsReducer);
     const ingredientsCategories = useMemo(() => ({
         'Булки': base.filter(item => item.type === 'bun'),
@@ -28,23 +26,6 @@ export default function BurgerIngredients({openModal}) {
         'Начинки': useRef(null)
     }
 
-    // function >>>>>>>
-    const showCounter = (num) => {
-        if (num > 0) { 
-            return <Counter count={num} size="default" extraClass="m-1"/>
-        }
-    };
-    const addIngredient = (ingredient) => {
-        dispatch({ type: SELECT_INGREDIENT, payload: ingredient });
-        if (ingredient.type === "bun") {
-            if (burgerData.bun !== null) {
-                dispatch({ type: REMOVE_BUN, payload: burgerData.bun });
-            } 
-            dispatch({ type: ADD_BUN, payload: ingredient });
-        } else {
-            dispatch({ type: ADD_INGREDIENT, payload: ingredient });   
-        }
-    };
     const handleScroll = () => {                                            
         const tabsBottom = tabsRef.current.getBoundingClientRect().bottom;
         const bunsTop = tabsRefs['Булки'].current.getBoundingClientRect().top;
@@ -71,10 +52,6 @@ export default function BurgerIngredients({openModal}) {
     const classH2 = `mb-6 text text_type_main-medium `;
     const classContainer = `mt-10 ${styles.container} custom-scroll`;
     const classItems = `mb-10 ${styles.items}`;
-    const classItem = `ml-4 mr-2 ${styles.item}`;
-    const classItemTitle = `text text_type_main-default ${styles.title}`;
-    const classItemText = `text text_type_digits-default ${styles.text}`;
-    const classItemPrice = `${styles.price}`;
     
     // >>>>>>> 
     return (
@@ -103,21 +80,10 @@ export default function BurgerIngredients({openModal}) {
                         </h2>
                         <ul className={classItems} >
                             {ingredients.map((ingredient) => (
-                                <li className={classItem} 
-                                    key={ingredient._id} 
-                                    onClick={() => {
-                                        addIngredient(ingredient);
-                                        openModal('ingredient');
-                                    }}
-                                    >
-                                    {showCounter(ingredient.__v)}
-                                    <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
-                                    <div className={classItemPrice}>
-                                        <span className={classItemText}>{ingredient.price}</span>
-                                        <CurrencyIcon type="primary"/>
-                                    </div>
-                                    <span className={classItemTitle}>{ingredient.name}</span>
-                                </li>
+                                <ItemCard   ingredient={ingredient}
+                                            openModal={openModal}
+                                            key={ingredient._id} 
+                                />
                             ))}
                         </ul>
                     </div>

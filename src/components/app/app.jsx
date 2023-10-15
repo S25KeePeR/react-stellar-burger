@@ -8,6 +8,9 @@ import api from "../../utils/api";
 // import transitions from "../modals/modal-transitions.module.css"; 
 // import { CSSTransition } from "react-transition-group";
 
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+
 import AppHeader from "../app-header/app-header";
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
@@ -81,10 +84,10 @@ export default function App() {
 					</p>
 				}
 				{!baseRequest && !baseFailed && base.length > 0 &&
-					<>
+					<DndProvider backend={HTML5Backend}>
 						<BurgerIngredients openModal={openModal}/> 
 						<BurgerConstructor openModal={openModal}/>
-					</>
+					</DndProvider>
 				}
 			</main>
 		</div>

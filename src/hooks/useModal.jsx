@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
-import { CLEAR_INGREDIENT } from "../services/actions/ingredient-action";
+import { CLEAR_INGREDIENT, SELECT_INGREDIENT } from "../services/actions/ingredient-action";
 
 const useModal = () => {
     const dispatch = useDispatch();
@@ -13,7 +13,8 @@ const useModal = () => {
         dispatch({ type: CLEAR_INGREDIENT });
     }
 
-    const openModal = (type = null) => { 
+    const openModal = (type = null, ingredient) => { 
+        dispatch({ type: SELECT_INGREDIENT, payload: ingredient });
         setModalState(true);
         if (type !== null) {
             setModalType(type);

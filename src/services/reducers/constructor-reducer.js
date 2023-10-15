@@ -1,8 +1,9 @@
+import { v4 as uuidv4 } from "uuid";
 import {
     ADD_BUN,
     REMOVE_BUN,
     ADD_INGREDIENT,
-    REMOVE_INGREDIENT,
+    DELETE_INGREDIENT,
     CLEAR,
   } from '../actions/constructor-action';
 
@@ -32,10 +33,15 @@ export const constructorReducer = (state = initialState, action) => {
                 ingredients: [...state.ingredients, action.payload],
                 total: state.total + action.payload.price
             };
-        case REMOVE_INGREDIENT: // доработать когда понадобится удалять ингредиенты из бургера
+        case DELETE_INGREDIENT: 
             return {
                 ...state,
-                total: state.total - action.payload.price
+                ingredients: [...state.ingredients].filter(
+                    (ingredient) => {
+                        return ingredient.UID !== action.item.UID;
+                    }
+                ),
+                total: state.total - action.item.price
             };
         case CLEAR:
             return {
