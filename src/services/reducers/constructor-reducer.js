@@ -5,6 +5,7 @@ import {
     ADD_INGREDIENT,
     DELETE_INGREDIENT,
     CLEAR,
+    MOVE_INGREDIENT
   } from '../actions/constructor-action';
 
 const initialState = {
@@ -16,24 +17,27 @@ const initialState = {
 
 export const constructorReducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_BUN:
+        case ADD_BUN:{
             return {
                 ...state,
                 bun: action.payload,
                 total: state.total  + (action.payload.price * 2)
             };
-        case REMOVE_BUN: 
+        }
+        case REMOVE_BUN: {
             return {
                 ...state,
                 total: state.total - (action.payload.price * 2)
             };
-        case ADD_INGREDIENT:
+        }
+        case ADD_INGREDIENT: {
             return {
                 ...state,
                 ingredients: [...state.ingredients, action.payload],
                 total: state.total + action.payload.price
             };
-        case DELETE_INGREDIENT: 
+        }
+        case DELETE_INGREDIENT: {
             return {
                 ...state,
                 ingredients: [...state.ingredients].filter(
@@ -43,12 +47,26 @@ export const constructorReducer = (state = initialState, action) => {
                 ),
                 total: state.total - action.item.price
             };
-        case CLEAR:
+        }
+        case MOVE_INGREDIENT: {
+            const dragIngredients = [...state.ingredients];
+            dragIngredients.splice(
+                action.payload.dragIndex,
+                0,
+                dragIngredients.splice(action.payload.hoverIndex, 1)[0]
+            );
+            return {
+                ...state,
+                ingredients: dragIngredients
+            };
+        }
+        case CLEAR: {
             return {
                 bun: null,
                 ingredients: [],
                 total: 0 
             };
+        }
         default:
             return state;
     }

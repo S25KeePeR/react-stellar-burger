@@ -2,20 +2,18 @@ import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-c
 import { useDrag } from "react-dnd";
 import { useDispatch } from 'react-redux';
 
-import { DELETE_BUN_VALUE } from '../../services/actions/ingredients-action';
+import styles from "./card-ingredients.module.css";
 
-import styles from "./item-card.module.css";
+export default function CardIngredients({ingredient, openModal, id}) { 
 
-export default function ItemCard({ingredient, openModal, id}) { 
-
-    const dispatch = useDispatch();
-    const [{ isDragging }, dragRef] = useDrag(() => ({
+	// function >>>>>>>
+    const [, dragRef] = useDrag(() => ({
         type: 'BOX',
         item: ingredient,
-        collect: (monitor) => ({
-            opacity: monitor.isDragging() ? 0 : undefined,
-            cursor: monitor.isDragging() ? 'grabbing' : 'grab'
-        }),
+        // collect: (monitor) => ({
+        //     opacity: monitor.isDragging() ? 0 : undefined,
+        //     cursor: monitor.isDragging() ? 'grabbing' : 'grab'
+        // }),
       }))
 
     const showCounter = (num) => {
@@ -24,17 +22,18 @@ export default function ItemCard({ingredient, openModal, id}) {
         }
     };
 
+    // styles >>>>>>>
     const classItem = `ml-4 mr-2 ${styles.item}`;
     const classItemTitle = `text text_type_main-default ${styles.title}`;
     const classItemText = `text text_type_digits-default ${styles.text}`;
     const classItemPrice = `${styles.price}`;
 
+	// >>>>>>> 
     return (
         <li     className={classItem}
                 ref={dragRef}
                 key={id} 
                 onClick={() => {
-                    // addIngredient(ingredient);
                     openModal('ingredient', ingredient);
                 }}                
             >

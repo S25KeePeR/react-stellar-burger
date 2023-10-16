@@ -7,7 +7,8 @@ import PropTypes from "prop-types";
 
 import styles from "./burger-ingredients.module.css";
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'; // { Tab , Counter, CurrencyIcon }
-import ItemCard from "../item-card/item-card";
+// import ItemCard from "../card-ingredients/card-ingredients";
+import CardIngredients from "../card-ingredients/card-ingredients";
 
 export default function BurgerIngredients({openModal}) {
 
@@ -26,6 +27,7 @@ export default function BurgerIngredients({openModal}) {
         'Начинки': useRef(null)
     }
 
+	// function >>>>>>>
     const handleScroll = () => {                                            
         const tabsBottom = tabsRef.current.getBoundingClientRect().bottom;
         const bunsTop = tabsRefs['Булки'].current.getBoundingClientRect().top;
@@ -47,7 +49,7 @@ export default function BurgerIngredients({openModal}) {
         tabsRefs[tab].current.scrollIntoView({behavior: 'smooth'});
     };
 
-    // class >>>>>>>
+    // styles >>>>>>>
     const classH1 = `mt-10 mb-5 text text_type_main-large `;
     const classH2 = `mb-6 text text_type_main-medium `;
     const classContainer = `mt-10 ${styles.container} custom-scroll`;
@@ -80,9 +82,9 @@ export default function BurgerIngredients({openModal}) {
                         </h2>
                         <ul className={classItems} >
                             {ingredients.map((ingredient) => (
-                                <ItemCard   ingredient={ingredient}
-                                            openModal={openModal}
-                                            key={ingredient._id} 
+                                <CardIngredients    ingredient={ingredient}
+                                                    openModal={openModal}
+                                                    key={ingredient._id} 
                                 />
                             ))}
                         </ul>

@@ -45,22 +45,13 @@
     border-radius: 40px 40px 88px 88px;
 }
 
-/* .item:first-of-type {
-    border-radius: 88px 88px 40px 40px;
-}
-
-.item:last-of-type {
-    border-radius: 40px 40px 88px 88px;
-} */
-
-.ingredient {
-    /* width: 100%; */
+/* .ingredient {
     min-width: 579px;
     display: flex;
     align-items: center;
     gap: 8px;    
     justify-content: flex-end;
-}
+} */
 
 .footer {
     display: flex;
