@@ -2,13 +2,11 @@ import { useCallback }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from "react-dnd";
 
-import { CLEAR } from "../../services/actions/constructor-action";
-import { GET_ORDER, GET_ORDER_FAILED, GET_ORDER_SUCCESS } from "../../services/actions/order-action";
+import { getOrder } from "../../services/actions/order-action";
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT, MOVE_INGREDIENT } from "../../services/actions/constructor-action";
-import { ADD_VALUE, RESET_VALUE, DELETE_BUN_VALUE } from '../../services/actions/ingredients-action';
+import { ADD_VALUE, DELETE_BUN_VALUE } from '../../services/actions/ingredients-action';
 
 import { v4 as uuidv4 } from "uuid";
-import api from "../../utils/api";
 
 import PropTypes from "prop-types";
 
@@ -32,38 +30,13 @@ export default function BurgerConstructor({openModal}) {
     });
     const submitOrder = async (e) => {
         e.preventDefault();
-        dispatch({
-            type: GET_ORDER
-        })
-        openModal('Order');
-        const newOrder = {
+        const listID = {
             ingredients: [  burgerData.bun._id, 
                             ...burgerData.ingredients.map(ingredient => ingredient._id), 
                             burgerData.bun._id ] 
         }
-        try {
-            let res = await api.post('orders', newOrder);
-            let resData = res.data;
-            if (res && resData.success && resData.order.number !== 0) {
-                dispatch({
-                    type: GET_ORDER_SUCCESS,
-                    order: resData.order.number,
-                    name: resData.name
-                })
-                dispatch({type: CLEAR});
-                dispatch({type: RESET_VALUE});
-            } else {
-                dispatch({
-                    type: GET_ORDER_FAILED
-                })
-                throw new Error('Некорректные данные');
-            }
-        } catch (error) {
-            dispatch({
-                type: GET_ORDER_FAILED
-            })
-            console.log('Ошибка: ', error); 
-        }
+        openModal('Order');
+        dispatch(getOrder(listID));
     };
     
     const addIngredient = (ingredient) => {

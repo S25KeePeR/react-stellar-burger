@@ -9,7 +9,7 @@ import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burg
 
 import styles from './card-constructor.module.css';
 
-export default function CardConstructor({key, index, id, ingredient, moveIngredient}) { 
+export default function CardConstructor({ index, id, ingredient, moveIngredient}) { 
 
 	// const >>>>>>>
     const dispatch = useDispatch();
@@ -72,7 +72,7 @@ export default function CardConstructor({key, index, id, ingredient, moveIngredi
 
 	// >>>>>>> 
     return (
-        <li className={classIngredient} key={key} id={ingredient.UID} ref={dragDropRef}>
+        <li className={classIngredient} key={ingredient.UID} id={ingredient.UID} ref={dragDropRef}>
             <DragIcon type="primary"/>
             <ConstructorElement text={ingredient.name}
                                 price={ingredient.price}
