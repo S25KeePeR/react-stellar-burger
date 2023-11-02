@@ -1,5 +1,6 @@
 import styles from "./app-header.module.css";
 import { Logo, BurgerIcon, ListIcon, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { Link } from 'react-router-dom';
 
 export default function AppHeader() {
 
@@ -21,12 +22,13 @@ export default function AppHeader() {
                     <Logo />
                 </li>
                 <li className={classMenuItem}>
-                    <a href="##" className={classLink}>
+                    <Link   to={`/`}
+                            className={classLink}>
                         <BurgerIcon type={typeIcon.pr}/>
                         <span className={classLinkTextActive}>
                             Конструктор
                         </span>
-                    </a>
+                    </Link>
                 </li>
                 <li className={classMenuItem}>
                     <a href="##" className={classLink}>
@@ -37,12 +39,13 @@ export default function AppHeader() {
                     </a>
                 </li>
                 <li className={classMenuItem}>
-                    <a href="##" className={classLink}>
+                    <Link   to={`/login`}
+                            className={classLink}>
                         <ProfileIcon type={typeIcon.se}/>
-                        <p className={classLinkText}>
+                        <span className={classLinkText}>
                             Личный кабинет
-                        </p>
-                    </a>
+                        </span>
+                    </Link>
                 </li>
             </ul>
         </header>

@@ -45,6 +45,7 @@
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    color: rgba(133, 133, 173, 1);
 }
 
 .link__text_ative {
@@ -52,5 +53,5 @@
 }
 
 .link__text {
-    color: rgba(133, 133, 173, 1);
+    /* color: rgba(133, 133, 173, 1); */
 }

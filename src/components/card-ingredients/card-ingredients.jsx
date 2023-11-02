@@ -1,10 +1,14 @@
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import { useDrag } from "react-dnd";
-import { useDispatch } from 'react-redux';
+import { useLocation, Link } from 'react-router-dom';
 
 import styles from "./card-ingredients.module.css";
 
 export default function CardIngredients({ingredient, openModal, id}) { 
+
+    const location = useLocation();
+    const ingredientId = ingredient._id;
+    console.log(location)
 
 	// function >>>>>>>
     const [, dragRef] = useDrag(() => ({
@@ -30,6 +34,7 @@ export default function CardIngredients({ingredient, openModal, id}) {
 
 	// >>>>>>> 
     return (
+
         <li     className={classItem}
                 ref={dragRef}
                 key={id} 
@@ -45,6 +50,7 @@ export default function CardIngredients({ingredient, openModal, id}) {
             </div>
             <span className={classItemTitle}>{ingredient.name}</span>
         </li>
+        
     )
 
 }

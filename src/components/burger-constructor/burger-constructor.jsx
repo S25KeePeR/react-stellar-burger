@@ -2,6 +2,7 @@ import { useCallback }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from "react-dnd";
 
+// project modules >>>>>>>
 import { getOrder } from "../../services/actions/order-action";
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT, MOVE_INGREDIENT } from "../../services/actions/constructor-action";
 import { ADD_VALUE, DELETE_BUN_VALUE } from '../../services/actions/ingredients-action';
@@ -28,7 +29,7 @@ export default function BurgerConstructor({openModal}) {
             addIngredient(item);
         },
     });
-    const submitOrder = async (e) => {
+    const submitOrder = (e) => {
         e.preventDefault();
         const listID = {
             ingredients: [  burgerData.bun._id, 

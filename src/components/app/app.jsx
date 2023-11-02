@@ -1,73 +1,72 @@
+// react >>>>>>>
 import { useEffect } from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-import { getBase } from "../../services/actions/ingredients-action";
+// pages >>>>>>>
+import HomePage from "../../pages/home";
+import Login from "../../pages/login";
+import Register from "../../pages/register";
+import ForgotPassword from "../../pages/forgot-password";
+import ResetPassword from "../../pages/reset-password";
 
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-
+// page elements >>>>>>>
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-
-import useModal from '../../hooks/useModal';
 import Modal from "../modals/modal";
-import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
 
+// page styles >>>>>>>
 import styles from "./app.module.css";
 
 export default function App() {
 
 	// const >>>>>>>
 	const dispatch = useDispatch();
-	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
-	const { modalState, modalType, openModal, closeModal } = useModal();
+	const location = useLocation();
+	const navigate = useNavigate();
+	const background = location.state && location.state.background;
 
 	// function >>>>>>>
 	useEffect(() => {
-		dispatch(getBase());
+		// dispatch(getBase());
 	}, []);
 
-	// class >>>>>>>
+	const handleModalClose = () => {
+		// Возвращаемся к предыдущему пути при закрытии модалки
+		navigate(-1);
+	};
+
+	// styles >>>>>>>
   	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
-	const classStatus = `${styles.status}`;
 
 	// >>>>>>> 
   	return (
-		<>
-			<div className={styles.app}>
-				<AppHeader />
-				<main className={classMain}>
-					{baseRequest && 
-						<p className={classStatus}>
-							Загрузка...
-						</p>
-					}
-					{baseFailed && 
-						<p className={classStatus}>
-							Произошла ошибка
-						</p>
-					}
-					{!baseRequest && !baseFailed && base.length > 0 &&
-						<DndProvider backend={HTML5Backend}>
-							<BurgerIngredients openModal={openModal}/> 
-							<BurgerConstructor openModal={openModal}/>
-						</DndProvider>
-					}
-				</main>
-			</div>
-			{modalState && modalType === 'ingredient' &&
-				<Modal closeModal={closeModal} modalTitle={'Детали ингредиента'}>
-					<IngredientDetails />
-				</Modal>
-			}
-			{modalState && modalType === 'Order' &&
-				<Modal closeModal={closeModal}>
-					<OrderDetails />
-				</Modal>
-			}
-		</>
+		<div className={styles.app}>
+			<AppHeader />
+			<main className={classMain}>
+			
+				<Routes>
+					<Route path="/" element={<HomePage/>} />
+					<Route path="/login" element={<Login/>} />
+					<Route path="/register" element={<Register/>} />
+					<Route path="/forgot-password" element={<ForgotPassword/>} />
+					<Route path="/reset-password" element={<ResetPassword/>} />
+					
+				</Routes>
+				{background && (
+					<Routes>
+						<Route
+							path='/ingredients/:ingredientId'
+							element={
+								<Modal onClose={handleModalClose}>
+									<IngredientDetails />
+								</Modal>
+							}
+						/>
+					</Routes>
+				)}
+			</main>
+		</div>
   	);
 }
 
