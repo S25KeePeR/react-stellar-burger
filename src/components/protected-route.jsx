@@ -8,12 +8,13 @@ const Protected = ({ onlyUnAuth = false, component }) => {
     const { userName, isAuthChecked } = useSelector(state => state.userReducer);
     const location = useLocation();
    
-    // if (!isAuthChecked) {
-    //     // Запрос еще выполняется
-    //     // Выводим прелоадер в ПР
-    //     // Здесь возвращается просто null для экономии времени
-    //     return null;
-    // }
+    if (!isAuthChecked) {
+        // Запрос еще выполняется
+        // Выводим прелоадер в ПР
+        // Здесь возвращается просто null для экономии времени
+        console.log('что-то пошло не так')
+        return null;
+    }
 
     if (onlyUnAuth && userName) {
         // Пользователь авторизован, но роут предназначен для неавторизованного пользователя

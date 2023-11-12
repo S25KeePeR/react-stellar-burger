@@ -10,13 +10,12 @@ export default function CardIngredients({ingredient, openModal, id}) {
     const ingredientId = ingredient._id;
 
 	// function >>>>>>>
-    const [, dragRef] = useDrag(() => ({
+    const [{ isDrag }, dragRef] = useDrag(() => ({
         type: 'BOX',
         item: ingredient,
-        // collect: (monitor) => ({
-        //     opacity: monitor.isDragging() ? 0 : undefined,
-        //     cursor: monitor.isDragging() ? 'grabbing' : 'grab'
-        // }),
+        collect: monitor => ({
+            isDrag: monitor.isDragging()
+        })
       }))
 
     const showCounter = (num) => {
@@ -30,26 +29,32 @@ export default function CardIngredients({ingredient, openModal, id}) {
     const classItemTitle = `text text_type_main-default ${styles.title}`;
     const classItemText = `text text_type_digits-default ${styles.text}`;
     const classItemPrice = `${styles.price}`;
+    const classLink = `${styles.link}`;
 
 	// >>>>>>> 
     return (
-
-        <li     className={classItem}
-                ref={dragRef}
-                key={id} 
-                onClick={() => {
-                    openModal('ingredient', ingredient);
-                }}                
-            >
-            {showCounter(ingredient.__v)}
-            <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
-            <div className={classItemPrice}>
-                <span className={classItemText}>{ingredient.price}</span>
-                <CurrencyIcon type="primary"/>
-            </div>
-            <span className={classItemTitle}>{ingredient.name}</span>
-        </li>
-        
+        <Link
+            key={ingredientId} 
+            to={`/ingredients/${ingredientId}`} // Тут мы формируем динамический путь для нашего ингредиента
+            state={{ background: location }} // а также сохраняем в свойство background роут, на котором была открыта наша модалка
+            className={classLink}
+        >
+            <li     className={classItem}
+                    ref={dragRef}
+                    key={id} 
+                    onClick={() => {
+                        openModal('ingredient', ingredient);
+                    }}                
+                >
+                {showCounter(ingredient.__v)}
+                <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
+                <div className={classItemPrice}>
+                    <span className={classItemText}>{ingredient.price}</span>
+                    <CurrencyIcon type="primary"/>
+                </div>
+                <span className={classItemTitle}>{ingredient.name}</span>
+            </li>
+        </Link>
     )
 
 }

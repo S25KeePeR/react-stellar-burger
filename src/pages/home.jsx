@@ -28,9 +28,9 @@ export default function HomePage() {
 	const { modalState, modalType, openModal, closeModal } = useModal();
 
 	// function >>>>>>>
-	useEffect(() => {
-		dispatch(getBase());
-	}, []);
+	// useEffect(() => {
+	// 	dispatch(getBase());
+	// }, []);
 
 	// styles >>>>>>>
     const classContainer = `${styles.container} pl-5 pr-5 text text_type_main-large`;
@@ -55,11 +55,11 @@ export default function HomePage() {
                     <BurgerConstructor openModal={openModal}/>
                 </DndProvider>
             }
-            {modalState && modalType === 'ingredient' &&
+            {/* {modalState && modalType === 'ingredient' &&
 				<Modal closeModal={closeModal} modalTitle={'Детали ингредиента'}>
 					<IngredientDetails />
 				</Modal>
-			}
+			} */}
 			{modalState && modalType === 'Order' &&
 				<Modal closeModal={closeModal}>
 					<OrderDetails />

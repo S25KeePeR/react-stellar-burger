@@ -1,6 +1,7 @@
 import { useCallback }  from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { useDrop } from "react-dnd";
+import { useNavigate } from "react-router-dom";
 
 // project modules >>>>>>>
 import { getOrder } from "../../services/actions/order-action";
@@ -21,6 +22,8 @@ export default function BurgerConstructor({openModal}) {
 	// const >>>>>>>
     const dispatch = useDispatch();
     const burgerData = useSelector(store => store.constructorReducer);
+    const { isUserAuth } = useSelector(state => state.userReducer);
+    const navigate = useNavigate();
 
 	// function >>>>>>>
     const [, dropTarget] = useDrop({
@@ -36,8 +39,15 @@ export default function BurgerConstructor({openModal}) {
                             ...burgerData.ingredients.map(ingredient => ingredient._id), 
                             burgerData.bun._id ] 
         }
-        openModal('Order');
-        dispatch(getOrder(listID));
+
+        if ( !isUserAuth ) {
+            navigate("/login");
+        } else {
+            openModal('Order');
+            dispatch(getOrder(listID));
+        }
+
+
     };
     
     const addIngredient = (ingredient) => {
@@ -131,9 +141,7 @@ export default function BurgerConstructor({openModal}) {
                             type="primary" 
                             size="large"
                             disabled={burgerData.bun === null ? true : burgerData.ingredients.length === 0 ? true : false}
-                            onClick={(e) => {
-                                submitOrder(e)
-                            }}
+                            onClick={submitOrder}
                 >
                     Оформить заказ
                 </Button>

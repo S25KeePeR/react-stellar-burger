@@ -39,9 +39,12 @@ export default function App() {
 
 	const background = location.state && location.state.background;
 
+	
+	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
+
 	////////////////////////////////
-	const { userName, isUserAuth } = useSelector(state => state.userReducer);
-	// console.log(`${userName} >> ${isUserAuth}`);
+	// const { userName, isUserAuth, isAuthChecked } = useSelector(state => state.userReducer);
+	// console.log(`${userName} >> ${isUserAuth} : ${isAuthChecked} `);
 	// console.log(token);
 	// console.log(refreshToken);
 	// // console.log(user);
@@ -50,8 +53,9 @@ export default function App() {
 	
 	// function >>>>>>>
 	useEffect(() => {
-		// dispatch(getBase());
+		dispatch(getBase());
 	}, []);
+	
 	useEffect(() => {
 		if ( token ) {
 			dispatch(checkUserAuth());
@@ -59,48 +63,62 @@ export default function App() {
 	  }, [token, refreshToken]);
 
 	const handleModalClose = () => {
-		// Возвращаемся к предыдущему пути при закрытии модалки
 		navigate(-1);
 	};
 
 	// styles >>>>>>>
   	const classMain = `${styles.main}`;
-
+	const classStatus = `text text_type_main-large`;
 	// >>>>>>> 
   	return (
-		<div className={styles.app}>
-			<AppHeader />
-			<main className={classMain}>
-				<Routes>
-					{/* для всех */}
-					<Route path="/" element={<HomePage/>} />
-					<Route path="*" element={<NotFoundPage/>} />
-					
-					{/* Только для авторизированных пользователей OnlyAuth */}
-					<Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
-					<Route path="/profile/orders" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
-					<Route path="/feed" element={<OnlyAuth component={<FeedPage/>} />} />
+		<>
+            {baseRequest && 
+                <p className={classStatus}>
+                    Загрузка...
+                </p>
+            }
+            {baseFailed && 
+                <p className={classStatus}>
+                    Произошла ошибка
+                </p>
+            }
+            {!baseRequest && !baseFailed && base.length > 0 &&
+				<div className={styles.app}>
+					<AppHeader />
+					<main className={classMain}>
+						<Routes location={background || location}>
+							{/* для всех */}
+							<Route path="/" element={<HomePage/>} />
+							<Route path='/ingredients/:ingredientId' element={<IngredientDetails />} />
+							<Route path="*" element={<NotFoundPage/>} />
+							
+							{/* Только для авторизированных пользователей OnlyAuth */}
+							<Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
+							<Route path="/profile/orders" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
+							<Route path="/feed" element={<OnlyAuth component={<FeedPage/>} />} />
 
-					{/* Только для неавторизированных пользователей OnlyUnAuth */}
-					<Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
-					<Route path="/login" element={<OnlyUnAuth component={<LoginPage/>} />} />
-					<Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPasswordPage/>} />} />
-					<Route path="/reset-password" element={<OnlyUnAuth component={<ResetPasswordPage/>} />} />
-				</Routes>
-				{background && (
-					<Routes>
-						<Route
-							path='/ingredients/:ingredientId'
-							element={
-								<Modal onClose={handleModalClose}>
-									<IngredientDetails />
-								</Modal>
-							}
-						/>
-					</Routes>
-				)}
-			</main>
-		</div>
+							{/* Только для неавторизированных пользователей OnlyUnAuth */}
+							<Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
+							<Route path="/login" element={<OnlyUnAuth component={<LoginPage/>} />} />
+							<Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPasswordPage/>} />} />
+							<Route path="/reset-password" element={<OnlyUnAuth component={<ResetPasswordPage/>} />} />
+						</Routes>
+						{background && (
+							<Routes>
+								<Route
+									path='/ingredients/:ingredientId'
+									element={
+										<Modal closeModal={handleModalClose} modalTitle={'Детали ингредиента'}>
+											<IngredientDetails />
+										</Modal>
+									}
+								/>
+							</Routes>
+						)}
+					</main>
+				</div>
+			}
+		</>
   	);
 }
 

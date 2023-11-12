@@ -85,7 +85,14 @@ export default function ProfilePage() {
 
     const saveChange = (e) => {
         e.preventDefault(); //newUserName, newUserEmail, newUserPassword 
-        dispatch(editUserData( null, null, null));
+        const newPassword = values.password == valueDefault.password ? null : values.password
+        
+        dispatch(editUserData( values.name, values.email, newPassword))
+            .then(
+                setInputName(true),
+                setInputEmail(true),
+                setInputPassword(true)
+            );
 
     }
 

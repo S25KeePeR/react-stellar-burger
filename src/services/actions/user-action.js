@@ -4,17 +4,19 @@ import {
     logoutUser,
     sendEmail,
     sendNewPassword,
-    refreshToken,
-    getRefreshUserData
+    getRefreshUserData,
+    patchRefreshUserData
 } from "../../utils/api";
 
 export const SET_USER_DATA = 'SET_USER_DATA';
 export const DELETE_USER_DATA = 'DELETE_USER_DATA';
 export const SET_USER_AUTH = 'SET_USER_AUTH';
+export const SET_AUTH_CHECKED = 'SET_AUTH_CHECKED';
 
 
 const saveLocalStorage = ( res ) => {
-    localStorage.setItem('accessToken', res.accessToken.split('Bearer ')[1]);
+    // localStorage.setItem('accessToken', res.accessToken.split('Bearer ')[1]);
+    localStorage.setItem('accessToken', res.accessToken);
     localStorage.setItem('refreshToken', res.refreshToken);
 }
 
@@ -23,9 +25,7 @@ export function register( name, email, password ) {
     return async function( dispatch ) { 
         try {
             const res = await registerUser( name, email, password );
-            // console.log(res);
             if ( res && res.success ) {
-                // console.log(res);
                 saveLocalStorage(res);
                 dispatch({
                     type: SET_USER_DATA,
@@ -47,7 +47,6 @@ export function logIn( email, password) {
         try {
             const res = await loginUser( email, password );
             if ( res && res.success ) { 
-                // console.log(res);
                 saveLocalStorage(res);
                 dispatch({
                     type: SET_USER_DATA,
@@ -91,7 +90,6 @@ export function forgotPassword( email ) {
         try {
             const res = await sendEmail( email );
             if ( res && res.success ) {
-                // console.log(res);
                 localStorage.setItem('forgotPassword', res.success);
                 return res.success
             } else {
@@ -108,7 +106,6 @@ export function resetPassword( password, token ) {
         try {
             const res = await sendNewPassword( password, token );
             if ( res && res.success ) {
-                // console.log(res);
                 localStorage.removeItem('forgotPassword');
                 return res.success
             } else {
@@ -120,16 +117,17 @@ export function resetPassword( password, token ) {
     }
 };
 
-////////////////////////
 export function checkUserAuth() { 
-    return async function( dispatch ) { 
-        dispatch({ type: SET_USER_AUTH });
+    return async function( dispatch ) {
         try {
-            // console.log('TYT');
             const res = await getRefreshUserData();
-            
             if ( res && res.success ) {
-                
+                dispatch({ type: SET_USER_AUTH });
+                dispatch({
+                    type: SET_USER_DATA,
+                    email: res.user.email,
+                    name: res.user.name
+                });
                 return res.success
             } else {
                 throw new Error('Некорректные данные');
@@ -143,11 +141,13 @@ export function checkUserAuth() {
 export function editUserData( name, email, password ) { 
     return async function( dispatch ) {
         try {
-            // console.log('TYT');
-            const res = await getRefreshUserData( name, email, password );
-            
+            const res = await patchRefreshUserData( name, email, password );
             if ( res && res.success ) {
-                
+                dispatch({
+                    type: SET_USER_DATA,
+                    email: res.user.email,
+                    name: res.user.name
+                });
                 return res.success
             } else {
                 throw new Error('Некорректные данные');

@@ -65,8 +65,6 @@ export const logoutUser = async () => {
     return onResponse(res);
 }
 
-
-
 export const sendEmail = async ( userEmail ) => {
     const res = await fetch(`${BASE_URL}/password-reset`, {
         method: 'POST',
@@ -94,20 +92,6 @@ export const sendNewPassword = async ( userPassword, emailCode ) => {
     return onResponse(res);
 }
 
-////////////////////////// 
-
-// export const getRefreshUserData = async () => { 
-//     await fetch(`${BASE_URL}/auth/user`, {
-//         method: 'GET',
-//         headers: {
-//             "Content-Type": "application/json",
-//             authorization: localStorage.getItem('accessToken')
-//         }
-//     });
-//     // console.log(res)
-//     // return onResponse(res);
-// }
-
 export const refreshToken = async () => { 
     const res = await fetch(`${BASE_URL}/auth/token`, {
         method: 'POST',
@@ -118,10 +102,8 @@ export const refreshToken = async () => {
             token: localStorage.getItem('refreshToken'),
         })
     });
-    console.log(res)
     return onResponse(res);
 }
-
 
 export const getRefreshUserData = () => fetchWithRefresh(`${BASE_URL}/auth/user`, {
     method: 'GET',
@@ -143,7 +125,6 @@ export const patchRefreshUserData = ( newUserName, newUserEmail, newUserPassword
         name: newUserName 
     })
 });
-
 
 export const fetchWithRefresh = async ( url, options ) => {
     try {
