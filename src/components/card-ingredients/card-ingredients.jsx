@@ -8,7 +8,6 @@ export default function CardIngredients({ingredient, openModal, id}) {
 
     const location = useLocation();
     const ingredientId = ingredient._id;
-    console.log(location)
 
 	// function >>>>>>>
     const [, dragRef] = useDrag(() => ({

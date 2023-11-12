@@ -1,71 +1,69 @@
 // react >>>>>>>
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // project modules >>>>>>>
-
+import { forgotPassword } from "../services/actions/user-action";
 
 // page elements >>>>>>>
-import { Button, EmailInput, PasswordInput, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, EmailInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useInput } from "../hooks/useInput";
 
 // page styles >>>>>>>
-import styles from "./form-styles.module.css";
+import * as styles from "./form-styles";
 
-export default function ForgotPassword() {
+export default function ForgotPasswordPage() {
 
 	// const >>>>>>>
-    const [valueEmail, setValueEmail] = useState('')
+    const { values, onChange, setValues } = useInput({email: ''});
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // function >>>>>>>
     const submitForgot = (e) => {
         e.preventDefault();
-        dispatch('getOrder(listID)');
+        dispatch(forgotPassword(values.email))
+            .then(() => {
+                navigate('/reset-password', { replace: true });
+            }
+        );
     };
 
+
 	// styles >>>>>>>
-    const classContainer = `${styles.container}`;
-    const classTitle = `${styles.title}`;
-    const classInput = `mt-6`;
-    const classButton = `mt-6 mb-20`;
-    const classInfo = `${styles.info}`;
-    const classText = ` text text_type_main-default text_color_inactive`;
-    const classLink = ` text text_type_main-default ${styles.link}`;
+
 	// >>>>>>> 
   	return (
-		<form className={classContainer}>
-            <h5 className={classTitle}>
+		<form className={styles.classContainer}>
+            <h5 className={styles.classTitle}>
                 Восстановление пароля
             </h5>
             <EmailInput
-                onChange={e => setValueEmail(e.target.value)}
-                value={valueEmail}
-                name={'Укажите e-mail'}
+                onChange={onChange}
+                value={values.email}
+                name={'email'}
                 isIcon={false}
-                extraClass={classInput}
+                extraClass={styles.classInput}  
+                required={true}
             />
             <Button     htmlType="submit" 
                         type="primary" 
                         size="medium"
-                        extraClass={classButton}
-                        onClick={(e) => {
-                            submitForgot(e)
-                        }}
+                        extraClass={styles.classButton}
+                        onClick={(e) => {submitForgot(e)}}
+                        disabled={!values.email ? true : false}
             >
                 Восстановить
             </Button>
-            <div className={classInfo}>
-                <p className={classText}>
+            <div className={styles.classInfo}>
+                <p className={styles.classText}>
                     Вспомнили пароль?
                 </p>
                 <Link   to={`/login`}
-                        className={classLink}>
+                        className={styles.classLink}>
                     Войти
-                </Link>
-                <Link   to={`/reset-password`}
-                        className={classLink}>
-                    ResetPassword
                 </Link>
             </div>
 		</form>

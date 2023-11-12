@@ -33,11 +33,12 @@ export default function HomePage() {
 	}, []);
 
 	// styles >>>>>>>
-	const classStatus = `${styles.status}`;
+    const classContainer = `${styles.container} pl-5 pr-5 text text_type_main-large`;
+	const classStatus = `${styles.status} text text_type_main-large`;
 
 	// >>>>>>> 
     return (
-        <>
+        <section className={classContainer}>
             {baseRequest && 
                 <p className={classStatus}>
                     Загрузка...
@@ -64,6 +65,6 @@ export default function HomePage() {
 					<OrderDetails />
 				</Modal>
 			}
-        </>
+        </section>
     )
 };

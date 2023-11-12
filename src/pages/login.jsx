@@ -1,70 +1,79 @@
 // react >>>>>>>
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+
+// project modules >>>>>>>
+import { logIn } from "../services/actions/user-action";
 
 // page elements >>>>>>>
 import { Button, EmailInput, PasswordInput } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useInput } from "../hooks/useInput";
 
 // page styles >>>>>>>
-import styles from "./form-styles.module.css";
+import * as styles from "./form-styles";
 
-export default function Login() {
+export default function LoginPage() {
 
 	// const >>>>>>>
-    const [valueEmail, setValueEmail] = useState('email')
-    const [valuePassword, setValuePassword] = useState('password')
+    const { values, onChange, setValues } = useInput({email: '', password: ''});
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     // const inputRef = useRef(null)
 
     // function >>>>>>>
+    const submitLogin = (e) => {
+        e.preventDefault();
+        dispatch(logIn( values.email, values.password));
+    };
 
 	// styles >>>>>>>
-    const classContainer = `${styles.container}`;
-    const classTitle = `${styles.title}`;
-    const classInput = `mt-6`;
-    const classButton = `mt-6 mb-20`;
-    const classInfo = `${styles.info}`;
-    const classText = ` text text_type_main-default text_color_inactive`;
-    const classLink = ` text text_type_main-default ${styles.link}`;
+
 	// >>>>>>> 
   	return (
-		<form className={classContainer}>
-            <h5 className={classTitle}>
+		<form className={styles.classContainer}>
+            <h5 className={styles.classTitle}>
                 Вход
             </h5>
             <EmailInput
-                onChange={e => setValueEmail(e.target.value)}
-                value={valueEmail}
+                onChange={onChange}
+                value={values.email}
                 name={'email'}
                 isIcon={false}
-                extraClass={classInput}
+                extraClass={styles.classInput}
+                required={true}
             />
             <PasswordInput
-                onChange={e => setValuePassword(e.target.value)}
-                value={valuePassword}
+                onChange={onChange}
+                value={values.password}
                 name={'password'}
-                extraClass={classInput}
+                extraClass={styles.classInput}
+                required={true}
                 // ref={inputRef}
             />
             <Button     htmlType="submit" 
                         type="primary" 
                         size="medium"
-                        extraClass={classButton}
+                        extraClass={styles.classButton}
+                        disabled={ !values.email ? true : !values.password ? true : false }
+                        onClick={(e) => {submitLogin(e)}}
             >
                 Войти
             </Button>
-            <div className={classInfo}>
-                <p className={classText}>
+            <div className={styles.classInfo}>
+                <p className={styles.classText}>
                     Вы - новый пользователь? 
                 </p>
                 <Link   to={`/register`}
-                        className={classLink}>
+                        className={styles.classLink}>
                     Зарегистрироваться
                 </Link>
-                <p className={classText}>
+                <p className={styles.classText}>
                     Забыли пароль?
                 </p>
                 <Link   to={`/forgot-password`}
-                        className={classLink}>
+                        className={styles.classLink}>
                     Восстановить пароль
                 </Link>
 

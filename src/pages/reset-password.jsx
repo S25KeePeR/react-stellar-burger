@@ -1,63 +1,84 @@
 // react >>>>>>>
-import { useState } from "react";
-import { Link } from 'react-router-dom';
+import { useState, useEffect  } from "react";
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+
+// project modules >>>>>>>
+import { resetPassword } from "../services/actions/user-action";
 
 // page elements >>>>>>>
-import { Button, EmailInput, PasswordInput, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { Button, PasswordInput, Input } from "@ya.praktikum/react-developer-burger-ui-components";
+import { useInput } from "../hooks/useInput";
 
 // page styles >>>>>>>
-import styles from "./form-styles.module.css";
+import * as styles from "./form-styles";
 
-export default function ResetPassword() {
+export default function ResetPasswordPage() {
 
 	// const >>>>>>>
-    const [valueName, setValueName] = useState('')
+    const isForgotPassword = localStorage.getItem('forgotPassword');
+    const { values, onChange, setValues } = useInput({ password: '', code: ''});
+console.log( values.code)
+    const [valueToken, setValueToken] = useState('')
     const [valuePassword, setValuePassword] = useState('')
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     // function >>>>>>>
+    useEffect(() => {
+        if (!isForgotPassword) { navigate("*") } 
+    }, []);
+    const submitReset = (e) => {
+        e.preventDefault();
+        dispatch(resetPassword( values.password, values.code ))
+            .then(() => {
+                navigate('/login', { replace: true });
+            }
+        );
+    };
+
 
 	// styles >>>>>>>
-    const classContainer = `${styles.container}`;
-    const classTitle = `${styles.title}`;
-    const classInput = `mt-6`;
-    const classButton = `mt-6 mb-20`;
-    const classInfo = `${styles.info}`;
-    const classText = ` text text_type_main-default text_color_inactive`;
-    const classLink = ` text text_type_main-default ${styles.link}`;
+
 	// >>>>>>> 
   	return (
-		<form className={classContainer}>
-            <h5 className={classTitle}>
+		<form className={styles.classContainer}>
+            <h5 className={styles.classTitle}>
                 Восстановление пароля
             </h5>
             <PasswordInput
-                onChange={e => setValuePassword(e.target.value)}
-                value={valuePassword}
+                onChange={onChange}
+                value={values.password}
                 name={'password'}
                 placeholder={'Введите новый пароль'}
-                extraClass={classInput}
+                extraClass={styles.classInput}
                 // ref={inputRef}
             />
             <Input
                 type={'text'}
+                name={'code'}
                 placeholder={'Введите код из письма'}
-                onChange={e => setValueName(e.target.value)}
-                value={valueName}
-                extraClass={classInput}
+                onChange={onChange}
+                value={values.code}
+                extraClass={styles.classInput}
             />
             <Button     htmlType="submit" 
                         type="primary" 
                         size="medium"
-                        extraClass={classButton}
+                        extraClass={styles.classButton}
+                        onClick={(e) => {
+                            submitReset(e)
+                        }}
+                        disabled={ !values.password ? true : !values.code ? true : false }
             >
                 Сохранить
             </Button>
-            <div className={classInfo}>
-                <p className={classText}>
+            <div className={styles.classInfo}>
+                <p className={styles.classText}>
                     Вспомнили пароль?
                 </p>
                 <Link   to={`/login`}
-                        className={classLink}>
+                        className={styles.classLink}>
                     Войти
                 </Link>
             </div>
