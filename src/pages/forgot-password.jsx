@@ -1,5 +1,4 @@
 // react >>>>>>>
-import { useState, useRef } from "react";
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -17,26 +16,21 @@ export default function ForgotPasswordPage() {
 
 	// const >>>>>>>
     const { values, onChange, setValues } = useInput({email: ''});
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // function >>>>>>>
     const submitForgot = (e) => {
         e.preventDefault();
-        dispatch(forgotPassword(values.email))
-            .then(() => {
-                navigate('/reset-password', { replace: true });
-            }
-        );
+        dispatch(forgotPassword(values.email));
+        navigate('/reset-password', { replace: true });
     };
-
 
 	// styles >>>>>>>
 
 	// >>>>>>> 
   	return (
-		<form className={styles.classContainer}>
+		<form className={styles.classContainer} onSubmit={submitForgot}>
             <h5 className={styles.classTitle}>
                 Восстановление пароля
             </h5>
@@ -52,7 +46,6 @@ export default function ForgotPasswordPage() {
                         type="primary" 
                         size="medium"
                         extraClass={styles.classButton}
-                        onClick={(e) => {submitForgot(e)}}
                         disabled={!values.email ? true : false}
             >
                 Восстановить

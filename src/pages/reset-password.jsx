@@ -18,23 +18,20 @@ export default function ResetPasswordPage() {
 	// const >>>>>>>
     const isForgotPassword = localStorage.getItem('forgotPassword');
     const { values, onChange, setValues } = useInput({ password: '', code: ''});
-console.log( values.code)
-    const [valueToken, setValueToken] = useState('')
-    const [valuePassword, setValuePassword] = useState('')
+    // const [valueToken, setValueToken] = useState('')
+    // const [valuePassword, setValuePassword] = useState('')
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     // function >>>>>>>
     useEffect(() => {
-        if (!isForgotPassword) { navigate("*") } 
+        if (!isForgotPassword) { navigate("/") } 
     }, []);
+
     const submitReset = (e) => {
         e.preventDefault();
-        dispatch(resetPassword( values.password, values.code ))
-            .then(() => {
-                navigate('/login', { replace: true });
-            }
-        );
+        dispatch(resetPassword( values.password, values.code ));
+        navigate('/login', { replace: true });
     };
 
 
@@ -42,7 +39,7 @@ console.log( values.code)
 
 	// >>>>>>> 
   	return (
-		<form className={styles.classContainer}>
+		<form className={styles.classContainer} onSubmit={submitReset}>
             <h5 className={styles.classTitle}>
                 Восстановление пароля
             </h5>
@@ -66,9 +63,6 @@ console.log( values.code)
                         type="primary" 
                         size="medium"
                         extraClass={styles.classButton}
-                        onClick={(e) => {
-                            submitReset(e)
-                        }}
                         disabled={ !values.password ? true : !values.code ? true : false }
             >
                 Сохранить

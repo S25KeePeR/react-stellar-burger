@@ -19,8 +19,6 @@ export default function LoginPage() {
     const { values, onChange, setValues } = useInput({email: '', password: ''});
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    // const inputRef = useRef(null)
 
     // function >>>>>>>
     const submitLogin = (e) => {
@@ -32,7 +30,7 @@ export default function LoginPage() {
 
 	// >>>>>>> 
   	return (
-		<form className={styles.classContainer}>
+		<form className={styles.classContainer} onSubmit={submitLogin} >
             <h5 className={styles.classTitle}>
                 Вход
             </h5>
@@ -57,7 +55,6 @@ export default function LoginPage() {
                         size="medium"
                         extraClass={styles.classButton}
                         disabled={ !values.email ? true : !values.password ? true : false }
-                        onClick={(e) => {submitLogin(e)}}
             >
                 Войти
             </Button>

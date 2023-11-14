@@ -6,21 +6,6 @@
   color: #f2f2f3;
 }
 
-/* .main {
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  display: grid;
-  grid-template-columns: 600px;
-  grid-auto-columns: 600px;
-  grid-auto-flow: column;
-  column-gap: 40px;
-  align-items: start;
-  height: 100%;
-  align-content: center;
-  justify-items: center;
-} */
-
 .main {
   max-width: 1280px;
   width: 100%;
@@ -29,4 +14,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.status {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }

@@ -9,29 +9,20 @@ export const DELETE_VALUE = 'DELETE_VALUE';
 export const DELETE_BUN_VALUE = 'DELETE_BUN_VALUE';
 export const RESET_VALUE = 'RESET_VALUE';
 
-export function getBase() {
-    return async function(dispatch) {
-        dispatch({
-            type: GET_INGREDIENTS
-        })
-        try {
-            const res = await requestBase();
-            if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
-                dispatch({
+export const getBase = () => ( dispatch ) => { 
+    dispatch({ type: GET_INGREDIENTS })
+    requestBase()
+        .then( (res) => {
+            if ( Array.isArray(res.data) && res.data.length > 0 ) {
+                dispatch({ 
                     type: GET_INGREDIENTS_SUCCESS,
                     base: res
                 })
             } else {
-                dispatch({
-                    type: GET_INGREDIENTS_FAILED
-                })
-                throw new Error('Некорректные данные или пустая база');
+                throw new Error('Некорректная или пустая база');
             }
-        } catch (error) {
-            dispatch({
-                type: GET_INGREDIENTS_FAILED
-            });
-            throw new Error(`Ошибка сервера ${error}`);
-        }
-    }
-}
+        })
+        .catch ((err) => {
+            dispatch({ type: GET_INGREDIENTS_FAILED })
+        })
+};

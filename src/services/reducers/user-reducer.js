@@ -2,7 +2,8 @@ import {
     SET_USER_DATA,
     SET_USER_AUTH,
     DELETE_USER_DATA,
-    SET_AUTH_CHECKED
+    SET_AUTH_CHECKED,
+
 } from "../actions/user-action";
 
 const initialState = {
@@ -10,7 +11,8 @@ const initialState = {
     userEmail: null,
 
     isUserAuth: false,
-    isAuthChecked: true
+    isAuthChecked: true,
+
 }
 
 export const userReducer = (state = initialState, action) => { 

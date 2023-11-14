@@ -68,10 +68,10 @@ export default function App() {
 
 	// styles >>>>>>>
   	const classMain = `${styles.main}`;
-	const classStatus = `text text_type_main-large`;
+	const classStatus = `text text_type_main-large ${styles.status}`;
 	// >>>>>>> 
   	return (
-		<>
+		<div className={styles.app}>
             {baseRequest && 
                 <p className={classStatus}>
                     Загрузка...
@@ -83,7 +83,7 @@ export default function App() {
                 </p>
             }
             {!baseRequest && !baseFailed && base.length > 0 &&
-				<div className={styles.app}>
+				<>
 					<AppHeader />
 					<main className={classMain}>
 						<Routes location={background || location}>
@@ -116,9 +116,9 @@ export default function App() {
 							</Routes>
 						)}
 					</main>
-				</div>
+				</>
 			}
-		</>
+		</div>
   	);
 }
 

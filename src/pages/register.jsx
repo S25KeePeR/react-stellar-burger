@@ -35,7 +35,7 @@ export default function RegisterPage() {
 
 	// >>>>>>> 
   	return (
-		<form className={styles.classContainer}>
+		<form className={styles.classContainer} onSubmit={submitRegister}>
             <h5 className={styles.classTitle}>
                 Регистрация
             </h5>
@@ -65,10 +65,7 @@ export default function RegisterPage() {
                         size="medium"
                         extraClass={styles.classButton}
                         disabled={ !valueName ? true : !valueEmail ? true : !valuePassword ? true : false }
-                        onClick={(e) => {
-                            submitRegister(e)
-                        }}
-            >
+             >
                 Зарегистрироваться
             </Button>
             <div className={styles.classInfo}>

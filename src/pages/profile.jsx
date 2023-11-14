@@ -22,6 +22,7 @@ export default function ProfilePage() {
     const inputPasswordRef = useRef(null);
     
     const { userName, userEmail } = useSelector(state => state.userReducer);
+
     const valueDefault = {
         name: userName, 
         email: userEmail, 
@@ -40,15 +41,16 @@ export default function ProfilePage() {
     useEffect(() => {
 		inputNameRef.current.focus();
 	}, [inputName]);
+
     useEffect(() => {
 		inputEmailRef.current.focus();
 	}, [inputEmail]);
+
     useEffect(() => {
 		inputPasswordRef.current.focus();
 	}, [inputPassword]);
 
     const editName = () => {
-        
         if (inputName) {
             setInputName(false)
         } else {
@@ -56,6 +58,7 @@ export default function ProfilePage() {
             setValues({...values, name: userName})
         }
     }
+
     const editEmail = () => {
         if (inputEmail) {
             setInputEmail(false)
@@ -64,6 +67,7 @@ export default function ProfilePage() {
             setValues({...values, email: userEmail})
         }
     }
+
     const editPassword = () => {
         if (inputPassword) {
             setInputPassword(false)
@@ -75,26 +79,24 @@ export default function ProfilePage() {
         }
     }
 
-    const canselChange = (e) => {
-        e.preventDefault();
+    const submitChange = (e) => {
+        e.preventDefault(); 
+        const newPassword = values.password == valueDefault.password ? null : values.password;
+        dispatch(editUserData( values.name, values.email, newPassword));
+        setInputName(true);
+        setInputEmail(true);
+        setInputPassword(true);
+
+    }
+
+    const canselChange = () => {
         setValues(valueDefault);
         setInputName(true);
         setInputEmail(true);
         setInputPassword(true);
     }
 
-    const saveChange = (e) => {
-        e.preventDefault(); //newUserName, newUserEmail, newUserPassword 
-        const newPassword = values.password == valueDefault.password ? null : values.password
-        
-        dispatch(editUserData( values.name, values.email, newPassword))
-            .then(
-                setInputName(true),
-                setInputEmail(true),
-                setInputPassword(true)
-            );
 
-    }
 
     const isDisabled = () => {
         if ( !inputName && values.name != userName  ) {
@@ -106,7 +108,6 @@ export default function ProfilePage() {
         if ( !inputPassword && !values.password == '' ) {
             return false
         }
-
         return true
     }
 
@@ -120,7 +121,7 @@ export default function ProfilePage() {
     return (
         <section className={classContainer}>
             <ProfileMenu />
-            <form className={classEdit}>
+            <form className={classEdit} onSubmit={submitChange}>
                 <Input
                     type={ 'text' }
                     name={ 'name' }
@@ -166,12 +167,10 @@ export default function ProfilePage() {
                     >
                         Отмена
                     </Button>
-                    <Button     htmlType="button" 
+                    <Button     htmlType="submit" 
                                 type="primary" 
                                 size="medium" 
-                                // disabled={ values.password == '' ? true :  false } 
                                 disabled={ isDisabled() }
-                                onClick={saveChange}
                     >
                         Сохранить
                     </Button>

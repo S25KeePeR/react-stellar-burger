@@ -1,111 +1,120 @@
-const BASE_URL = "https://norma.nomoreparties.space/api";
+// base url >>>>>>>
+const API_URL = "https://norma.nomoreparties.space/api/";
 
-function onResponse(res) {
-    // return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
+// functions >>>>>>>
+const checkResponse = (res) => {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-export const requestBase = async () => {
-    const res = await fetch(`${BASE_URL}/ingredients`);
-    return onResponse(res);
-}
+const checkSuccess = (res) => {
+    return res && res.success ? res : Promise.reject(`Ответ не success: ${res}`);
+};
 
-export const requestOrder = async (listID) => {
-    const res = await fetch(`${BASE_URL}/orders`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            ingredients: listID.ingredients
-        })
-    });
-    return onResponse(res);
-}
+const request = (endpoint, options) => {
+    return fetch(`${API_URL}${endpoint}`, options)
+      .then(checkResponse)
+      .then(checkSuccess);
+};
 
-export const registerUser = async ( userName, userEmail, userPassword ) => { 
-    const res = await fetch(`${BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            email: userEmail, 
-            password: userPassword, 
-            name: userName 
-        })
-    });
-    return onResponse(res);
-}
+export const fetchWithRefresh = async ( endpoint, options ) => {
+    try {
+        const res = await fetch(`${API_URL}${endpoint}`, options);
+        return await checkResponse(res);
+    } catch (err) {
+        if (err.message === "jwt expired") {
+            const refreshData = await requestRefreshToken(); //обновляем токен
+            if (!refreshData.success) {
+                return Promise.reject(refreshData);
+            }
+            localStorage.setItem("refreshToken", refreshData.refreshToken);
+            localStorage.setItem("accessToken", refreshData.accessToken);
+            options.headers.authorization = refreshData.accessToken;
+            const res = await fetch(`${API_URL}${endpoint}`, options); //повторяем запрос
+            return await checkResponse(res);
+        } else {
+            return Promise.reject(err);
+        }
+    }
+};
 
-export const loginUser = async ( userEmail, userPassword ) => { 
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            email: userEmail, 
-            password: userPassword
-        })
-    });
-    return onResponse(res);
-}
+// request >>>>>>>
+export const requestBase = () => request( 'ingredients' );
 
-export const logoutUser = async () => { 
-    const res = await fetch(`${BASE_URL}/auth/logout`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            token: localStorage.getItem("refreshToken")
-        })
-    });
-    return onResponse(res);
-}
+export const requestOrder = (listID) => request( 'orders', {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        ingredients: listID.ingredients
+    })
+});
 
-export const sendEmail = async ( userEmail ) => {
-    const res = await fetch(`${BASE_URL}/password-reset`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            email: userEmail
-        })
-    });
-    return onResponse(res);
-}
+export const requestRegister =  ( userName, userEmail, userPassword ) => request( 'auth/register' , {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        email: userEmail, 
+        password: userPassword, 
+        name: userName 
+    })
+});
 
-export const sendNewPassword = async ( userPassword, emailCode ) => { 
-    const res = await fetch(`${BASE_URL}/password-reset/reset`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            password: userPassword,
-            token: emailCode
-        })
-    });
-    return onResponse(res);
-}
+export const requestLogin = ( userEmail, userPassword ) => request( 'auth/login', {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        email: userEmail, 
+        password: userPassword
+    })
+});
 
-export const refreshToken = async () => { 
-    const res = await fetch(`${BASE_URL}/auth/token`, {
-        method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            token: localStorage.getItem('refreshToken'),
-        })
-    });
-    return onResponse(res);
-}
+export const requestLogout =  () => request( 'auth/logout', {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        token: localStorage.getItem("refreshToken")
+    })
+});
 
-export const getRefreshUserData = () => fetchWithRefresh(`${BASE_URL}/auth/user`, {
+export const requestRestorePassword = ( userEmail ) => request( 'password-reset', {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        email: userEmail
+    })
+});
+
+export const requestNewPassword =  ( userPassword, emailCode ) => request( 'password-reset/reset', {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        password: userPassword,
+        token: emailCode
+    })
+});
+
+export const requestRefreshToken = () => request( 'auth/token', {
+    method: 'POST',
+    headers: {
+        "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+        token: localStorage.getItem('refreshToken'),
+    })
+});
+
+export const requestUserAuth = () => fetchWithRefresh( 'auth/user', {
     method: 'GET',
     headers: {
         "Content-Type": "application/json",
@@ -113,36 +122,15 @@ export const getRefreshUserData = () => fetchWithRefresh(`${BASE_URL}/auth/user`
     }
 });
 
-export const patchRefreshUserData = ( newUserName, newUserEmail, newUserPassword ) => fetchWithRefresh(`${BASE_URL}/auth/user`, {
+export const requestRefreshUserData = ( newName, newEmail, newPassword ) => fetchWithRefresh( 'auth/user', {
     method: 'PATCH',
     headers: {
         "Content-Type": "application/json",
         authorization: localStorage.getItem('accessToken')
     },
     body: JSON.stringify({
-        email: newUserEmail, 
-        password: newUserPassword, 
-        name: newUserName 
+        email: newEmail, 
+        password: newPassword, 
+        name: newName 
     })
 });
-
-export const fetchWithRefresh = async ( url, options ) => {
-    try {
-        const res = await fetch(url, options);
-        return await onResponse(res);
-    } catch (err) {
-        if (err.message === "jwt expired") {
-            const refreshData = await refreshToken(); //обновляем токен
-            if (!refreshData.success) {
-                return Promise.reject(refreshData);
-            }
-            localStorage.setItem("refreshToken", refreshData.refreshToken);
-            localStorage.setItem("accessToken", refreshData.accessToken);
-            options.headers.authorization = refreshData.accessToken;
-            const res = await fetch(url, options); //повторяем запрос
-            return await onResponse(res);
-        } else {
-            return Promise.reject(err);
-        }
-    }
-  };

@@ -17,11 +17,7 @@ export default function ProfileMenu() {
     const setActiveText = ({ isActive }) => ( isActive ? classLinkActive : classLink );
      const onClickLogout = (e) => {
         e.preventDefault();
-        dispatch(logOut())
-            .then(() => {
-                navigate('/', { replace: true });
-            }
-        );
+        dispatch(logOut());
     };
 
 
