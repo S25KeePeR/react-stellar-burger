@@ -50,6 +50,9 @@ export const requestOrder = (listID) => request( 'orders', {
     })
 });
 
+export const requestAllOrders = () => request( 'orders/all');
+// export const requestUserOrders = () => request( 'orders');
+
 export const requestRegister =  ( userName, userEmail, userPassword ) => request( 'auth/register' , {
     method: 'POST',
     headers: {

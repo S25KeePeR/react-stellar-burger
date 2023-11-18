@@ -112,14 +112,14 @@ export default function ProfilePage() {
     }
 
 	// styles >>>>>>>
-    const classContainer = `${styles.container}`;
+    const classSection = `${styles.section}`;
     const classEdit = `${styles.edit}`;
     const classInput = `mb-6`;
     const classButtons = `${styles.buttons}`;  
 
 	// >>>>>>> 
     return (
-        <section className={classContainer}>
+        <section className={classSection}>
             <ProfileMenu />
             <form className={classEdit} onSubmit={submitChange}>
                 <Input

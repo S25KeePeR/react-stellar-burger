@@ -17,6 +17,7 @@ import FeedPage from "../../pages/feed";
 // project modules >>>>>>>
 import { getBase } from "../../services/actions/ingredients-action";
 import { checkUserAuth } from "../../services/actions/user-action";
+import { getAllOrders, getUserOrders } from "../../services/actions/order-action";
 
 // page elements >>>>>>>
 import AppHeader from "../app-header/app-header";
@@ -54,6 +55,8 @@ export default function App() {
 	// function >>>>>>>
 	useEffect(() => {
 		dispatch(getBase());
+		dispatch(getAllOrders());
+		// dispatch(getUserOrders());
 	}, []);
 	
 	useEffect(() => {
@@ -91,11 +94,13 @@ export default function App() {
 							<Route path="/" element={<HomePage/>} />
 							<Route path='/ingredients/:ingredientId' element={<IngredientDetails />} />
 							<Route path="*" element={<NotFoundPage/>} />
+							<Route path="/feed" element={<FeedPage/>} />
+							<Route path="/feed/:id" element={<FeedPage/>} />
 							
 							{/* Только для авторизированных пользователей OnlyAuth */}
 							<Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
 							<Route path="/profile/orders" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
-							<Route path="/feed" element={<OnlyAuth component={<FeedPage/>} />} />
+							<Route path="/profile/orders/:id" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
 
 							{/* Только для неавторизированных пользователей OnlyUnAuth */}
 							<Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
