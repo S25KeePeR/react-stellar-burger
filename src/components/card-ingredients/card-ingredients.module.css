@@ -1,22 +1,4 @@
-.menu {
-    display: flex;
-}
-
-.container {
-    height: calc(100vh - 364px);
-    overflow: auto;
-}
-
-.items {
-    margin-top: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 32px;
-    list-style-type: none;
-}
-
-/* .item {
+.item {
     padding: 0;
     width: 272px;
     height: 208px;
@@ -44,4 +26,9 @@
     display: flex;
     align-items: center;
     gap: 8px;
-} */
+}
+
+.link {
+    text-decoration: none;
+    color: white
+}

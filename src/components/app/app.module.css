@@ -8,30 +8,17 @@
 
 .main {
   max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  display: grid;
-  grid-template-columns: 600px;
-  grid-auto-columns: 600px;
-  grid-auto-flow: column;
-  column-gap: 40px;
-  align-items: start;
+  width: 100%;
   height: 100%;
-  align-content: center;
-  justify-items: center;
+  margin: 0 auto 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .status {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  position: absolute;
-  z-index: 1000;
-  top: 0;
-  left: 0;
   display: flex;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, .6);
 }

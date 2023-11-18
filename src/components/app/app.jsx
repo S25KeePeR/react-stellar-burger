@@ -1,118 +1,124 @@
-import { useEffect, useState, useReducer, useMemo, useRef } from "react";
-import api from "../../utils/api";
+// react >>>>>>>
+import { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 
-import styles from "./app.module.css";
+// pages >>>>>>>
+import HomePage from "../../pages/home";
+import LoginPage from "../../pages/login";
+import RegisterPage from "../../pages/register";
+import ForgotPasswordPage from "../../pages/forgot-password";
+import ResetPasswordPage from "../../pages/reset-password";
+import ProfilePage from "../../pages/profile";
+import ProfileOrdersPage from "../../pages/profile-orders";
+import NotFoundPage from "../../pages/not-found";
+import FeedPage from "../../pages/feed";
 
-// import transitions from "../modals/modal-transitions.module.css"; 
-// import { CSSTransition } from "react-transition-group";
+// project modules >>>>>>>
+import { getBase } from "../../services/actions/ingredients-action";
+import { checkUserAuth } from "../../services/actions/user-action";
 
+// page elements >>>>>>>
 import AppHeader from "../app-header/app-header";
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
-
-import useModal from '../../hooks/useModal';
 import Modal from "../modals/modal";
-import OrderDetails from "../modals/order-details/order-details";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+import { OnlyAuth, OnlyUnAuth } from "../protected-route";
 
-import { ConstructorContext } from "../../services/constructorContext";
-import { constructorReducer, initialState } from "../../services/constructorReducer";
-import { OrderDetailsContext } from "../../services/orderDetailsContext";
+// page styles >>>>>>>
+import styles from "./app.module.css";
 
 export default function App() {
 
 	// const >>>>>>>
-	const [ data, setData ] = useState([]);
-	const [ isLoading, setIsLoading ] = useState(false);
-	const [ error, setError ] = useState(false);
-	const [ burgerData, setBurgerData ] = useState({
-		bun: null,
-		ingredients: [],
-	});
-	const [ orderData, setOrderData ] = useState({
-		name: null,
-		number: null
-	})
-		
-	// const nodeRef = useRef(null);
-	const { modalState, modalType, modalData, openModal, closeModal } = useModal();
-    const [ state, dispatch ] = useReducer(constructorReducer, initialState);
-		
-	// function >>>>>>>
+	const dispatch = useDispatch();
+	const location = useLocation();
+	const navigate = useNavigate();
 
+	const token = localStorage.getItem('accessToken');
+	const refreshToken = localStorage.getItem('refreshToken');
+
+	const background = location.state && location.state.background;
+
+	
+	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
+
+	////////////////////////////////
+	// const { userName, isUserAuth, isAuthChecked } = useSelector(state => state.userReducer);
+	// console.log(`${userName} >> ${isUserAuth} : ${isAuthChecked} `);
+	// console.log(token);
+	// console.log(refreshToken);
+	// // console.log(user);
+	// console.log(!!background);
+	///////////////////////////////
+	
+	// function >>>>>>>
 	useEffect(() => {
-		setIsLoading(true);
-		const getData = async () => {
-			try {
-				let res = await api.get('ingredients');
-				let resData = res.data;
-				if (resData.success && Array.isArray(resData.data) && resData.data.length !== 0) {
-					setData(resData.data);
-				} else {
-					throw new Error('Некорректные данные или пустая база');
-				}
-			} catch (error) {
-				setError(true);
-				console.log('Ошибка: ', error); 
-			} finally {
-				setIsLoading(false);
-			}
-		};
-		getData();
+		dispatch(getBase());
 	}, []);
 	
-	// class >>>>>>>
-  	const classMain = `${styles.main} pl-5 pr-5 mb-10 text_type_main-large`;
-	const classStatus = `${styles.status}`;
+	useEffect(() => {
+		if ( token ) {
+			dispatch(checkUserAuth());
+		}
+	  }, [token, refreshToken]);
 
+	const handleModalClose = () => {
+		navigate(-1);
+	};
+
+	// styles >>>>>>>
+  	const classMain = `${styles.main}`;
+	const classStatus = `text text_type_main-large ${styles.status}`;
 	// >>>>>>> 
   	return (
-		<>
 		<div className={styles.app}>
-			<AppHeader />
-			<main className={classMain}>
-				{isLoading && 
-					<p className={classStatus}>
-						Загрузка...
-					</p>
-				}
-				{error && 
-					<p className={classStatus}>
-						Произошла ошибка
-					</p>
-				}
-				{data.length !== 0 && 
-					<ConstructorContext.Provider value={{burgerData, setBurgerData, state, dispatch}}>
-						<BurgerIngredients data={data} openModal={openModal}/> 
-						<OrderDetailsContext.Provider value={{setOrderData, setIsLoading, setError}}>
-							<BurgerConstructor openModal={openModal}/>						
-						</OrderDetailsContext.Provider> 
-					</ConstructorContext.Provider>
-				}
-			</main>
+            {baseRequest && 
+                <p className={classStatus}>
+                    Загрузка...
+                </p>
+            }
+            {baseFailed && 
+                <p className={classStatus}>
+                    Произошла ошибка
+                </p>
+            }
+            {!baseRequest && !baseFailed && base.length > 0 &&
+				<>
+					<AppHeader />
+					<main className={classMain}>
+						<Routes location={background || location}>
+							{/* для всех */}
+							<Route path="/" element={<HomePage/>} />
+							<Route path='/ingredients/:ingredientId' element={<IngredientDetails />} />
+							<Route path="*" element={<NotFoundPage/>} />
+							
+							{/* Только для авторизированных пользователей OnlyAuth */}
+							<Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
+							<Route path="/profile/orders" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
+							<Route path="/feed" element={<OnlyAuth component={<FeedPage/>} />} />
+
+							{/* Только для неавторизированных пользователей OnlyUnAuth */}
+							<Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
+							<Route path="/login" element={<OnlyUnAuth component={<LoginPage/>} />} />
+							<Route path="/forgot-password" element={<OnlyUnAuth component={<ForgotPasswordPage/>} />} />
+							<Route path="/reset-password" element={<OnlyUnAuth component={<ResetPasswordPage/>} />} />
+						</Routes>
+						{background && (
+							<Routes>
+								<Route
+									path='/ingredients/:ingredientId'
+									element={
+										<Modal closeModal={handleModalClose} modalTitle={'Детали ингредиента'}>
+											<IngredientDetails />
+										</Modal>
+									}
+								/>
+							</Routes>
+						)}
+					</main>
+				</>
+			}
 		</div>
-		{modalState && modalType === 'ingredient' &&
-			<Modal closeModal={closeModal} modalTitle={'Детали ингредиента'}>
-				<IngredientDetails ingredient={modalData}/>
-			</Modal>
-		}
-		{modalState && modalType === 'Order' &&
-			<Modal closeModal={closeModal}>
-				<OrderDetails  orderNum={orderData.number}/>
-			</Modal>
-		}
-		{/* <CSSTransition
-			nodeRef={nodeRef}
-			in={modalState && modalType === 'ingredient'}
-			timeout={300}
-			classNames={{...transitions}}
-			unmountOnExit 
-		>
-			<Modal ref={nodeRef} closeModal={closeModal} modalTitle={'Детали ингредиента'}>
-				<IngredientDetails  ingredient={modalData}/>
-			</Modal>
-      	</CSSTransition> */}
-		</>
   	);
 }
 
