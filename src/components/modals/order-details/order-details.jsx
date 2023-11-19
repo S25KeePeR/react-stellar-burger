@@ -13,23 +13,23 @@ const classInfoInactive = `${classText} text_color_inactive mt-2 mb-15`;
 
 const OrderDetails = () => {
 
-    const orderData = useSelector(store => store.orderReducer);
-
+    const { order, orderRequest, orderFailed } = useSelector(store => store.orderReducer);
+    
     return (
         <>
-            {orderData.orderRequest && 
+            { orderRequest && 
                 <p className={classOrderID}>
                     Загрузка...
                 </p>
             }
-            {orderData.orderFailed && 
+            { orderFailed && 
                 <p className={classOrderID}>
                     Произошла ошибка
                 </p>
             }
-            {!orderData.orderRequest && !orderData.orderFailed &&
+            { !orderRequest && !orderFailed && 
                 <>
-                    <h3 className={classH3}>{orderData.order}</h3>
+                    <h3 className={classH3}>{ order }</h3>
                     <p className={classOrderID}>идентификатор заказа</p>
                     <img className={classOrderImg} src={doneImg} alt='Заказ принят.' />
                     <p className={classInfo}>Ваш заказ начали готовить</p>

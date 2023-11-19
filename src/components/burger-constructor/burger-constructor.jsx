@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 // project modules >>>>>>>
 import { getOrder } from "../../services/actions/order-action";
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT, MOVE_INGREDIENT } from "../../services/actions/constructor-action";
-import { ADD_VALUE, DELETE_BUN_VALUE } from '../../services/actions/ingredients-action';
-
+import { GET_ORDER } from "../../services/actions/order-action";
 import { v4 as uuidv4 } from "uuid";
 
 import PropTypes from "prop-types";
@@ -21,9 +20,9 @@ export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const burgerData = useSelector(store => store.constructorReducer);
     const { isUserAuth } = useSelector(state => state.userReducer);
-    const navigate = useNavigate();
 
 	// function >>>>>>>
     const [, dropTarget] = useDrop({
@@ -34,6 +33,7 @@ export default function BurgerConstructor({openModal}) {
     });
     const submitOrder = (e) => {
         e.preventDefault();
+        dispatch({ type: GET_ORDER });
         const listID = {
             ingredients: [  burgerData.bun._id, 
                             ...burgerData.ingredients.map(ingredient => ingredient._id), 
@@ -46,10 +46,8 @@ export default function BurgerConstructor({openModal}) {
             openModal('Order');
             dispatch(getOrder(listID));
         }
-
-
     };
-    
+
     const addIngredient = (ingredient) => {
         const newIngredient = new Object({...ingredient, UID: uuidv4()})
         if (newIngredient.type === "bun") {
@@ -57,11 +55,9 @@ export default function BurgerConstructor({openModal}) {
                 dispatch({ type: REMOVE_BUN, payload: burgerData.bun });  
             } 
             dispatch({ type: ADD_BUN, payload: newIngredient });
-            dispatch({ type: DELETE_BUN_VALUE, newIngredient });
         } else {
             dispatch({ type: ADD_INGREDIENT, payload: newIngredient });   
         }
-        dispatch({type: ADD_VALUE, newIngredient})
     };
 
     const moveIngredient = useCallback(

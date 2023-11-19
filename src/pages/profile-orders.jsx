@@ -1,12 +1,13 @@
 // react >>>>>>>
-import { NavLink } from 'react-router-dom';
-import { useSelector} from 'react-redux';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 
 // project modules >>>>>>>
 import ProfileMenu from '../components/profile-menu/profile-menu';
-import CardOrder from '../components/card-order/card-order';
+import CardOrder from "../components/card-order/card-order";
 
 // page elements >>>>>>>
+import { connect, disconnect } from "../services/actions/orders-user-action";
 
 // page styles >>>>>>>
 import styles from "./profile.module.css";
@@ -14,43 +15,44 @@ import styles from "./profile.module.css";
 export default function ProfileOrdersPage() { 
 
 	// const >>>>>>>
-    const { ordersUser, orderRequest, orderFailed } = useSelector(store => store.orderReducer);
-    console.log(ordersUser)
-    // const orders = ordersAll.orders
+    const dispatch = useDispatch();
+ 
+    const { orders, isLoading, error } = useSelector(store => store.ordersUserReducer);
+    const sendToken = localStorage.getItem("accessToken").split('Bearer ')[1];
+    const ORDERS_USER_URL = `wss://norma.nomoreparties.space/orders?token=${sendToken}`;
+
 	// function >>>>>>>
-   
+    useEffect(() => {
+        dispatch(connect(ORDERS_USER_URL));
+        return () => {
+            dispatch(disconnect(ORDERS_USER_URL));
+        }
+    }, [dispatch]);
 	// styles >>>>>>>
     const classSection = `${styles.section}`;
     const classList = `mt-9 ${styles.list} custom-scroll`;
-    const classTitle = `text text_type_main-medium`;
+    const classTitle = `mt-30 text text_type_main-medium`;
 
 	// >>>>>>> 
     return (
 
         <section className={classSection}>
             <ProfileMenu />
-            {orderRequest && 
+            { isLoading && 
                 <p className={classTitle}>
                     Загрузка...
                 </p>
             }
-            {orderFailed && 
+            { !isLoading && error && 
                 <p className={classTitle}>
                     Произошла ошибка
                 </p>
             }
-            {!orderRequest && !orderFailed && 
+            { !isLoading && !error && 
                 <ul className={classList}>
-                    {/* {orders.map(item => (
-                        <CardOrder key={item._id} order={item}/>
-                    ))} */}
-                    {/* <CardOrder />
-                    <CardOrder />
-                    <CardOrder />
-                    <CardOrder />
-                    <CardOrder />
-                    <CardOrder />
-                    <CardOrder /> */}
+                    { [...orders].reverse().map(item => (
+                        <CardOrder key={item._id} order={item} user={true}/>
+                    ))}
                 </ul>
             }
         </section>

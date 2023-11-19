@@ -17,7 +17,6 @@ import FeedPage from "../../pages/feed";
 // project modules >>>>>>>
 import { getBase } from "../../services/actions/ingredients-action";
 import { checkUserAuth } from "../../services/actions/user-action";
-import { getAllOrders, getUserOrders } from "../../services/actions/order-action";
 
 // page elements >>>>>>>
 import AppHeader from "../app-header/app-header";
@@ -34,29 +33,14 @@ export default function App() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const navigate = useNavigate();
-
 	const token = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
-
 	const background = location.state && location.state.background;
-
-	
 	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
 
-	////////////////////////////////
-	// const { userName, isUserAuth, isAuthChecked } = useSelector(state => state.userReducer);
-	// console.log(`${userName} >> ${isUserAuth} : ${isAuthChecked} `);
-	// console.log(token);
-	// console.log(refreshToken);
-	// // console.log(user);
-	// console.log(!!background);
-	///////////////////////////////
-	
 	// function >>>>>>>
 	useEffect(() => {
 		dispatch(getBase());
-		dispatch(getAllOrders());
-		// dispatch(getUserOrders());
 	}, []);
 	
 	useEffect(() => {

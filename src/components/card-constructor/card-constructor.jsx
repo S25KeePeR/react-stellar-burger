@@ -17,8 +17,7 @@ export default function CardConstructor({ index, id, ingredient, moveIngredient}
 
 	// function >>>>>>>
     const deleteIngredient = (item) => {
-        dispatch({ type: DELETE_INGREDIENT, item });
-        dispatch({ type: DELETE_VALUE, item });
+        dispatch({ type: DELETE_INGREDIENT, payload: item });
     };
 
     const [{ isDragging }, refDrag] = useDrag({
@@ -65,6 +64,7 @@ export default function CardConstructor({ index, id, ingredient, moveIngredient}
 
     const ref = useRef(null);
     const dragDropRef = refDrag(refDrop(ref));
+
 
     // styles >>>>>>>
     const classMR = ` mr-3`;

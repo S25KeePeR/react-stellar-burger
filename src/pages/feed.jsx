@@ -1,12 +1,12 @@
 // react >>>>>>>
+import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
 // project modules >>>>>>>
 import CardOrder from '../components/card-order/card-order';
 
 // page elements >>>>>>>
-
-// modals elements >>>>>>>
+import { connect, disconnect } from "../services/actions/orders-all-action";
 
 // page styles >>>>>>>
 import styles from "./feed.module.css";
@@ -15,14 +15,16 @@ export default function FeedPage() {
 
 	// const >>>>>>>
 	const dispatch = useDispatch();
-    const { ordersAll, orderRequest, orderFailed } = useSelector(store => store.orderReducer);
-    const total = ordersAll.total
-    const totalToday = ordersAll.totalToday
-    const orders = ordersAll.orders
+    const ORDERS_ALL_URL = "wss://norma.nomoreparties.space/orders/all";
+    const { orders, isLoading, connected, total, totalToday } = useSelector(store => store.ordersAllReducer);
 
-  
 	// function >>>>>>>
-
+    useEffect(() => {
+        dispatch(connect(ORDERS_ALL_URL));
+        return () => {
+            dispatch(disconnect(ORDERS_ALL_URL));
+        }
+    }, [dispatch]);
 
 	// styles >>>>>>> ${styles.border}
     const classSection = `${styles.section}  `;
@@ -42,17 +44,17 @@ export default function FeedPage() {
 	// >>>>>>>  
     return (
         <section className={classSection}>
-            {orderRequest && 
+            { isLoading && 
                 <p className={classTitle}>
                     Загрузка...
                 </p>
             }
-            {orderFailed && 
+            { !isLoading && !connected && 
                 <p className={classTitle}>
                     Произошла ошибка
                 </p>
             }
-            {!orderRequest && !orderFailed && 
+            { !isLoading && orders.length > 0  && 
 
                 <>
                     <div className={classOrders}>
@@ -114,7 +116,7 @@ export default function FeedPage() {
                                 Выполнено за все время:
                             </h3>
                             <span  className={classTotal}>
-                                { total.toLocaleString() }
+                                { total > 0 && total.toLocaleString("ru") }
                             </span>
                         </div>
                         <div>

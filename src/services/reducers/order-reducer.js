@@ -1,19 +1,15 @@
 import {
     GET_ORDER,
     GET_ORDER_FAILED,
-    GET_ORDER_SUCCESS,
-    GET_ALL_ORDERS,
-    GET_USER_ORDERS
+    GET_ORDER_SUCCESS
 } from '../actions/order-action';
 
 const initialState = {
+    isLoading: false,
     orderRequest: false,
     orderFailed: false,
     name: null,
-    order: null,
-    ordersAll: {},
-    ordersUser: {}
-
+    order: null
 }
 
 export const orderReducer = (state = initialState, action) => {
@@ -40,20 +36,7 @@ export const orderReducer = (state = initialState, action) => {
                 orderRequest: false 
             };
         }
-        case GET_ALL_ORDERS: {
-            return { 
-                ...state,  
-                ordersAll: action.payload,
-                orderRequest: false 
-            };
-        }
-        case GET_USER_ORDERS: {
-            return { 
-                ...state,  
-                ordersUser: action.payload,
-                orderRequest: false 
-            };
-        }
+
         default: {
             return state
         }

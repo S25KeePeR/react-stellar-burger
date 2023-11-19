@@ -40,18 +40,17 @@ export const fetchWithRefresh = async ( endpoint, options ) => {
 // request >>>>>>>
 export const requestBase = () => request( 'ingredients' );
 
-export const requestOrder = (listID) => request( 'orders', {
+export const requestOrder = (ingredientsID) => request( 'orders', {
     method: 'POST',
     headers: {
         "Content-Type": "application/json",
+        authorization: localStorage.getItem('accessToken')
     },
     body: JSON.stringify({
-        ingredients: listID.ingredients
+        ingredients: ingredientsID,
+        
     })
 });
-
-export const requestAllOrders = () => request( 'orders/all');
-// export const requestUserOrders = () => request( 'orders');
 
 export const requestRegister =  ( userName, userEmail, userPassword ) => request( 'auth/register' , {
     method: 'POST',

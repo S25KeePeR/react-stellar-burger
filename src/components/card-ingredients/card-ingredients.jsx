@@ -1,7 +1,14 @@
-import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+// react >>>>>>>
+import { useSelector } from 'react-redux';
+import { useMemo }  from "react";
 import { useDrag } from "react-dnd";
 import { useLocation, Link } from 'react-router-dom';
 
+
+// page elements >>>>>>>
+import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+
+// page styles >>>>>>>
 import styles from "./card-ingredients.module.css";
 
 export default function CardIngredients({ingredient, openModal, id}) { 
@@ -18,11 +25,14 @@ export default function CardIngredients({ingredient, openModal, id}) {
         })
       }))
 
-    const showCounter = (num) => {
-        if (num > 0) { 
-            return <Counter count={num} size="default" extraClass="m-1"/>
-        }
-    };
+      const { bun, ingredients } = useSelector(store => store.constructorReducer);
+
+      const counter = useMemo(
+        () => () => {
+            return bun && bun._id === ingredient._id ? 2 : ingredients.filter((item) => item._id === ingredient._id).length;
+        },
+        [ingredient._id, bun, ingredients]
+    );
 
     // styles >>>>>>>
     const classItem = `ml-4 mr-2 ${styles.item}`;
@@ -35,8 +45,8 @@ export default function CardIngredients({ingredient, openModal, id}) {
     return (
         <Link
             key={ingredientId} 
-            to={`/ingredients/${ingredientId}`} // Тут мы формируем динамический путь для нашего ингредиента
-            state={{ background: location }} // а также сохраняем в свойство background роут, на котором была открыта наша модалка
+            to={`/ingredients/${ingredientId}`} 
+            state={{ background: location }} 
             className={classLink}
         >
             <li     className={classItem}
@@ -46,7 +56,7 @@ export default function CardIngredients({ingredient, openModal, id}) {
                         openModal('ingredient', ingredient);
                     }}                
                 >
-                {showCounter(ingredient.__v)}
+                { counter() > 0 && <Counter count={ counter() } size="default" extraClass="m-1"/> }
                 <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
                 <div className={classItemPrice}>
                     <span className={classItemText}>{ingredient.price}</span>

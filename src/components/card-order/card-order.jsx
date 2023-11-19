@@ -3,6 +3,7 @@ import { useSelector} from 'react-redux';
 
 // project modules >>>>>>>
 import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
 
 // page elements >>>>>>>
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components'; 
@@ -36,8 +37,39 @@ export default function CardOrder({order, user=false}) {
 		})
 		return price 
 	}
+	const getStatus = () => {
+		if (order.status == 'pending') {
+			return 'Готовится'
+		}
+		if (order.status == 'created') {
+			return 'Создан'
+		}
+		return 'Выполнен'
+	}
 
-	
+
+	const counts = {};
+	ingredients.forEach((x) => { counts[x] = (counts[x] || 0) + 1; });
+
+	const getElement = (item, index, arr) => {
+		if (index < 6 ) { 
+			return (
+				<li key={item} className={classItem} style={{ zIndex: `${6 -index}` }}>
+					<span  key={item} className={classItemImg} 
+							style={{ backgroundImage: `url(${getIngredientImage(item)})`}}
+					>
+						{ index == 5 && 
+							<span className={classItemText}>
+								{`+${arr.length - 5}`}
+							</span>
+						}
+					</span>
+				</li>
+			)
+		}
+	}
+
+
 	// styles >>>>>>>
 	const classOrder = `p-6 ${styles.order}`;   
     const classTitle = `text text_type_main-medium`;
@@ -52,7 +84,7 @@ export default function CardOrder({order, user=false}) {
     const classItem = `${styles.item}`;
     const classItemImg = `${styles.img}`;
     const classItemText = `${styles.text} text text_type_main-default`;
-	const classStatus = ``;
+	const classStatus = `${classText} ${styles.done}`;
 
 	// >>>>>>> 
     return (
@@ -70,63 +102,15 @@ export default function CardOrder({order, user=false}) {
 				{order.name}
 			</h2>
 			{ user && 
-				<span className={classText}>
-					Создан
+				<span className={order.status == 'done' ? classStatus : classText}>
+					{getStatus()}
 				</span>
 			}
 			<div className={classFooter}>
 				<ul className={classItems}>
-					<li  className={classItem} style={{ zIndex: 6 }}>
-						<span   className={classItemImg} 
-								style={{ backgroundImage: `url(${getIngredientImage(ingredients[0])})`}}
-						>
-						</span>
-					</li>
-					{numberIngredients >= 2 && 
-						<li  className={classItem} style={{ zIndex: 5 }}>
-							<span   className={classItemImg} 
-									style={{ backgroundImage: `url(${getIngredientImage(ingredients[1])})`}} 
-							>
-							</span>
-						</li>
-					}
-					{numberIngredients >= 3 && 
-						<li  className={classItem} style={{ zIndex: 4 }}>
-							<span   className={classItemImg} 
-									style={{ backgroundImage: `url(${getIngredientImage(ingredients[2])})`}}
-							>
-							</span>
-						</li>
-					}
-					{numberIngredients >= 4 && 
-						<li  className={classItem} style={{ zIndex: 3 }}>
-							<span   className={classItemImg} 
-									style={{ backgroundImage: `url(${getIngredientImage(ingredients[3])})`}}
-							>
-							</span>
-						</li>
-					}
-					{numberIngredients >= 5 && 
-						<li  className={classItem} style={{ zIndex: 2 }}>
-							<span   className={classItemImg} 
-									style={{ backgroundImage: `url(${getIngredientImage(ingredients[4])})`}}
-							>
-							</span>
-						</li>
-					}
-					{numberIngredients >= 6 && 
-						<li  className={classItem} style={{ zIndex: 1 }}>
-							<span   className={classItemImg} 
-									style={{ backgroundImage: `url(${getIngredientImage(ingredients[5])})`}}
-							>
-								{numberIngredients > 6 && 
-									<span className={classItemText}>
-										+{numberIngredients - 6}
-									</span>
-								}
-							</span>
-						</li>
-					}	
+					{Object.keys(counts).map(( item, index, arr ) => (
+						getElement(item, index, arr )
+					))}
 				</ul>
 				<div className={classPriceContainer}>
 					<p className={classPrice}>
