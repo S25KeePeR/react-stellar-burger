@@ -1,5 +1,5 @@
-// base url >>>>>>>
-const API_URL = "https://norma.nomoreparties.space/api/";
+// url >>>>>>>
+const API_URL = 'https://norma.nomoreparties.space/api/';
 
 // functions >>>>>>>
 const checkResponse = (res) => {
