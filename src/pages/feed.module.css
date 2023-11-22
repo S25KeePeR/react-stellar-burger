@@ -8,12 +8,12 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    column-gap: 56px;
-    align-items: center;
+    column-gap: 54px;
+    /* align-items: center; */
 }
 
 .orders {
-    max-width: 608px;
+    max-width: 602px;
     width: 100%;
 }
 
@@ -44,7 +44,7 @@
 
 
 .title {
-    height: 40px;
+    align-self: center;
 }
 
 
@@ -63,6 +63,9 @@
 .end {
     color: rgba(0, 204, 204, 1);
 }
+.end:last-of-type {
+    margin-bottom: 0;
+}
 
 .box {
     max-width: 272px;
@@ -75,4 +78,9 @@
     flex-direction: row;
     /* overflow: hidden; */
     column-gap: 40px;
+}
+
+.link {
+    text-decoration: none;
+    color: white
 }

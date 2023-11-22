@@ -136,3 +136,6 @@ export const requestRefreshUserData = ( newName, newEmail, newPassword ) => fetc
         name: newName 
     })
 });
+
+
+export const requestOrderDetails = (order) => request( `orders/${order}` );

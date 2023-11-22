@@ -1,6 +1,7 @@
 // react >>>>>>>
 import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, Link } from 'react-router-dom';
 
 // project modules >>>>>>>
 import CardOrder from '../components/card-order/card-order';
@@ -15,31 +16,35 @@ export default function FeedPage() {
 
 	// const >>>>>>>
 	const dispatch = useDispatch();
+    const location = useLocation();
     const ORDERS_ALL_URL = "wss://norma.nomoreparties.space/orders/all";
     const { orders, isLoading, connected, total, totalToday } = useSelector(store => store.ordersAllReducer);
+    const panding = orders.filter(item => item.status == 'pending' )
+    const done = orders.filter(item => item.status == 'done' )
 
 	// function >>>>>>>
     useEffect(() => {
-        dispatch(connect(ORDERS_ALL_URL));
+        dispatch(connect(ORDERS_ALL_URL), { replace: true });
         return () => {
-            dispatch(disconnect(ORDERS_ALL_URL));
+            dispatch(disconnect(ORDERS_ALL_URL), { replace: true });
         }
     }, [dispatch]);
 
-	// styles >>>>>>> ${styles.border}
+	// styles >>>>>>> 
     const classSection = `${styles.section}  `;
     const classOrders = `mt-10 ${styles.orders} `;
     const classStatistics = `mt-25 ${styles.statistics}`;
     const classList = ` ${styles.list} custom-scroll`;
     const classH1 = ` text text_type_main-large`;
-    const classTitle = `text text_type_main-medium`;
+    const classTitle = `text text_type_main-medium ${styles.title}`;
     const classText = `text text_type_main-default`;
     const classItems = `${styles.items}`;
-    const classItem = `mt-2 text text_type_digits-default`;
+    const classItem = `mb-2 text text_type_digits-default`;
     const classTotal = `text text_type_digits-large`;
     const classItemEnd = `${classItem} ${styles.end}`;
     const classBox = `${styles.box}`;
     const classContainer = `${styles.container}`;
+    const classLink = `${styles.link}`;
 
 	// >>>>>>>  
     return (
@@ -54,7 +59,7 @@ export default function FeedPage() {
                     Произошла ошибка
                 </p>
             }
-            { !isLoading && orders.length > 0  && 
+            { !isLoading && connected  && 
 
                 <>
                     <div className={classOrders}>
@@ -63,7 +68,14 @@ export default function FeedPage() {
                         </h1>
                         <ul className={classList}>
                             {orders.map(item => (
-                                <CardOrder key={item._id} order={item}/>
+                                <Link
+                                    key={item.number} 
+                                    to={`/feed/${item.number}`} 
+                                    state={{ background: location }} 
+                                    className={classLink}
+                                >
+                                    <CardOrder key={item._id} order={item} />
+                                </Link>
                             ))}
                         </ul>
                     </div>
@@ -74,21 +86,15 @@ export default function FeedPage() {
                                     Готовы:
                                 </h3>
                                 <ul className={classItems}>
-                                    <li className={classItemEnd}>
-                                        034533
-                                    </li>
-                                    <li className={classItemEnd}>
-                                        034532
-                                    </li>
-                                    <li className={classItemEnd}>
-                                        034530
-                                    </li>
-                                    <li className={classItemEnd}>
-                                        034527
-                                    </li>
-                                    <li className={classItemEnd}>
-                                        034525
-                                    </li>
+                                    {done.map((item, index) => {
+                                        if ( index < 20) {
+                                            return (
+                                                <li key={item.number} className={classItemEnd}>
+                                                    {String(item.number).padStart(6, '0')}
+                                                </li>
+                                            )
+                                        }
+                                    })}
                                 </ul>
                             </div>
                             <div className={classBox}>
@@ -96,18 +102,15 @@ export default function FeedPage() {
                                     В работе:
                                 </h3>
                                 <ul className={classItems}>
-                                    <li className={classItem}>
-                                        034538
-                                    </li>
-                                    <li className={classItem}>
-                                        034541
-                                    </li>
-                                    <li className={classItem}>
-                                        034542
-                                    </li>
-                                    <li className={classItem}>
-                                        034542
-                                    </li>
+                                    {panding.map((item, index) => {
+                                        if ( index < 20) {
+                                            return (
+                                                <li key={item.number} className={classItem}>
+                                                    {String(item.number).padStart(6, '0')}
+                                                </li>
+                                            )
+                                        }
+                                    })}
                                 </ul>
                             </div>
                         </div>
@@ -134,3 +137,5 @@ export default function FeedPage() {
 
     )
 }; 
+
+/// http://localhost:3000/feed/26737

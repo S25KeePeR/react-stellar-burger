@@ -22,6 +22,7 @@ import { checkUserAuth } from "../../services/actions/user-action";
 import AppHeader from "../app-header/app-header";
 import Modal from "../modals/modal";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+import FeedDetails from "../modals/feed-details/feed-details";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route";
 
 // page styles >>>>>>>
@@ -79,12 +80,12 @@ export default function App() {
 							<Route path='/ingredients/:ingredientId' element={<IngredientDetails />} />
 							<Route path="*" element={<NotFoundPage/>} />
 							<Route path="/feed" element={<FeedPage/>} />
-							<Route path="/feed/:id" element={<FeedPage/>} />
+							<Route path="/feed/:number" element={<FeedDetails/>} />
 							
 							{/* Только для авторизированных пользователей OnlyAuth */}
 							<Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
 							<Route path="/profile/orders" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
-							<Route path="/profile/orders/:id" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
+							<Route path="/profile/orders/:number" element={<OnlyAuth component={<FeedDetails/>} />} />
 
 							{/* Только для неавторизированных пользователей OnlyUnAuth */}
 							<Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
@@ -97,8 +98,24 @@ export default function App() {
 								<Route
 									path='/ingredients/:ingredientId'
 									element={
-										<Modal closeModal={handleModalClose} modalTitle={'Детали ингредиента'}>
+										<Modal closeModal={handleModalClose} >
 											<IngredientDetails />
+										</Modal>
+									}
+								/>
+								<Route
+									path='/feed/:id'
+									element={
+										<Modal closeModal={handleModalClose} >
+											<FeedDetails />
+										</Modal>
+									}
+								/>
+								<Route
+									path='/profile/orders/:id'
+									element={
+										<Modal closeModal={handleModalClose} >
+											<FeedDetails />
 										</Modal>
 									}
 								/>

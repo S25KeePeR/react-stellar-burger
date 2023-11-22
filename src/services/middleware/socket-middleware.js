@@ -32,7 +32,7 @@ export const socketMiddleware = ( wsActions ) => {
 					dispatch({type: wsConnect});
 				};
 		
-				socket.onmessage = event => {
+				socket.onmessage = (event) => {
 					
 					const { data } = event;
 					const parsedData = JSON.parse(data);

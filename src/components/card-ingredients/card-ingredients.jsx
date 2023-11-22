@@ -13,6 +13,7 @@ import styles from "./card-ingredients.module.css";
 
 export default function CardIngredients({ingredient, openModal, id}) { 
 
+	// const >>>>>>>
     const location = useLocation();
     const ingredientId = ingredient._id;
 

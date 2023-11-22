@@ -47,6 +47,7 @@ export const ordersAllReducer = (state = initialState, action) => {
 				isLoading: false,
                 connected: false,
         };
+
 		default: 
             return state;
 	};
