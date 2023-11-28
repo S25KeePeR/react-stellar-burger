@@ -4,10 +4,6 @@ export const GET_INGREDIENTS = 'GET_INGREDIENTS';
 export const GET_INGREDIENTS_FAILED = 'GET_INGREDIENTS_FAILED';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
 export const SELECT_TAB = 'SELECT_TAB';
-export const ADD_VALUE = 'ADD_VALUE';
-export const DELETE_VALUE = 'DELETE_VALUE';
-export const DELETE_BUN_VALUE = 'DELETE_BUN_VALUE';
-export const RESET_VALUE = 'RESET_VALUE';
 
 export const getBase = () => ( dispatch ) => { 
     dispatch({ type: GET_INGREDIENTS })

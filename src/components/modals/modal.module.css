@@ -4,9 +4,9 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
+    z-index: 1001;
     background-color: rgba(28, 28, 33, 1);
-    border-radius: 30px;
+    border-radius: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,10 +25,15 @@
 .title {
     margin: 0;
     padding: 0;
+    height: 64px;
+    width: 100%;
+    display: flex;
+    align-items: center;
 
 }
 
 .close {
+    height: 64px;
     background-color: transparent;
     cursor: pointer;
     border: none;
@@ -36,6 +41,9 @@
     padding: 0;
     display: flex;
     align-items: center;
+    position: fixed;
+    right: 40px;
+    z-index: 1002;
 }
 
 .overlay {

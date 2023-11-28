@@ -22,6 +22,7 @@ import { checkUserAuth } from "../../services/actions/user-action";
 import AppHeader from "../app-header/app-header";
 import Modal from "../modals/modal";
 import IngredientDetails from "../modals/ingredient-details/ingredient-details";
+import FeedDetails from "../modals/feed-details/feed-details";
 import { OnlyAuth, OnlyUnAuth } from "../protected-route";
 
 // page styles >>>>>>>
@@ -33,24 +34,11 @@ export default function App() {
 	const dispatch = useDispatch();
 	const location = useLocation();
 	const navigate = useNavigate();
-
 	const token = localStorage.getItem('accessToken');
 	const refreshToken = localStorage.getItem('refreshToken');
-
 	const background = location.state && location.state.background;
-
-	
 	const { base, baseRequest, baseFailed } = useSelector(state => state.ingredientsReducer);
 
-	////////////////////////////////
-	// const { userName, isUserAuth, isAuthChecked } = useSelector(state => state.userReducer);
-	// console.log(`${userName} >> ${isUserAuth} : ${isAuthChecked} `);
-	// console.log(token);
-	// console.log(refreshToken);
-	// // console.log(user);
-	// console.log(!!background);
-	///////////////////////////////
-	
 	// function >>>>>>>
 	useEffect(() => {
 		dispatch(getBase());
@@ -91,11 +79,13 @@ export default function App() {
 							<Route path="/" element={<HomePage/>} />
 							<Route path='/ingredients/:ingredientId' element={<IngredientDetails />} />
 							<Route path="*" element={<NotFoundPage/>} />
+							<Route path="/feed" element={<FeedPage/>} />
+							<Route path="/feed/:number" element={<FeedDetails/>} />
 							
 							{/* Только для авторизированных пользователей OnlyAuth */}
 							<Route path="/profile" element={<OnlyAuth component={<ProfilePage/>} />} />
 							<Route path="/profile/orders" element={<OnlyAuth component={<ProfileOrdersPage/>} />} />
-							<Route path="/feed" element={<OnlyAuth component={<FeedPage/>} />} />
+							<Route path="/profile/orders/:number" element={<OnlyAuth component={<FeedDetails/>} />} />
 
 							{/* Только для неавторизированных пользователей OnlyUnAuth */}
 							<Route path="/register" element={<OnlyUnAuth component={<RegisterPage/>} />} />
@@ -108,8 +98,24 @@ export default function App() {
 								<Route
 									path='/ingredients/:ingredientId'
 									element={
-										<Modal closeModal={handleModalClose} modalTitle={'Детали ингредиента'}>
+										<Modal closeModal={handleModalClose} >
 											<IngredientDetails />
+										</Modal>
+									}
+								/>
+								<Route
+									path='/feed/:id'
+									element={
+										<Modal closeModal={handleModalClose} >
+											<FeedDetails />
+										</Modal>
+									}
+								/>
+								<Route
+									path='/profile/orders/:id'
+									element={
+										<Modal closeModal={handleModalClose} >
+											<FeedDetails />
 										</Modal>
 									}
 								/>

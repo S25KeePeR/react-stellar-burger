@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 // project modules >>>>>>>
 import { getOrder } from "../../services/actions/order-action";
 import { ADD_BUN, REMOVE_BUN, ADD_INGREDIENT, MOVE_INGREDIENT } from "../../services/actions/constructor-action";
-import { ADD_VALUE, DELETE_BUN_VALUE } from '../../services/actions/ingredients-action';
-
+import { GET_ORDER } from "../../services/actions/order-action";
 import { v4 as uuidv4 } from "uuid";
 
 import PropTypes from "prop-types";
@@ -21,9 +20,9 @@ export default function BurgerConstructor({openModal}) {
 
 	// const >>>>>>>
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const burgerData = useSelector(store => store.constructorReducer);
     const { isUserAuth } = useSelector(state => state.userReducer);
-    const navigate = useNavigate();
 
 	// function >>>>>>>
     const [, dropTarget] = useDrop({
@@ -34,6 +33,7 @@ export default function BurgerConstructor({openModal}) {
     });
     const submitOrder = (e) => {
         e.preventDefault();
+        dispatch({ type: GET_ORDER });
         const listID = {
             ingredients: [  burgerData.bun._id, 
                             ...burgerData.ingredients.map(ingredient => ingredient._id), 
@@ -46,10 +46,8 @@ export default function BurgerConstructor({openModal}) {
             openModal('Order');
             dispatch(getOrder(listID));
         }
-
-
     };
-    
+
     const addIngredient = (ingredient) => {
         const newIngredient = new Object({...ingredient, UID: uuidv4()})
         if (newIngredient.type === "bun") {
@@ -57,11 +55,9 @@ export default function BurgerConstructor({openModal}) {
                 dispatch({ type: REMOVE_BUN, payload: burgerData.bun });  
             } 
             dispatch({ type: ADD_BUN, payload: newIngredient });
-            dispatch({ type: DELETE_BUN_VALUE, newIngredient });
         } else {
             dispatch({ type: ADD_INGREDIENT, payload: newIngredient });   
         }
-        dispatch({type: ADD_VALUE, newIngredient})
     };
 
     const moveIngredient = useCallback(
@@ -72,21 +68,22 @@ export default function BurgerConstructor({openModal}) {
 
     // styles >>>>>>>
     const classContainer = `${styles.container}`;
-    const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
-    const classMR = ` mr-3`;
-    const classIngredients = `pr-1 ${styles.ingredients} custom-scroll`;
+    const classConstructor = `mt-20 pt-5 mb-5  ${styles.constructor}`;
+    const classMR = ` ${styles.mr}`;
+    const classIngredients = ` ${styles.ingredients} custom-scroll`; //pr-1
     const classFooter = `mr-4 mt-5 ${styles.footer}`;
     const classTotal = `mr-10 ${styles.total}`;
     const classTotalTitle = `mr-4 text text_type_digits-medium`;
-    const classItem = `mr-4 ${styles.item}`;
+    const classItem = `${classMR} ${styles.item}`;
     const classItemTop = `mr-4 ${classItem} ${styles.top}`;
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
+    const classLi = `${styles.li}`;
 
 	// >>>>>>> 
     return (
         <section className={classContainer}>
             <ul className={classConstructor} ref={dropTarget}>
-                <li>
+                <li className={classLi}>
                     {burgerData.bun === null ? (
                         <span className={classItemTop}>выберите булку</span> 
                     ) : (
@@ -99,7 +96,7 @@ export default function BurgerConstructor({openModal}) {
                         />
                     )}  
                 </li>
-                <li>
+                <li className={classLi}>
                     {burgerData.ingredients.length === 0 ? (
                         <span className={classItem}>выберите ингредиенты</span> 
                     ) : (
@@ -115,7 +112,7 @@ export default function BurgerConstructor({openModal}) {
                         </ul>
                     )}    
                 </li>
-                <li>
+                <li className={classLi}>
                     {burgerData.bun === null ? (
                         <span className={classItemBot}></span> 
                     ) : (

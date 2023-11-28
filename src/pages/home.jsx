@@ -1,11 +1,9 @@
 // react >>>>>>>
-import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 // project modules >>>>>>>
-import { getBase } from "../services/actions/ingredients-action";
 
 // page elements >>>>>>>
 import BurgerConstructor from "../components/burger-constructor/burger-constructor";
@@ -15,7 +13,6 @@ import BurgerIngredients from "../components/burger-ingredients/burger-ingredien
 import useModal from "../hooks/useModal";
 import Modal from "../components/modals/modal";
 import OrderDetails from "../components/modals/order-details/order-details";
-import IngredientDetails from "../components/modals/ingredient-details/ingredient-details";
 
 // page styles >>>>>>>
 import styles from "./home.module.css";

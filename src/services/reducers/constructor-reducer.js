@@ -41,10 +41,10 @@ export const constructorReducer = (state = initialState, action) => {
                 ...state,
                 ingredients: [...state.ingredients].filter(
                     (ingredient) => {
-                        return ingredient.UID !== action.item.UID;
+                        return ingredient.UID !== action.payload.UID;
                     }
                 ),
-                total: state.total - action.item.price
+                total: state.total - action.payload.price
             };
         }
         case MOVE_INGREDIENT: {

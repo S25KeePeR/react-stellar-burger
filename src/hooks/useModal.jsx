@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { CLEAR_INGREDIENT, SELECT_INGREDIENT } from "../services/actions/ingredient-action";
+import { GET_CLEAR } from "../services/actions/order-action";
 import { useNavigate } from "react-router-dom";
 
 const useModal = () => {
@@ -13,7 +14,7 @@ const useModal = () => {
         setModalState(false);
         setModalType(null);
         dispatch({ type: CLEAR_INGREDIENT });
-
+        dispatch({ type: GET_CLEAR });
     }
 
     const openModal = (type = null, ingredient) => { 

@@ -5,6 +5,8 @@ import { constructorReducer } from '../reducers/constructor-reducer'; // спи�
 import { ingredientReducer } from './ingredient-reducer'; // объект текущего просматриваемого ингредиента
 import { orderReducer } from './order-reducer'; // объект созданного заказа
 import { userReducer } from './user-reducer';
+import { ordersAllReducer } from './orders-all-reducer';
+import { ordersUserReducer } from './orders-user-reducer';
 
 // Корневой редьюсер
 const rootReducer = combineReducers({
@@ -13,6 +15,8 @@ const rootReducer = combineReducers({
     ingredientReducer,
     orderReducer,
     userReducer,
+    ordersAllReducer,
+    ordersUserReducer
 }) 
 
 export default rootReducer;

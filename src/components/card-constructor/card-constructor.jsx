@@ -17,8 +17,7 @@ export default function CardConstructor({ index, id, ingredient, moveIngredient}
 
 	// function >>>>>>>
     const deleteIngredient = (item) => {
-        dispatch({ type: DELETE_INGREDIENT, item });
-        dispatch({ type: DELETE_VALUE, item });
+        dispatch({ type: DELETE_INGREDIENT, payload: item });
     };
 
     const [{ isDragging }, refDrag] = useDrag({
@@ -48,8 +47,7 @@ export default function CardConstructor({ index, id, ingredient, moveIngredient}
               return;
             }
             const hoverBoundingRect = ref.current?.getBoundingClientRect();
-            const hoverMiddleY =
-              (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
             const clientOffset = monitor.getClientOffset();
             const hoverClientY = clientOffset.y - hoverBoundingRect.top;
             if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
@@ -66,24 +64,35 @@ export default function CardConstructor({ index, id, ingredient, moveIngredient}
     const ref = useRef(null);
     const dragDropRef = refDrag(refDrop(ref));
 
+
     // styles >>>>>>>
-    const classMR = ` mr-3`;
+    // const classMR = ` ${styles.mr} `;
     const classIngredient = `${styles.ingredient}`;
+    const classItem = ` ${styles.item}`;
 
 	// >>>>>>> 
     return (
-        <li className={classIngredient} key={ingredient.UID} id={ingredient.UID} ref={dragDropRef}>
-            <DragIcon type="primary"/>
-            <ConstructorElement text={ingredient.name}
-                                price={ingredient.price}
-                                thumbnail={ingredient.image}
-                                extraClass={burgerData.ingredients.length < 6  ? classMR : null}
-                                handleClose={() => {
-                                    deleteIngredient(ingredient)
-                                }}
-                                
-            />
-        </li>
+        <>
+            { !isDragging && 
+                <li className={classIngredient} key={ingredient.UID} id={ingredient.UID} ref={dragDropRef}>
+                    <DragIcon type="primary"/>
+                    <ConstructorElement text={ingredient.name}
+                                        price={ingredient.price}
+                                        thumbnail={ingredient.image}
+                                        // extraClass={burgerData.ingredients.length < 6  ? classMR : null}
+                                        handleClose={() => {
+                                            deleteIngredient(ingredient)
+                                        }}
+                                        
+                    />
+                </li>
+            }
+            { isDragging &&
+                <span className={classItem}></span>  
+            }
+                   
+        </>
+
     )
 
 }

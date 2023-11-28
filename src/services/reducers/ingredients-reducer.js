@@ -3,10 +3,6 @@ import {
     GET_INGREDIENTS_SUCCESS, 
     GET_INGREDIENTS_FAILED,
     SELECT_TAB,
-    ADD_VALUE,
-    DELETE_VALUE,
-    DELETE_BUN_VALUE,
-    RESET_VALUE
 } from "../actions/ingredients-action";
 
 const initialState = {
@@ -43,62 +39,6 @@ export const ingredientsReducer = (state = initialState, action) => {
             return { 
                 ...state, 
                 currentTab: action.currentTab,
-            };
-        }
-        case ADD_VALUE: {
-            return {
-                ...state,
-                base: state.base.map((element) => {
-                    if (element._id === action.newIngredient._id) {
-                        return {
-                            ...element,
-                            __v: element.type === 'bun' ? 1 : ++element.__v,
-                        }
-                    } else {
-                        return element;
-                    }
-                })
-            };
-        }
-        case DELETE_VALUE: {
-            return {
-                ...state,
-                base: state.base.map((element) => {
-                    if (element._id === action.item._id) {
-                        return {
-                            ...element,
-                            __v: element.type === 'bun' ? 1 : --element.__v,
-                        }
-                    } else {
-                        return element;
-                    }
-                })
-            };
-        }
-        case DELETE_BUN_VALUE: {
-            return {
-                ...state,
-                base: state.base.map((element) => {
-                    if (element.type === 'bun') {
-                        return {
-                            ...element,
-                            __v: element._id !== action.newIngredient._id ? 0 : null,
-                        }
-                    } else {
-                        return element;
-                    }
-                })
-            };
-        }
-        case RESET_VALUE: {
-            return {
-                ...state,
-                base: state.base.map((element) => {
-                    return {
-                        ...element,
-                        __v: 0,
-                    }
-                })
             };
         }
         default: {

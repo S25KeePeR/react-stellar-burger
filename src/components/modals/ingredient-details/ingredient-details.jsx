@@ -27,11 +27,9 @@ const IngredientDetails = () => {
 
     return (
         <div className={classContainer}>
-            {location.state === null && (
-                <h2 className={classH2}>
-                    Детали ингредиента
-                </h2>
-            )}
+            <h2 className={classH2} style={{ justifyContent: location.state === null ? 'center' : 'flex-start'}}>
+                Детали ингредиента
+            </h2>
             <img src={ingredient.image_large} alt={ingredient.name}/>
             <h3 className={classH3}>{ingredient.name}</h3>
             <ul className={classDetails}>
