@@ -1,8 +1,9 @@
 .container {
-    max-height: calc(100vh - 168px);
+    /* max-height: calc(100vh - 168px); */
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: stretch;
     width: 600px;
 }
 
@@ -13,11 +14,12 @@
     gap: 16px;
     overflow: hidden;
     list-style-type: none;
+    padding-left: 14px;
 }
 
 .ingredients {
     padding-left: 0;
-    max-height: 464px;
+    max-height: 368px;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -45,14 +47,6 @@
     border-radius: 40px 40px 88px 88px;
 }
 
-/* .ingredient {
-    min-width: 579px;
-    display: flex;
-    align-items: center;
-    gap: 8px;    
-    justify-content: flex-end;
-} */
-
 .footer {
     display: flex;
     align-items: center;
@@ -62,4 +56,12 @@
 .total > svg {
     transform: scale(1.5);
     padding-right: 4px;
+}
+
+.li {
+    width: 100%;
+}
+
+.mr {
+    margin-left: 32px;
 }

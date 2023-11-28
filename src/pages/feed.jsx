@@ -30,6 +30,33 @@ export default function FeedPage() {
         }
     }, [dispatch]);
 
+
+    const getCardOrder = (orders) => {
+        return orders.filter(item => !item.ingredients.includes(null)).map(item => (               
+            <Link
+                key={item.number} 
+                to={`/feed/${item.number}`} 
+                state={{ background: location }} 
+                className={classLink}
+            >
+                <CardOrder key={item._id} order={item} />
+            </Link>
+        ))
+    }
+
+    const getOrderList = (status) => {
+        return status.map((item, index) => {
+            if ( index < 10) {
+                return (
+                    <li key={item.number} className={ status === done ? classItemEnd : classItem }>
+                        {String(item.number).padStart(6, '0')}
+                    </li>
+                )
+            }
+        })
+    }
+
+
 	// styles >>>>>>> 
     const classSection = `${styles.section}  `;
     const classOrders = `mt-10 ${styles.orders} `;
@@ -39,7 +66,7 @@ export default function FeedPage() {
     const classTitle = `text text_type_main-medium ${styles.title}`;
     const classText = `text text_type_main-default`;
     const classItems = `${styles.items}`;
-    const classItem = `mb-2 text text_type_digits-default`;
+    const classItem = `text text_type_digits-default`;
     const classTotal = `text text_type_digits-large`;
     const classItemEnd = `${classItem} ${styles.end}`;
     const classBox = `${styles.box}`;
@@ -67,16 +94,7 @@ export default function FeedPage() {
                             Лента заказов
                         </h1>
                         <ul className={classList}>
-                            {orders.map(item => (
-                                <Link
-                                    key={item.number} 
-                                    to={`/feed/${item.number}`} 
-                                    state={{ background: location }} 
-                                    className={classLink}
-                                >
-                                    <CardOrder key={item._id} order={item} />
-                                </Link>
-                            ))}
+                            {getCardOrder(orders)}
                         </ul>
                     </div>
                     <div className={classStatistics}>
@@ -86,15 +104,7 @@ export default function FeedPage() {
                                     Готовы:
                                 </h3>
                                 <ul className={classItems}>
-                                    {done.map((item, index) => {
-                                        if ( index < 20) {
-                                            return (
-                                                <li key={item.number} className={classItemEnd}>
-                                                    {String(item.number).padStart(6, '0')}
-                                                </li>
-                                            )
-                                        }
-                                    })}
+                                    {getOrderList(done)}
                                 </ul>
                             </div>
                             <div className={classBox}>
@@ -102,15 +112,7 @@ export default function FeedPage() {
                                     В работе:
                                 </h3>
                                 <ul className={classItems}>
-                                    {panding.map((item, index) => {
-                                        if ( index < 20) {
-                                            return (
-                                                <li key={item.number} className={classItem}>
-                                                    {String(item.number).padStart(6, '0')}
-                                                </li>
-                                            )
-                                        }
-                                    })}
+                                    {getOrderList(panding)}
                                 </ul>
                             </div>
                         </div>

@@ -50,7 +50,7 @@ export default function BurgerIngredients({openModal}) {
     };
 
     // styles >>>>>>>
-    const classH1 = `mt-10 mb-5 text text_type_main-large `;
+    const classH1 = `mt-10 mb-1 text text_type_main-large `;
     const classH2 = `mb-6 text text_type_main-medium `;
     const classContainer = `mt-10 ${styles.container} custom-scroll`;
     const classItems = `mb-10 ${styles.items}`;

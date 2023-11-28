@@ -14,4 +14,6 @@
     grid-template-columns: 1fr 1fr;
     row-gap: 32px;
     list-style-type: none;
+    justify-items: center;
+
 }

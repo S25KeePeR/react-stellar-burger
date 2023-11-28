@@ -12,14 +12,17 @@ import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burge
 // page styles >>>>>>>
 import styles from "./card-order.module.css";
 
-export default function CardOrder({order, user=false}) { 
+export default function CardOrder({ order }) { 
 	
 	// const >>>>>>>
 	const ingredients = order.ingredients;
 	const { base } = useSelector(state => state.ingredientsReducer);
+	const { isUserAuth } = useSelector(store => store.userReducer);
 	const counts = {};
 
-	// function >>>>>>>
+
+
+	// function >>>>>>> 
 	ingredients.forEach((x) => { counts[x] = (counts[x] || 0) + 1; });
 
 	const getIngredientImage = (id) => {
@@ -83,7 +86,7 @@ export default function CardOrder({order, user=false}) {
 			<h2 className={classTitle}>
 				{order.name}
 			</h2>
-			{ user && 
+			{ isUserAuth && 
 				<span className={order.status == 'done' ? classStatus : classText}>
 					{order.status == 'pending' ? 'Готовится' : order.status == 'created' ? 'Создан' : 'Выполнен' }
 				</span>

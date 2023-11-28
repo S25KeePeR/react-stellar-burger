@@ -1,9 +1,8 @@
 // react >>>>>>>
 import { useSelector } from 'react-redux';
-import { useMemo }  from "react";
+import { useCallback, useEffect }  from "react";
 import { useDrag } from "react-dnd";
 import { useLocation, Link } from 'react-router-dom';
-
 
 // page elements >>>>>>>
 import { Counter, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -18,17 +17,17 @@ export default function CardIngredients({ingredient, openModal, id}) {
     const ingredientId = ingredient._id;
 
 	// function >>>>>>>
-    const [{ isDrag }, dragRef] = useDrag(() => ({
+    const [{ isDragging }, dragRef, preview ] = useDrag(() => ({
         type: 'BOX',
         item: ingredient,
         collect: monitor => ({
-            isDrag: monitor.isDragging()
+            isDragging: monitor.isDragging()
         })
-      }))
+    }))
 
-      const { bun, ingredients } = useSelector(store => store.constructorReducer);
+    const { bun, ingredients } = useSelector(store => store.constructorReducer);
 
-      const counter = useMemo(
+    const counter = useCallback(
         () => () => {
             return bun && bun._id === ingredient._id ? 2 : ingredients.filter((item) => item._id === ingredient._id).length;
         },
@@ -41,34 +40,42 @@ export default function CardIngredients({ingredient, openModal, id}) {
     const classItemText = `text text_type_digits-default ${styles.text}`;
     const classItemPrice = `${styles.price}`;
     const classLink = `${styles.link}`;
+    const classDrag = `${styles.drag}`;
 
 	// >>>>>>> 
     return (
+       
         <Link
             key={ingredientId} 
             to={`/ingredients/${ingredientId}`} 
             state={{ background: location }} 
             className={classLink}
         >
-            <li     className={classItem}
-                    ref={dragRef}
-                    key={id} 
-                    onClick={() => {
-                        openModal('ingredient', ingredient);
-                    }}                
+             { !isDragging && 
+                <li     className={classItem}
+                        ref={dragRef}
+                        key={id}            
                 >
-                { counter() > 0 && <Counter count={ counter() } size="default" extraClass="m-1"/> }
-                <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
-                <div className={classItemPrice}>
-                    <span className={classItemText}>{ingredient.price}</span>
-                    <CurrencyIcon type="primary"/>
-                </div>
-                <span className={classItemTitle}>{ingredient.name}</span>
-            </li>
+                    { counter() > 0 && <Counter count={ counter() } size="default" extraClass="m-1"/> }
+                    <img src={ingredient.image} alt={ingredient.name} width="240" height="120"/>
+                    <div className={classItemPrice}>
+                        <span className={classItemText}>{ingredient.price}</span>
+                        <CurrencyIcon type="primary"/>
+                    </div>
+                    <span className={classItemTitle}>{ingredient.name}</span>
+                </li>
+            }
+            { isDragging && 
+                <li   className={classDrag}>
+                
+                </li>
+            }
         </Link>
     )
 
 }
+
+
 
 
 

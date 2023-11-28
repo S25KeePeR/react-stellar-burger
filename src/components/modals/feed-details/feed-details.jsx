@@ -98,6 +98,7 @@ const FeedDetails = () => {
 	const classItemText = `ml-4 ${classText} ${styles.text}`;
 	const classPrice = `mr-2 text text_type_digits-default `;
 	const classFooter = ` mt-10 ${styles.footer}`;
+	const classFlex = `${styles.flex}`;
 	
 
 	return (
@@ -124,7 +125,7 @@ const FeedDetails = () => {
 						{ingredients(order.ingredients)}
 					<footer className={classFooter}>
 					<FormattedDate className={classDate} date={new Date(order.createdAt)} />
-					<div style={{ display: 'flex'}}>
+					<div className={classFlex}>
 						<span className={classPrice}>
 							{getPrice()} 
 						</span>

@@ -68,21 +68,22 @@ export default function BurgerConstructor({openModal}) {
 
     // styles >>>>>>>
     const classContainer = `${styles.container}`;
-    const classConstructor = `mt-20 pt-5 mb-5 pl-4 ${styles.constructor}`;
-    const classMR = ` mr-3`;
-    const classIngredients = `pr-1 ${styles.ingredients} custom-scroll`;
+    const classConstructor = `mt-20 pt-5 mb-5  ${styles.constructor}`;
+    const classMR = ` ${styles.mr}`;
+    const classIngredients = ` ${styles.ingredients} custom-scroll`; //pr-1
     const classFooter = `mr-4 mt-5 ${styles.footer}`;
     const classTotal = `mr-10 ${styles.total}`;
     const classTotalTitle = `mr-4 text text_type_digits-medium`;
-    const classItem = `mr-4 ${styles.item}`;
+    const classItem = `${classMR} ${styles.item}`;
     const classItemTop = `mr-4 ${classItem} ${styles.top}`;
     const classItemBot = `mr-4 ${classItem} ${styles.bot}`;
+    const classLi = `${styles.li}`;
 
 	// >>>>>>> 
     return (
         <section className={classContainer}>
             <ul className={classConstructor} ref={dropTarget}>
-                <li>
+                <li className={classLi}>
                     {burgerData.bun === null ? (
                         <span className={classItemTop}>выберите булку</span> 
                     ) : (
@@ -95,7 +96,7 @@ export default function BurgerConstructor({openModal}) {
                         />
                     )}  
                 </li>
-                <li>
+                <li className={classLi}>
                     {burgerData.ingredients.length === 0 ? (
                         <span className={classItem}>выберите ингредиенты</span> 
                     ) : (
@@ -111,7 +112,7 @@ export default function BurgerConstructor({openModal}) {
                         </ul>
                     )}    
                 </li>
-                <li>
+                <li className={classLi}>
                     {burgerData.bun === null ? (
                         <span className={classItemBot}></span> 
                     ) : (

@@ -19,15 +19,19 @@ export default function ProfileOrdersPage() {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const { orders, isLoading, error } = useSelector(store => store.ordersUserReducer);
-    const sendToken = localStorage.getItem("accessToken").split('Bearer ')[1];
-    const ORDERS_USER_URL = `wss://norma.nomoreparties.space/orders?token=${sendToken}`;
+    const { orders, isLoading } = useSelector(store => store.ordersUserReducer);
+    // const sendToken = localStorage.getItem("accessToken").split('Bearer ')[1];
+    // const ORDERS_USER_URL = `wss://norma.nomoreparties.space/orders?token=${sendToken}`;
 
 	// function >>>>>>>
     useEffect(() => {
-        dispatch(connect(ORDERS_USER_URL));
+        const sendToken = localStorage.getItem("accessToken").split('Bearer ')[1];
+        const ORDERS_USER_URL = `wss://norma.nomoreparties.space/orders?token=${sendToken}`;
+
+        dispatch(connect(ORDERS_USER_URL), { replace: true });
+        
         return () => {
-            dispatch(disconnect(ORDERS_USER_URL));
+            dispatch(disconnect(ORDERS_USER_URL), { replace: true });
         }
     }, [dispatch]);
 
@@ -47,12 +51,12 @@ export default function ProfileOrdersPage() {
                     Загрузка...
                 </p>
             }
-            { !isLoading && error && 
+            { !isLoading && orders.length === 0 &&
                 <p className={classTitle}>
                     Произошла ошибка
                 </p>
             }
-            { !isLoading && !error && 
+            { !isLoading && orders.length > 0 &&
                 <ul className={classList}>
                     { [...orders].reverse().map(item => (
                         <Link
